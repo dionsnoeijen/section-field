@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  mysql:
+    image: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: sectionfield
+      MYSQL_ROOT_PASSWORD: eR83k1n8t0r
+    volumes:
+      - ./data/mysql:/var/lib/mysql
