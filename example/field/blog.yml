@@ -1,0 +1,6 @@
+field:
+  name: Blog
+  type: Relationship
+  variant: hidden
+  kind: many-to-one
+  to: blog

@@ -1,0 +1,5 @@
+field:
+  name: Email
+  type: TextInput
+  length: 255
+  validate: email

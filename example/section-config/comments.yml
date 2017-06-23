@@ -1,0 +1,10 @@
+section:
+  name: Comments
+  fields:
+    - name
+    - email
+    - comment
+    - blog
+  slug: [name]
+  required: [name, email, comment, blog]
+  default: name

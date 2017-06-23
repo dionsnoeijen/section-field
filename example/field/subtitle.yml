@@ -1,0 +1,4 @@
+field:
+  name: Sub title
+  type: TextInput
+  length: 255
