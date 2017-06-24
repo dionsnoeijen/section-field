@@ -68,6 +68,8 @@ class CreateFieldCommand extends Command
 
             $output->writeln('<info>Field created!</info>');
 
+            print_r($fieldConfigYml);
+
             return;
         }
 
