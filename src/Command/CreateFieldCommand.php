@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Field;
-use Tardigrades\Entity\FieldConfig;
 use Tardigrades\Entity\FieldType;
 
 class CreateFieldCommand extends Command
@@ -58,16 +57,12 @@ class CreateFieldCommand extends Command
                 return;
             }
 
-            $fieldConfig = new FieldConfig();
-            $fieldConfig->setConfig((object) $fieldConfigYml);
-
             $field = new Field();
             $field->setName($fieldConfigYml['field']['name']);
             $field->setHandle($this->slugify($fieldConfigYml['field']['name']));
             $field->setFieldType($fieldType);
-            $field->setFieldConfig($fieldConfig);
+            $field->setConfig((object) $fieldConfigYml);
 
-            $this->entityManager->persist($fieldConfig);
             $this->entityManager->persist($field);
             $this->entityManager->flush();
 
