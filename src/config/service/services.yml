@@ -13,3 +13,8 @@ services:
     class: Tardigrades\Command\CreateSectionCommand
     arguments:
       - '@doctrine.orm.entity_manager'
+
+  create.field.command:
+    class: Tardigrades\Command\CreateFieldCommand
+    arguments:
+      - '@doctrine.orm.entity_manager'
