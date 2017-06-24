@@ -3,6 +3,9 @@
 namespace Tardigrades\Command;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Tardigrades\Entity\FieldType;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,11 +38,6 @@ class InstallFieldTypeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln([
-            'FieldType Installer',
-            '============',
-            '',
-        ]);
         $namespace = $input->getArgument('namespace');
 
         $fieldType = new FieldType();
@@ -50,5 +48,34 @@ class InstallFieldTypeCommand extends Command
 
         $this->entityManager->persist($fieldType);
         $this->entityManager->flush();
+
+        $this->renderTable($output, [$fieldType]);
+    }
+
+    private function renderTable(OutputInterface $output, array $fieldTypes)
+    {
+        $table = new Table($output);
+
+        $rows = [];
+        foreach ($fieldTypes as $fieldType) {
+            $rows[] = [
+                $fieldType->getId(),
+                $fieldType->getType(),
+                $fieldType->getNamespace(),
+                $fieldType->getCreated()->format(\DateTime::ATOM),
+                $fieldType->getUpdated()->format(\DateTime::ATOM)
+            ];
+        }
+
+        $rows[] = new TableSeparator();
+        $rows[] = [
+            new TableCell('<info>FieldType installed</info>', array('colspan' => 5))
+        ];
+
+        $table
+            ->setHeaders(['#id', 'type', 'namespace', 'created', 'updated'])
+            ->setRows($rows)
+        ;
+        $table->render();
     }
 }
