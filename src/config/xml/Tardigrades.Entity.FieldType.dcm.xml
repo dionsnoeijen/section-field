@@ -13,8 +13,8 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="type" type="string" />
-        <field name="namespace" type="string" />
+        <field name="type" type="string" unique="true" />
+        <field name="namespace" type="string" unique="true" />
         <field name="created" type="datetime" />
         <field name="updated" type="datetime" />
 

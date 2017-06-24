@@ -16,13 +16,9 @@
         <field name="handle" type="string" length="156" unique="true">
             <gedmo:slug unique="true" style="camel" updatable="false" separator="-" fields="name" />
         </field>
+        <field name="config" type="json_array" />
         <field name="created" type="datetime" />
         <field name="updated" type="datetime" />
-        <one-to-one
-            target-entity="Tardigrades\Entity\FieldConfig"
-            field="fieldConfig"
-            mapped-by="field"
-        />
         <many-to-one
             target-entity="Tardigrades\Entity\FieldType"
             field="fieldType"
