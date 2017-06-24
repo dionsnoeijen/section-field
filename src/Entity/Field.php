@@ -21,8 +21,8 @@ class Field
     /** @var FieldType */
     protected $fieldType;
 
-    /** @var FieldConfig */
-    protected $fieldConfig;
+    /** @var \stdClass */
+    protected $config;
 
     /** @var \DateTime */
     protected $created;
@@ -85,12 +85,14 @@ class Field
         $this->fieldType = $fieldType;
     }
 
-    public function setFieldConfig(FieldConfig $fieldConfig): self
+    public function setConfig(\stdClass $config): void
     {
-        $fieldConfig->setField($this);
-        $this->fieldConfig = $fieldConfig;
+        $this->config = $config;
+    }
 
-        return $this;
+    public function getConfig(): \stdClass
+    {
+        return $this->config;
     }
 
     public function getSections(): ArrayCollection
