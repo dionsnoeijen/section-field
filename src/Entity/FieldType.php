@@ -64,13 +64,38 @@ class FieldType
         return $this->namespace;
     }
 
+    public function setCreated(\DateTime $created): self
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
     public function getCreated(): \DateTime
     {
         return $this->created;
     }
 
+    public function setUpdated(\DateTime $updated): self
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
     public function getUpdated(): \DateTime
     {
         return $this->updated;
+    }
+
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+        $this->updated = new \DateTime("now");
+    }
+
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }
