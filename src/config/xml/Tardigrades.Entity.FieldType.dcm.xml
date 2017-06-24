@@ -18,6 +18,10 @@
         <field name="created" type="datetime" />
         <field name="updated" type="datetime" />
 
-        <one-to-many target-entity="FieldType" field="fields" mapped-by="fieldType" />
+        <one-to-many
+            target-entity="Tardigrades\Entity\Field"
+            field="fields"
+            mapped-by="fieldType"
+        />
     </entity>
 </doctrine-mapping>
