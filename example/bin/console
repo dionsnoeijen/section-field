@@ -51,5 +51,6 @@ $application->add($container->get('create.field.command'));
 $application->add($container->get('install.field.type.command'));
 $application->add($container->get('update.field.type.command'));
 $application->add($container->get('delete.field.type.command'));
+$application->add($container->get('list.field.type.command'));
 
 $application->run();
