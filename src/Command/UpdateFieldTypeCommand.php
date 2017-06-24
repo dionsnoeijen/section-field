@@ -4,7 +4,6 @@ namespace Tardigrades\Command;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -139,7 +138,6 @@ class UpdateFieldTypeCommand extends Command
         $fieldType->setNamespace($namespace);
 
         $this->entityManager->flush();
-
         $this->renderTable($output, [$fieldType]);
 
         $output->writeln('<info>Done!</info>');
