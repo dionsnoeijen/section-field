@@ -30,7 +30,7 @@ class CreateFieldCommand extends Command
         $this
             ->setName('sf:create-field')
             ->setDescription('Creates a field.')
-            ->setHelp('Create field based on a config file')
+            ->setHelp('Create field based on a config file.')
             ->addArgument('config', InputArgument::REQUIRED, 'The field configuration yml')
         ;
     }
