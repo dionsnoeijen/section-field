@@ -4,11 +4,40 @@
 
 require __DIR__.'/../../vendor/autoload.php';
 
+use Tardigrades\Command\CreateSectionCommand;
+use Tardigrades\Command\InstallFieldTypeCommand;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Console\Application;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+
+// Container
+$container = new ContainerBuilder();
+
+// First add the doctrine entity manager with php
+$container
+    ->register('doctrine.orm.entity_manager')
+    ->setFactory([EntityManager::class, 'create'])
+    ->setArguments([[
+        'dbname' => 'sectionfield',
+        'user' => 'root',
+        'password' => 'eR83k1n8t0r',
+        'host' => '127.0.0.1',
+        'port' => '3306',
+        'driver' => 'pdo_mysql'
+    ], Setup::createXMLMetadataConfiguration([
+        __DIR__."/../src/config/xml"], true)
+    ]);
+
+// Now load other services by a service yml
+$loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../src/config/service/'));
+$loader->load('services.yml');
 
 $application = new Application();
 
-$application->add(new \Command\CreateSectionCommand());
-$application->add(new \Command\InstallFieldTypeCommand());
+$application->add(new CreateSectionCommand());
+$application->add($container->get('install.field.type.command'));
 
 $application->run();

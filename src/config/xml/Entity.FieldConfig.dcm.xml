@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
-    <entity name="Entity\FieldConfig" table="field_config">
+    <entity name="Tardigrades\Entity\FieldConfig" table="field_config">
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

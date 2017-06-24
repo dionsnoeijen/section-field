@@ -1,0 +1,5 @@
+services:
+  install.field.type.command:
+    class: Tardigrades\Command\InstallFieldTypeCommand
+    arguments:
+      - '@doctrine.orm.entity_manager'

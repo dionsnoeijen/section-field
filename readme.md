@@ -7,11 +7,12 @@ It helps with:
 - Creating template output
 - Automated api endpoints
 
-Whilst the aim for this tool is to bevery high level, simplicity should never prevail over flexibility.
+While the aim for this tool is to be very high level, simplicity should never prevail over flexibility.
 
 ## @todo (don't forget)
 
 - Move FieldTypes to separate dependencies
+- Change namespace
 
 ## Config
 

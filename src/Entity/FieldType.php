@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -11,6 +11,9 @@ class FieldType
 
     /** @var string * */
     protected $type;
+
+    /** @var string */
+    protected $namespace;
 
     /** @var ArrayCollection */
     protected $fields;
@@ -49,6 +52,16 @@ class FieldType
     public function getFields(): ArrayCollection
     {
         return $this->fields;
+    }
+
+    public function setNamespace(string $namespace): void
+    {
+        $this->namespace = $namespace;
+    }
+
+    public function getNamespace(): string
+    {
+        return $this->namespace;
     }
 
     public function getCreated(): \DateTime

@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -18,7 +18,7 @@ class Section
     /** @var ArrayCollection */
     protected $fields;
 
-    /** @var array */
+    /** @var \stdClass */
     protected $config;
 
     /** @var \DateTime */
@@ -79,12 +79,12 @@ class Section
         return $this->fields;
     }
 
-    public function setConfig(array $config): void
+    public function setConfig(\stdClass $config): void
     {
         $this->config = $config;
     }
 
-    public function getConfig(): array
+    public function getConfig(): \stdClass
     {
         return $this->config;
     }
