@@ -9,8 +9,8 @@ class FieldConfig
     /** @var int */
     protected $id;
 
-    /** @var ArrayCollection */
-    protected $fields;
+    /** @var Field */
+    protected $field;
 
     /** @var \stdClass */
     protected $config;
@@ -21,24 +21,21 @@ class FieldConfig
     /** @var \DateTime */
     protected $updated;
 
-    public function __construct()
-    {
-        $this->fields = new ArrayCollection();
-    }
-
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function addField(Field $field): void
+    public function setField(Field $field): self
     {
-        $this->fields->add($field);
+        $this->field = $field;
+
+        return $this;
     }
 
-    public function getFields(): ArrayCollection
+    public function getField(): ArrayCollection
     {
-        return $this->fields;
+        return $this->field;
     }
 
     public function setConfig(\stdClass $config): void
@@ -59,5 +56,16 @@ class FieldConfig
     public function getUpdated(): \DateTime
     {
         return $this->updated;
+    }
+
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+        $this->updated = new \DateTime("now");
+    }
+
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }

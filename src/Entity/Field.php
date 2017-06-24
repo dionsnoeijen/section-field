@@ -32,6 +32,7 @@ class Field
 
     public function __construct()
     {
+        $this->fieldConfigs = new ArrayCollection();
         $this->sections = new ArrayCollection();
     }
 
@@ -84,10 +85,12 @@ class Field
         $this->fieldType = $fieldType;
     }
 
-    public function setFieldConfig(FieldConfig $fieldConfig)
+    public function setFieldConfig(FieldConfig $fieldConfig): self
     {
-        $fieldConfig->addField($this);
+        $fieldConfig->setField($this);
         $this->fieldConfig = $fieldConfig;
+
+        return $this;
     }
 
     public function getSections(): ArrayCollection
@@ -103,5 +106,16 @@ class Field
     public function getUpdated(): \DateTime
     {
         return $this->updated;
+    }
+
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+        $this->updated = new \DateTime("now");
+    }
+
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
 }
