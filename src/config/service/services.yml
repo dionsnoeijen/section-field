@@ -3,3 +3,8 @@ services:
     class: Tardigrades\Command\InstallFieldTypeCommand
     arguments:
       - '@doctrine.orm.entity_manager'
+
+  update.field.type.command:
+    class: Tardigrades\Command\UpdateFieldTypeCommand
+    arguments:
+      - '@doctrine.orm.entity_manager'
