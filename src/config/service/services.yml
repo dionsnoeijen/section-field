@@ -8,3 +8,8 @@ services:
     class: Tardigrades\Command\UpdateFieldTypeCommand
     arguments:
       - '@doctrine.orm.entity_manager'
+
+  create.section.command:
+    class: Tardigrades\Command\CreateSectionCommand
+    arguments:
+      - '@doctrine.orm.entity_manager'

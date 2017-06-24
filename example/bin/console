@@ -46,7 +46,7 @@ $loader->load('services.yml');
 
 $application = new Application();
 
-$application->add(new CreateSectionCommand());
+$application->add($container->get('create.section.command'));
 $application->add($container->get('install.field.type.command'));
 $application->add($container->get('update.field.type.command'));
 

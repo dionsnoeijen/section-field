@@ -2,6 +2,7 @@
 
 namespace Tardigrades\Command;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,6 +11,18 @@ use Symfony\Component\Yaml\Yaml;
 
 class CreateSectionCommand extends Command
 {
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+
+        parent::__construct(null);
+    }
+
     protected function configure()
     {
         $this
@@ -29,8 +42,10 @@ class CreateSectionCommand extends Command
         ]);
 
         $config = $input->getArgument('config');
-        $parsed = Yaml::parse(file_get_contents($config));
+        $sectionConfig = Yaml::parse(file_get_contents($config));
 
-        print_r($parsed);
+        if (key($sectionConfig) === 'section') {
+            print_r($sectionConfig);
+        }
     }
 }
