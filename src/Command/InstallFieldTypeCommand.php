@@ -43,12 +43,12 @@ class InstallFieldTypeCommand extends Command
         $namespace = $input->getArgument('namespace');
 
         $fieldType = new FieldType();
+        $type = explode('\\', $namespace);
+        $type = $type[count($type) - 1];
+        $fieldType->setType($type);
+        $fieldType->setNamespace($namespace);
 
-
-//        $product = new Product();
-//        $product->setName($newProductName);
-//
-//        $entityManager->persist($product);
-//        $entityManager->flush();
+        $this->entityManager->persist($fieldType);
+        $this->entityManager->flush();
     }
 }
