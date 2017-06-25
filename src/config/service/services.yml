@@ -29,6 +29,11 @@ services:
     arguments:
       - '@doctrine.orm.entity_manager'
 
+  update.field.command:
+    class: Tardigrades\Command\UpdateFieldCommand
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
   list.field.command:
     class: Tardigrades\Command\ListFieldCommand
     arguments:
