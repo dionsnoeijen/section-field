@@ -12,7 +12,9 @@ While the aim for this tool is to be very high level, simplicity should never pr
 ## @todo (don't forget)
 
 - Move FieldTypes to separate dependencies
-- Change namespace
+- Deleting a field type should ony be possible if there are no installed fields with that type.
+- Field handles should not be created based on their name. At least. Maybe on creation when no handle is given, but an update should contain an explicit handle config to prevent application breaking changes just on updating a field name.
+- Move field database interactions from commands to generic services.
 
 ## Config
 
@@ -27,15 +29,15 @@ However, in some situations, you would want users to be able to create or config
 #### Example section config
 
 	section:
-      name: Comments
-      fields:
-        - name
-        - email
-        - comment
-        - blog
-      slug: [name]
-      required: [name, email, comment, blog]
-      default: name
+    name: Comments
+    fields:
+      - name
+      - email
+      - comment
+      - blog
+    slug: [name]
+    required: [name, email, comment, blog]
+    default: name
     
 name: Defines the section name, will be converted to handle aswel.
 fields: Assign fields to this section as array
@@ -73,3 +75,29 @@ Another one, but with a validation specified.
 A more complicated field like a relationship requires a bit more explanation.
 
 variant: There are many way's one might associate relationships. In this case the field is meanth for the `comment` section. Therefore the relationship is created without an explicit user input field and the variant hidden can generate a hidden field. Other variants might be: list, option select, multi select (in case of a one-to-many relationship)
+
+## Commands
+
+#### Field type commands
+
+`bin/console sf:instal-field-type <namespace> (Escape \ in namespace)`
+
+`bin/console sf:update-field-type (follow dialog)`
+
+`bin/console sf:delete-field-type (follow dialog)`
+
+`bin/console sf:list-field-type`
+
+
+#### Field commands
+
+`bin/console sf:create-field <path to config yml>`
+
+`bin/console sf:update-field <path to config yml> (follow dialog)`
+
+`bin/console sf:delete-field (follow dialog)`
+
+`bin/console sf:list-field`
+
+
+### Section commands
