@@ -98,4 +98,15 @@ class Section
     {
         return $this->updated;
     }
+
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+        $this->updated = new \DateTime("now");
+    }
+
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
+    }
 }
