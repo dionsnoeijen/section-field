@@ -36,9 +36,9 @@ class ListFieldCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fieldTypeRepository = $this->entityManager->getRepository(Field::class);
+        $fieldRepository = $this->entityManager->getRepository(Field::class);
 
-        $fields = $fieldTypeRepository->findAll();
+        $fields = $fieldRepository->findAll();
 
         $this->renderTable($output, $fields);
     }

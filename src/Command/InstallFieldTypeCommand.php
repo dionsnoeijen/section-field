@@ -30,8 +30,8 @@ class InstallFieldTypeCommand extends Command
     {
         $this
             ->setName('sf:install-field-type')
-            ->setDescription('Creates a new section.')
-            ->setHelp('This command allows you to create a section...')
+            ->setDescription('Install a field type. Escape the backslash! Like so: This\\\Is\\\Namespace')
+            ->setHelp('This command installs a field type, just give the namespace where to find the field.')
             ->addArgument('namespace', InputArgument::REQUIRED, 'Field type namespace')
         ;
     }

@@ -82,6 +82,11 @@ class UpdateFieldTypeCommand extends Command
         $this->updateWhatRecord($input, $output);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return FieldType|null
+     */
     private function getFieldType(InputInterface $input, OutputInterface $output)
     {
         $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
@@ -91,7 +96,7 @@ class UpdateFieldTypeCommand extends Command
             Assertion::integerish($id, 'Not an id (int), sorry.');
             $fieldType = $fieldTypeRepository->find($id);
             if (!$fieldType) {
-                throw new \Exception('No record with that id id database.');
+                throw new \Exception('No record with that id in database.');
             }
             return $fieldType;
         });

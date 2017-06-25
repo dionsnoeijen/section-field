@@ -37,12 +37,6 @@ class CreateFieldCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln([
-            'FieldType Installer',
-            '============',
-            ''
-        ]);
-
         $config = $input->getArgument('config');
         $fieldConfigYml = Yaml::parse(file_get_contents($config));
 
