@@ -100,7 +100,7 @@ class UpdateFieldCommand extends Command
             }
 
             $field->setName($fieldConfigYml['field']['name']);
-            $field->setHandle($this->slugify($fieldConfigYml['field']['name']));
+            $field->setHandle($this->camelCase($fieldConfigYml['field']['name']));
             $field->setFieldType($fieldType);
             $field->setConfig((object) $fieldConfigYml);
 
@@ -151,16 +151,14 @@ class UpdateFieldCommand extends Command
         $table->render();
     }
 
-    private function slugify(string $string): string
+    private function camelCase($str, array $noStrip = [])
     {
-        $rule = 'NFD; [:Nonspacing Mark:] Remove; NFC';
-        $transliterator = \Transliterator::create($rule);
-        $string = $transliterator->transliterate($string);
+        $str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
+        $str = trim($str);
+        $str = ucwords($str);
+        $str = str_replace(" ", "", $str);
+        $str = lcfirst($str);
 
-        return preg_replace(
-            '/[^a-z0-9]/',
-            '-',
-            strtolower(trim(strip_tags($string)))
-        );
+        return $str;
     }
 }
