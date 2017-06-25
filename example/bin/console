@@ -49,6 +49,7 @@ $application = new Application();
 $application->add($container->get('create.section.command'));
 $application->add($container->get('create.field.command'));
 $application->add($container->get('update.field.command'));
+$application->add($container->get('delete.field.command'));
 $application->add($container->get('list.field.command'));
 $application->add($container->get('install.field.type.command'));
 $application->add($container->get('update.field.type.command'));
