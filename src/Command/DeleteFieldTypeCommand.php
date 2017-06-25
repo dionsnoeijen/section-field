@@ -33,7 +33,7 @@ class DeleteFieldTypeCommand extends Command
         $this
             ->setName('sf:delete-field-type')
             ->setDescription('Delete field type.')
-            ->setHelp('Delete field type')
+            ->setHelp('Delete field type.')
         ;
     }
 
@@ -81,7 +81,7 @@ class DeleteFieldTypeCommand extends Command
     {
         $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
 
-        $question = new Question('<question>What record do you want to update?</question> (#id): ');
+        $question = new Question('<question>What record do you want to delete?</question> (#id): ');
         $question->setValidator(function ($id) use ($output, $fieldTypeRepository) {
             Assertion::integerish($id, 'Not an id (int), sorry.');
             $fieldType = $fieldTypeRepository->find($id);
