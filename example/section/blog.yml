@@ -1,0 +1,9 @@
+section:
+  name: Blog
+  fields:
+    - title
+    - subTitle
+    - body
+  slug: [title]
+  required: [title, body]
+  default: title
