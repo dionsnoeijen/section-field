@@ -21,7 +21,7 @@ class Field
     /** @var FieldType */
     protected $fieldType;
 
-    /** @var \stdClass */
+    /** @var \array */
     protected $config;
 
     /** @var \DateTime */
@@ -85,12 +85,17 @@ class Field
         $this->fieldType = $fieldType;
     }
 
+    public function getFieldType(): FieldType
+    {
+        return $this->fieldType;
+    }
+
     public function setConfig(\stdClass $config): void
     {
         $this->config = $config;
     }
 
-    public function getConfig(): \stdClass
+    public function getConfig(): array
     {
         return $this->config;
     }

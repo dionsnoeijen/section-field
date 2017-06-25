@@ -28,3 +28,8 @@ services:
     class: Tardigrades\Command\CreateFieldCommand
     arguments:
       - '@doctrine.orm.entity_manager'
+
+  list.field.command:
+    class: Tardigrades\Command\ListFieldCommand
+    arguments:
+      - '@doctrine.orm.entity_manager'
