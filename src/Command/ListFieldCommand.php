@@ -72,7 +72,7 @@ class ListFieldCommand extends Command
         ];
 
         $table
-            ->setHeaders(['#id', 'type', 'handle', 'type', 'config', 'created', 'updated'])
+            ->setHeaders(['#id', 'name', 'handle', 'type', 'config', 'created', 'updated'])
             ->setRows($rows)
         ;
         $table->render();
