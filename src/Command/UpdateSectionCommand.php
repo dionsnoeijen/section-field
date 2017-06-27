@@ -146,7 +146,7 @@ class UpdateSectionCommand extends Command
                 if (is_array($value)) {
                     $config .= "\n";
                     foreach ($value as $subKey=>$subValue) {
-                        $config .= "-{$subValue}\n";
+                        $config .= " - {$subValue}\n";
                     }
                     continue;
                 }
