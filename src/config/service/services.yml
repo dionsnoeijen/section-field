@@ -29,6 +29,11 @@ services:
     arguments:
       - '@doctrine.orm.entity_manager'
 
+  list.section.command:
+    class: Tardigrades\Command\ListSectionCommand
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
   create.field.command:
     class: Tardigrades\Command\CreateFieldCommand
     arguments:
