@@ -11,11 +11,13 @@ While the aim for this tool is to be very high level, simplicity should never pr
 
 ## @todo (don't forget)
 
-- Move FieldTypes to separate dependencies
+- Move FieldTypes to separate dependency
 - Deleting a field type should ony be possible if there are no installed fields with that type.
 - Field handles should not be created based on their name. At least. Maybe on creation when no handle is given, but an update should contain an explicit handle config to prevent application breaking changes just on updating a field name.
 - Move field database interactions from commands to generic services.
 - All commands that list something should check if there are entries.
+- Refactor commands so shared functions are in a baseclass.
+- Unit tests for commands.
 
 ## Config
 
