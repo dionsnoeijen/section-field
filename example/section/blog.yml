@@ -1,9 +1,6 @@
 section:
   name: Blog
-  fields:
-    - title
-    - subTitle
-    - body
+  fields: [title, subTitle, body, created, updated]
   slug: [title]
   required: [title, body]
   default: title
