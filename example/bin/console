@@ -48,6 +48,7 @@ $application = new Application();
 
 $application->add($container->get('create.section.command'));
 $application->add($container->get('update.section.command'));
+$application->add($container->get('delete.section.command'));
 $application->add($container->get('list.section.command'));
 $application->add($container->get('create.field.command'));
 $application->add($container->get('update.field.command'));
