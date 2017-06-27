@@ -104,3 +104,11 @@ variant: There are many way's one might associate relationships. In this case th
 
 
 ### Section commands
+
+`bin/console sf:create-section <path to config yml>`
+
+`bin/console sf:update-section <path to config yml> (follow dialog)`
+
+`bin/console sf:delete-section (follow dialog)`
+
+`bin/console sf:list-section`
