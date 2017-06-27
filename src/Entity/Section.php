@@ -3,6 +3,7 @@
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class Section
 {
@@ -18,7 +19,7 @@ class Section
     /** @var ArrayCollection */
     protected $fields;
 
-    /** @var \stdClass */
+    /** @var array */
     protected $config;
 
     /** @var \DateTime */
@@ -74,7 +75,7 @@ class Section
         $this->fields->remove($field);
     }
 
-    public function getFields(): ArrayCollection
+    public function getFields(): Collection
     {
         return $this->fields;
     }
@@ -84,7 +85,7 @@ class Section
         $this->config = $config;
     }
 
-    public function getConfig(): \stdClass
+    public function getConfig(): array
     {
         return $this->config;
     }
