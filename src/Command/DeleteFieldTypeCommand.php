@@ -5,12 +5,14 @@ namespace Tardigrades\Command;
 use Assert\Assertion;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Tardigrades\Entity\FieldType;
+use Tardigrades\SectionField\Service\FieldTypeManager;
 
 class DeleteFieldTypeCommand extends Command
 {
@@ -19,19 +21,29 @@ class DeleteFieldTypeCommand extends Command
      */
     private $entityManager;
 
+    /**
+     * @var QuestionHelper
+     */
     private $questionHelper;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    /**
+     * @var FieldTypeManager
+     */
+    private $fieldTypeManager;
 
-        parent::__construct(null);
+    public function __construct(
+        EntityManager $entityManager,
+        FieldTypeManager $fieldTypeManager
+    ) {
+        $this->entityManager = $entityManager;
+        $this->fieldTypeManager = $fieldTypeManager;
+
+        parent::__construct('sf:delete-field-type');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:delete-field-type')
             ->setDescription('Delete field type.')
             ->setHelp('Delete field type.')
         ;
@@ -71,8 +83,7 @@ class DeleteFieldTypeCommand extends Command
 
     private function deleteRecord(InputInterface $input, OutputInterface $output, FieldType $fieldType)
     {
-        $this->entityManager->remove($fieldType);
-        $this->entityManager->flush();
+        $this->fieldTypeManager->delete($fieldType);
 
         $output->writeln('<info>Removed!</info>');
     }

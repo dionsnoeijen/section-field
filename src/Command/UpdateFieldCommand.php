@@ -4,17 +4,19 @@ namespace Tardigrades\Command;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Field;
-use Tardigrades\Entity\FieldType;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tardigrades\SectionField\Service\FieldManager;
+use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 class UpdateFieldCommand extends Command
 {
@@ -23,19 +25,29 @@ class UpdateFieldCommand extends Command
      */
     private $entityManager;
 
+    /**
+     * @var QuestionHelper
+     */
     private $questionHelper;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    /**
+     * @var FieldManager
+     */
+    private $fieldManager;
 
-        parent::__construct(null);
+    public function __construct(
+        EntityManager $entityManager,
+        FieldManager $fieldManager
+    ) {
+        $this->entityManager = $entityManager;
+        $this->fieldManager = $fieldManager;
+
+        parent::__construct('sf:update-field');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:update-field')
             ->setDescription('Updates an existing field.')
             ->setHelp('Update field by giving a new or updated field config file.')
             ->addArgument('config', InputArgument::REQUIRED, 'The field configuration yml')
@@ -84,32 +96,17 @@ class UpdateFieldCommand extends Command
     private function updateWhatRecord(InputInterface $input, OutputInterface $output)
     {
         $field = $this->getField($input, $output);
-
         $config = $input->getArgument('config');
-        $fieldConfigYml = Yaml::parse(file_get_contents($config));
 
-        if (key($fieldConfigYml) === 'field' && !empty($fieldConfigYml['field']['type'])) {
-            $fieldTypeRepo = $this->entityManager->getRepository(FieldType::class);
-            $fieldType = $fieldTypeRepo->findOneBy([
-                'type' => $fieldConfigYml['field']['type']
-            ]);
-
-            if (empty($fieldType)) {
-                $output->writeln('<error>Invalid field type. Either it\'s not installed or we have a typo</error>');
-                return;
-            }
-
-            $field->setName($fieldConfigYml['field']['name']);
-            $field->setHandle($this->camelCase($fieldConfigYml['field']['name']));
-            $field->setFieldType($fieldType);
-            $field->setConfig((object) $fieldConfigYml);
-
-            $this->entityManager->flush();
-
-            $output->writeln('<info>Field updated!</info>');
-
-            print_r($fieldConfigYml);
-
+        try {
+            $fieldConfig = FieldConfig::create(
+                Yaml::parse(
+                    file_get_contents($config)
+                )
+            );
+            $this->fieldManager->updateByConfig($fieldConfig, $field);
+        } catch (\Exception $exception) {
+            $output->writeln("<error>Invalid configuration file.  {$exception->getMessage()}</error>");
             return;
         }
 
@@ -122,18 +119,12 @@ class UpdateFieldCommand extends Command
 
         $rows = [];
         foreach ($fields as $field) {
-
-            $config = '';
-            foreach ($field->getConfig()['field'] as $key=>$value) {
-                $config .= $key . ':' . $value . "\n";
-            }
-
             $rows[] = [
                 $field->getId(),
                 $field->getName(),
                 $field->getHandle(),
                 $field->getFieldType()->getType(),
-                $config,
+                (string) $field->getConfig(),
                 $field->getCreated()->format(\DateTime::ATOM),
                 $field->getUpdated()->format(\DateTime::ATOM)
             ];
@@ -149,16 +140,5 @@ class UpdateFieldCommand extends Command
             ->setRows($rows)
         ;
         $table->render();
-    }
-
-    private function camelCase($str, array $noStrip = [])
-    {
-        $str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
-        $str = trim($str);
-        $str = ucwords($str);
-        $str = str_replace(" ", "", $str);
-        $str = lcfirst($str);
-
-        return $str;
     }
 }

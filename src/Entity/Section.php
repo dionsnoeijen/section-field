@@ -4,8 +4,10 @@ namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
+use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class Section
+class Section implements StructureEntity
 {
     /** @var int */
     protected $id;
@@ -85,14 +87,24 @@ class Section
         $this->config = $config;
     }
 
-    public function getConfig(): array
+    public function getConfig(): SectionConfig
     {
-        return $this->config;
+        return SectionConfig::create($this->config);
+    }
+
+    public function setCreated(\DateTime $created): void
+    {
+        $this->created = $created;
     }
 
     public function getCreated(): \DateTime
     {
         return $this->created;
+    }
+
+    public function setUpdated(\DateTime $updated): void
+    {
+        $this->updated = $updated;
     }
 
     public function getUpdated(): \DateTime
@@ -105,7 +117,6 @@ class Section
         $this->created = new \DateTime("now");
         $this->updated = new \DateTime("now");
     }
-
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");

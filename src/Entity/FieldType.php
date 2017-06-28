@@ -3,8 +3,9 @@
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
 
-class FieldType
+class FieldType implements StructureEntity
 {
     /** @var int */
     protected $id;
@@ -97,5 +98,15 @@ class FieldType
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
+    }
+
+    public function getName(): string
+    {
+        return $this->type;
+    }
+
+    public function setName(string $name): string
+    {
+        $this->type = $name;
     }
 }

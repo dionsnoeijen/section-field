@@ -42,7 +42,7 @@ $loader = new YamlFileLoader(
     $container,
     new FileLocator(__DIR__.'/../../src/config/service/')
 );
-$loader->load('services.yml');
+$loader->load('commands.yml');
 
 $application = new Application();
 

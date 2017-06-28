@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 use Assert\Assertion;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -14,6 +15,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldType;
+use Tardigrades\SectionField\Service\FieldManager;
 
 class DeleteFieldCommand extends Command
 {
@@ -22,19 +24,29 @@ class DeleteFieldCommand extends Command
      */
     private $entityManager;
 
+    /**
+     * @var QuestionHelper
+     */
     private $questionHelper;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    /**
+     * @var FieldManager
+     */
+    private $fieldManager;
 
-        parent::__construct(null);
+    public function __construct(
+        EntityManager $entityManager,
+        FieldManager $fieldManager
+    ) {
+        $this->entityManager = $entityManager;
+        $this->fieldManager = $fieldManager;
+
+        parent::__construct('sf:delete-field');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:delete-field')
             ->setDescription('Delete field.')
             ->setHelp('Delete field.')
         ;
@@ -74,24 +86,23 @@ class DeleteFieldCommand extends Command
 
     private function deleteRecord(InputInterface $input, OutputInterface $output, Field $field)
     {
-        $this->entityManager->remove($field);
-        $this->entityManager->flush();
+        $this->fieldManager->delete($field);
 
         $output->writeln('<info>Removed!</info>');
     }
 
     private function getField(InputInterface $input, OutputInterface $output)
     {
-        $fieldRepository = $this->entityManager->getRepository(Field::class);
-
         $question = new Question('<question>What record do you want to delete?</question> (#id): ');
-        $question->setValidator(function ($id) use ($output, $fieldRepository) {
-            Assertion::integerish($id, 'Not an id (int), sorry.');
-            $field = $fieldRepository->find($id);
-            if (!$field) {
-                throw new \Exception('No record with that id id database.');
+        $question->setValidator(function ($id) use ($output) {
+            try {
+                Assertion::integerish($id, 'Not an id (int), sorry.');
+                $field = $this->fieldManager->read($id);
+                return $field;
+            } catch (\Exception $exception) {
+                $output->writeln("<error>{$exception->getMessage()}</error>");
             }
-            return $field;
+            return;
         });
 
         return $this->questionHelper->ask($input, $output, $question);

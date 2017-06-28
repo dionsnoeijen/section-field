@@ -6,11 +6,11 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
-use Tardigrades\Entity\FieldType;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tardigrades\SectionField\Service\FieldTypeManager;
 
 class InstallFieldTypeCommand extends Command
 {
@@ -19,17 +19,24 @@ class InstallFieldTypeCommand extends Command
      */
     private $entityManager;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    /**
+     * @var FieldTypeManager
+     */
+    private $fieldTypeManager;
 
-        parent::__construct(null);
+    public function __construct(
+        EntityManager $entityManager,
+        FieldTypeManager $fieldTypeManager
+    ) {
+        $this->entityManager = $entityManager;
+        $this->fieldTypeManager = $fieldTypeManager;
+
+        parent::__construct('sf:install-field-type');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:install-field-type')
             ->setDescription('Install a field type. Escape the backslash! Like so: This\\\Is\\\Namespace')
             ->setHelp('This command installs a field type, just give the namespace where to find the field.')
             ->addArgument('namespace', InputArgument::REQUIRED, 'Field type namespace')
@@ -40,14 +47,7 @@ class InstallFieldTypeCommand extends Command
     {
         $namespace = $input->getArgument('namespace');
 
-        $fieldType = new FieldType();
-        $type = explode('\\', $namespace);
-        $type = $type[count($type) - 1];
-        $fieldType->setType($type);
-        $fieldType->setNamespace($namespace);
-
-        $this->entityManager->persist($fieldType);
-        $this->entityManager->flush();
+        $fieldType = $this->fieldTypeManager->createWithNamespace($namespace);
 
         $this->renderTable($output, [$fieldType]);
     }
@@ -62,8 +62,8 @@ class InstallFieldTypeCommand extends Command
                 $fieldType->getId(),
                 $fieldType->getType(),
                 $fieldType->getNamespace(),
-                $fieldType->getCreated()->format(\DateTime::ATOM),
-                $fieldType->getUpdated()->format(\DateTime::ATOM)
+                $fieldType->getCreated()->format('Y-m-d'),
+                $fieldType->getUpdated()->format('Y-m-d')
             ];
         }
 

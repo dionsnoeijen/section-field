@@ -22,13 +22,12 @@ class ListFieldCommand extends Command
     {
         $this->entityManager = $entityManager;
 
-        parent::__construct(null);
+        parent::__construct('sf:list-field');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:list-field')
             ->setDescription('Show installed fields.')
             ->setHelp('This command lists all installed fields.')
         ;
@@ -49,20 +48,14 @@ class ListFieldCommand extends Command
 
         $rows = [];
         foreach ($fields as $field) {
-
-            $config = '';
-            foreach ($field->getConfig()['field'] as $key=>$value) {
-                $config .= $key . ':' . $value . "\n";
-            }
-
             $rows[] = [
                 $field->getId(),
                 $field->getName(),
                 $field->getHandle(),
                 $field->getFieldType()->getType(),
-                $config,
-                $field->getCreated()->format(\DateTime::ATOM),
-                $field->getUpdated()->format(\DateTime::ATOM)
+                (string) $field->getConfig(),
+                $field->getCreated()->format('Y-m-d'),
+                $field->getUpdated()->format('Y-m-d')
             ];
         }
 

@@ -3,8 +3,10 @@
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
+use Tardigrades\SectionField\ValueObject\FieldConfig;
 
-class Field
+class Field implements StructureEntity
 {
     /** @var int */
     protected $id;
@@ -95,9 +97,9 @@ class Field
         $this->config = $config;
     }
 
-    public function getConfig(): array
+    public function getConfig(): FieldConfig
     {
-        return $this->config;
+        return FieldConfig::create($this->config);
     }
 
     public function getSections(): ArrayCollection
@@ -105,9 +107,19 @@ class Field
         return $this->sections;
     }
 
+    public function setCreated(\DateTime $created): void
+    {
+        $this->created = $created;
+    }
+
     public function getCreated(): \DateTime
     {
         return $this->created;
+    }
+
+    public function setUpdated(\DateTime $updated): void
+    {
+        $this->updated = $updated;
     }
 
     public function getUpdated(): \DateTime
