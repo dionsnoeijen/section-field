@@ -1,15 +1,16 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
 use Doctrine\ORM\EntityManager;
 use Tardigrades\Entity\Field;
 use Tardigrades\Helper\StringConverter;
-use Tardigrades\SectionField\SectionFieldInterface\Manager;
-use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
+use Tardigrades\SectionField\SectionFieldInterface\FieldManager as FieldManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
+use Tardigrades\SectionField\ValueObject\Id;
 
-class FieldManager implements Manager
+class FieldManager implements FieldManagerInterface
 {
     /**
      * @var EntityManager
@@ -29,7 +30,7 @@ class FieldManager implements Manager
         $this->fieldTypeManager = $fieldTypeManager;
     }
 
-    public function create(StructureEntity $entity): StructureEntity
+    public function create(Field $entity): Field
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -37,7 +38,7 @@ class FieldManager implements Manager
         return $entity;
     }
 
-    public function read(int $id): StructureEntity
+    public function read(Id $id): Field
     {
         $fieldRepository = $this->entityManager->getRepository(Field::class);
 
@@ -51,7 +52,7 @@ class FieldManager implements Manager
         return $field;
     }
 
-    public function update(StructureEntity $entity): StructureEntity
+    public function update(Field $entity): Field
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -59,12 +60,10 @@ class FieldManager implements Manager
         return $entity;
     }
 
-    public function delete(StructureEntity $entity): bool
+    public function delete(Field $entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
-
-        return true;
     }
 
     public function createByConfig(FieldConfig $fieldConfig): Field

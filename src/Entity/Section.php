@@ -1,13 +1,19 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
+use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
+use Tardigrades\SectionField\ValueObject\Created;
+use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\Id;
+use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
+use Tardigrades\SectionField\ValueObject\Updated;
 
-class Section implements StructureEntity
+class Section implements SectionInterface
 {
     /** @var int */
     protected $id;
@@ -35,46 +41,54 @@ class Section implements StructureEntity
         $this->fields = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): Id
     {
-        return $this->id;
+        return Id::create($this->id);
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
-        return $this->name;
+        return Name::create($this->name);
     }
 
-    public function setName(string $name): void
+    public function setName(string $name): SectionInterface
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    public function getHandle(): string
+    public function getHandle(): Handle
     {
-        return $this->handle;
+        return Handle::create($this->handle);
     }
 
-    public function setHandle(string $handle): void
+    public function setHandle(string $handle): SectionInterface
     {
         $this->handle = $handle;
+
+        return $this;
     }
 
-    public function addField(Field $field)
+    public function addField(Field $field): SectionInterface
     {
         if ($this->fields->contains($field)) {
-            return;
+            return $this;
         }
         $this->fields->add($field);
         $field->addSection($this);
+
+        return $this;
     }
 
-    public function removeField(Field $field)
+    public function removeField(Field $field): SectionInterface
     {
-        if ($this->fields->contains($field)) {
-            return;
+        if (!$this->fields->contains($field)) {
+            return $this;
         }
         $this->fields->remove($field);
+
+        return $this;
     }
 
     public function getFields(): Collection
@@ -82,9 +96,11 @@ class Section implements StructureEntity
         return $this->fields;
     }
 
-    public function setConfig(\stdClass $config): void
+    public function setConfig(\stdClass $config): SectionInterface
     {
         $this->config = $config;
+
+        return $this;
     }
 
     public function getConfig(): SectionConfig
@@ -92,32 +108,37 @@ class Section implements StructureEntity
         return SectionConfig::create($this->config);
     }
 
-    public function setCreated(\DateTime $created): void
+    public function setCreated(\DateTime $created): SectionInterface
     {
         $this->created = $created;
+
+        return $this;
     }
 
-    public function getCreated(): \DateTime
+    public function getCreated(): Created
     {
-        return $this->created;
+        return Created::create($this->created);
     }
 
-    public function setUpdated(\DateTime $updated): void
+    public function setUpdated(\DateTime $updated): SectionInterface
     {
         $this->updated = $updated;
+
+        return $this;
     }
 
-    public function getUpdated(): \DateTime
+    public function getUpdated(): Updated
     {
-        return $this->updated;
+        return Updated::create($this->updated);
     }
 
-    public function onPrePersist()
+    public function onPrePersist(): void
     {
         $this->created = new \DateTime("now");
         $this->updated = new \DateTime("now");
     }
-    public function onPreUpdate()
+
+    public function onPreUpdate(): void
     {
         $this->updated = new \DateTime("now");
     }

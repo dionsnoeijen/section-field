@@ -1,15 +1,17 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
 use Doctrine\ORM\EntityManager;
-use Tardigrades\Entity\Section;
+use Tardigrades\Entity\Section as SectionEntity;
+use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\Helper\StringConverter;
-use Tardigrades\SectionField\SectionFieldInterface\Manager;
-use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
+use Tardigrades\SectionField\SectionFieldInterface\SectionManager as SectionManagerInterface;
+use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class SectionManager implements Manager
+class SectionManager implements SectionManagerInterface
 {
     /**
      * @var EntityManager
@@ -29,7 +31,7 @@ class SectionManager implements Manager
         $this->fieldManager = $fieldManager;
     }
 
-    public function create(StructureEntity $entity): StructureEntity
+    public function create(Section $entity): Section
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -37,9 +39,9 @@ class SectionManager implements Manager
         return $entity;
     }
 
-    public function read(int $id): StructureEntity
+    public function read(Id $id): Section
     {
-        $sectionRepository = $this->entityManager->getRepository(Section::class);
+        $sectionRepository = $this->entityManager->getRepository(SectionEntity::class);
 
         /** @var $section Section */
         $section = $sectionRepository->find($id);
@@ -51,7 +53,7 @@ class SectionManager implements Manager
         return $section;
     }
 
-    public function update(StructureEntity $entity): StructureEntity
+    public function update(Section $entity): Section
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -59,17 +61,15 @@ class SectionManager implements Manager
         return $entity;
     }
 
-    public function delete(StructureEntity $entity): bool
+    public function delete(Section $entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
-
-        return true;
     }
 
     public function createFromConfig(SectionConfig $sectionConfig): Section
     {
-        $section = new Section();
+        $section = new SectionEntity();
         $this->updateFromConfig($sectionConfig, $section);
 
         return $section;

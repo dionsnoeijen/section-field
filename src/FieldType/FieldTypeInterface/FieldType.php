@@ -1,6 +1,6 @@
 <?php
 
-namespace Tardigrades\SectionField\SectionFieldInterface;
+namespace Tardigrades\FieldType\FieldTypeInterface;
 
 interface FieldType
 {

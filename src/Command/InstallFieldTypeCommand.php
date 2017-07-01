@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tardigrades\SectionField\Service\FieldTypeManager;
+use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 
 class InstallFieldTypeCommand extends Command
 {
@@ -46,8 +47,9 @@ class InstallFieldTypeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $namespace = $input->getArgument('namespace');
-
-        $fieldType = $this->fieldTypeManager->createWithNamespace($namespace);
+        $fieldType = $this->fieldTypeManager->createWithNamespace(
+            FullyQualifiedClassName::create($namespace)
+        );
 
         $this->renderTable($output, [$fieldType]);
     }

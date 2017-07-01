@@ -1,10 +1,12 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -13,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Tardigrades\Entity\Section;
+use Tardigrades\SectionField\Service\SectionManager;
+use Tardigrades\SectionField\Service\SectionNotFoundException;
 
 class DeleteSectionCommand extends Command
 {
@@ -21,19 +25,29 @@ class DeleteSectionCommand extends Command
      */
     private $entityManager;
 
+    /**
+     * @var QuestionHelper
+     */
     private $questionHelper;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    /**
+     * @var SectionManager
+     */
+    private $sectionManager;
 
-        parent::__construct(null);
+    public function __construct(
+        EntityManager $entityManager,
+        SectionManager $sectionManager
+    ) {
+        $this->entityManager = $entityManager;
+        $this->sectionManager = $sectionManager;
+
+        parent::__construct('sf:delete-section');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:delete-section')
             ->setDescription('Delete section.')
             ->setHelp('Delete section.')
         ;
@@ -56,24 +70,26 @@ class DeleteSectionCommand extends Command
         $this->deleteWhatRecord($input, $output);
     }
 
-    private function getSection(InputInterface $input, OutputInterface $output)
+    private function getSection(InputInterface $input, OutputInterface $output): Section
     {
-        $sectionRepository = $this->entityManager->getRepository(Section::class);
-
         $question = new Question('<question>What record do you want to delete?</question> (#id): ');
-        $question->setValidator(function ($id) use ($output, $sectionRepository) {
+
+        $question->setValidator(function ($id) use ($output) {
             Assertion::integerish($id, 'Not an id (int), sorry.');
-            $section = $sectionRepository->find($id);
-            if (!$section) {
-                throw new \Exception('No record with that id id database.');
+            try {
+                $section = $this->sectionManager->read($id);
+            } catch (SectionNotFoundException $exception) {
+                $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                return null;
             }
+
             return $section;
         });
 
         return $this->questionHelper->ask($input, $output, $question);
     }
 
-    private function deleteWhatRecord(InputInterface $input, OutputInterface $output)
+    private function deleteWhatRecord(InputInterface $input, OutputInterface $output): void
     {
         $section = $this->getSection($input, $output);
 
@@ -86,13 +102,7 @@ class DeleteSectionCommand extends Command
             return;
         }
 
-        $this->deleteRecord($input, $output, $section);
-    }
-
-    private function deleteRecord(InputInterface $input, OutputInterface $output, Section $section)
-    {
-        $this->entityManager->remove($section);
-        $this->entityManager->flush();
+        $this->sectionManager->delete($section);
 
         $output->writeln('<info>Removed!</info>');
     }
@@ -103,24 +113,11 @@ class DeleteSectionCommand extends Command
 
         $rows = [];
         foreach ($sections as $section) {
-            $config = '';
-            foreach ($section->getConfig()['section'] as $key=>$value) {
-                $config .= $key . ':';
-                if (is_array($value)) {
-                    $config .= "\n";
-                    foreach ($value as $subKey=>$subValue) {
-                        $config .= " - {$subValue}\n";
-                    }
-                    continue;
-                }
-                $config .= $value . "\n";
-            }
-
             $rows[] = [
                 $section->getId(),
                 $section->getName(),
                 $section->getHandle(),
-                $config,
+                (string) $section->getConfig(),
                 $section->getCreated()->format(\DateTime::ATOM),
                 $section->getUpdated()->format(\DateTime::ATOM)
             ];

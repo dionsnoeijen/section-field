@@ -2,7 +2,9 @@
 
 namespace Tardigrades\SectionField;
 
-abstract class FieldType implements SectionFieldInterface\FieldType {
+use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
+
+abstract class FieldType implements FieldTypeInterface {
 
     /** @var string */
     protected $name;
