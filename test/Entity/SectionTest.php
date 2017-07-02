@@ -9,11 +9,9 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
-use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
-use Tardigrades\SectionField\ValueObject\Type;
 use Tardigrades\SectionField\ValueObject\Updated;
 use TypeError;
 
