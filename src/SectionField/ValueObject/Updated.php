@@ -20,6 +20,11 @@ class Updated
         return $this->updated->format(\DateTime::ATOM);
     }
 
+    public function getDateTime(): \DateTime
+    {
+        return $this->updated;
+    }
+
     public static function create(\DateTime $updated): self
     {
         return new self($updated);

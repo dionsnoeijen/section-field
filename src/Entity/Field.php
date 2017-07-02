@@ -3,7 +3,10 @@
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
+use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
+use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Handle;
@@ -28,7 +31,7 @@ class Field implements FieldInterface
     /** @var FieldType */
     protected $fieldType;
 
-    /** @var \array */
+    /** @var array */
     protected $config;
 
     /** @var \DateTime */
@@ -37,10 +40,10 @@ class Field implements FieldInterface
     /** @var \DateTime */
     protected $updated;
 
-    public function __construct()
-    {
-        $this->fieldConfigs = new ArrayCollection();
-        $this->sections = new ArrayCollection();
+    public function __construct(
+        Collection $sections = null
+    ) {
+        $this->sections = is_null($sections) ? new ArrayCollection() : $sections;
     }
 
     public function getId(): Id
@@ -55,7 +58,7 @@ class Field implements FieldInterface
 
     public function setName(Name $name): Field
     {
-        $this->name = $name;
+        $this->name = (string) $name;
 
         return $this;
     }
@@ -72,7 +75,7 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function addSection(Section $section): Field
+    public function addSection(SectionInterface $section): Field
     {
         if ($this->sections->contains($section)) {
             return $this;
@@ -83,7 +86,7 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function removeSection(Section $section): Field
+    public function removeSection(SectionInterface $section): Field
     {
         if ($this->sections->contains($section)) {
             return $this;
@@ -94,7 +97,12 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function setFieldType(FieldType $fieldType): Field
+    public function getSections(): Collection
+    {
+        return $this->sections;
+    }
+
+    public function setFieldType(FieldTypeInterface $fieldType): Field
     {
         $fieldType->addField($this);
         $this->fieldType = $fieldType;
@@ -102,12 +110,12 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function getFieldType(): FieldType
+    public function getFieldType(): FieldTypeInterface
     {
         return $this->fieldType;
     }
 
-    public function setConfig(\stdClass $config): Field
+    public function setConfig(array $config): Field
     {
         $this->config = $config;
 
@@ -116,12 +124,7 @@ class Field implements FieldInterface
 
     public function getConfig(): FieldConfig
     {
-        return FieldConfig::create($this->config);
-    }
-
-    public function getSections(): ArrayCollection
-    {
-        return $this->sections;
+        return FieldConfig::create((array) $this->config);
     }
 
     public function setCreated(\DateTime $created): Field
