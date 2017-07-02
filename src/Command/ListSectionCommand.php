@@ -1,88 +1,65 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\Entity\Section;
+use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
 class ListSectionCommand extends Command
 {
     /**
-     * @var EntityManager
+     * @var SectionManager
      */
-    private $entityManager;
+    private $sectionManager;
 
-    private $questionHelper;
+    public function __construct(
+        SectionManager $sectionManager
+    ) {
+        $this->sectionManager = $sectionManager;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-
-        parent::__construct(null);
+        parent::__construct('sf:list-section');
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setName('sf:list-section')
             ->setDescription('Show installed sections.')
             ->setHelp('This command lists all installed sections.')
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $this->questionHelper = $this->getHelper('question');
-        $this->showInstalledSections($input, $output);
-    }
-
-    private function showInstalledSections(InputInterface $input, OutputInterface $output)
-    {
-        $sectionRepository = $this->entityManager->getRepository(Section::class);
-
-        $sections = $sectionRepository->findAll();
+        $sections = $this->sectionManager->readAll();
 
         $this->renderTable($output, $sections);
     }
 
-    private function renderTable(OutputInterface $output, array $sections)
+    private function renderTable(OutputInterface $output, array $sections): void
     {
         $table = new Table($output);
 
         $rows = [];
         foreach ($sections as $section) {
-            $config = '';
-            foreach ($section->getConfig()['section'] as $key=>$value) {
-                $config .= $key . ':';
-                if (is_array($value)) {
-                    $config .= "\n";
-                    foreach ($value as $subKey=>$subValue) {
-                        $config .= " - {$subValue}\n";
-                    }
-                    continue;
-                }
-                $config .= $value . "\n";
-            }
-
             $rows[] = [
                 $section->getId(),
                 $section->getName(),
                 $section->getHandle(),
-                $config,
-                $section->getCreated()->format(\DateTime::ATOM),
-                $section->getUpdated()->format(\DateTime::ATOM)
+                (string) $section->getConfig(),
+                (string) $section->getCreated(),
+                (string) $section->getUpdated()
             ];
         }
 
         $rows[] = new TableSeparator();
         $rows[] = [
-            new TableCell('<info>All installed Sections</info>', array('colspan' => 6))
+            new TableCell('<info>All installed Sections</info>', ['colspan' => 6])
         ];
 
         $table

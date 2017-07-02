@@ -1,9 +1,8 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Assert\Assertion;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
@@ -15,16 +14,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\Service\FieldManager;
+use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\Service\FieldNotFoundException;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
+use Tardigrades\SectionField\ValueObject\Id;
 
 class UpdateFieldCommand extends Command
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
     /**
      * @var QuestionHelper
      */
@@ -36,10 +32,8 @@ class UpdateFieldCommand extends Command
     private $fieldManager;
 
     public function __construct(
-        EntityManager $entityManager,
         FieldManager $fieldManager
     ) {
-        $this->entityManager = $entityManager;
         $this->fieldManager = $fieldManager;
 
         parent::__construct('sf:update-field');
@@ -61,39 +55,30 @@ class UpdateFieldCommand extends Command
         $this->showInstalledFields($input, $output);
     }
 
-    private function showInstalledFields(InputInterface $input, OutputInterface $output)
+    private function showInstalledFields(InputInterface $input, OutputInterface $output): void
     {
-        $fieldRepository = $this->entityManager->getRepository(Field::class);
-
-        $fields = $fieldRepository->findAll();
+        $fields = $this->fieldManager->readAll();
 
         $this->renderTable($output, $fields);
         $this->updateWhatRecord($input, $output);
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return Field|null
-     */
-    private function getField(InputInterface $input, OutputInterface $output)
+    private function getField(InputInterface $input, OutputInterface $output): Field
     {
-        $fieldRepository = $this->entityManager->getRepository(Field::class);
-
         $question = new Question('<question>What record do you want to update?</question> (#id): ');
-        $question->setValidator(function ($id) use ($output, $fieldRepository) {
-            Assertion::integerish($id, 'Not an id (int), sorry.');
-            $field = $fieldRepository->find($id);
-            if (!$field) {
-                throw new \Exception('No record with that id in database.');
+        $question->setValidator(function ($id) use ($output) {
+            try {
+                return $this->fieldManager->read(Id::create($id));
+            } catch (FieldNotFoundException $exception) {
+                $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
-            return $field;
+            return null;
         });
 
         return $this->questionHelper->ask($input, $output, $question);
     }
 
-    private function updateWhatRecord(InputInterface $input, OutputInterface $output)
+    private function updateWhatRecord(InputInterface $input, OutputInterface $output): void
     {
         $field = $this->getField($input, $output);
         $config = $input->getArgument('config');
@@ -110,10 +95,10 @@ class UpdateFieldCommand extends Command
             return;
         }
 
-        $output->writeln('<error>Invalid field config.</error>');
+        $output->writeln('<info>Field updated!</info>');
     }
 
-    private function renderTable(OutputInterface $output, array $fields)
+    private function renderTable(OutputInterface $output, array $fields): void
     {
         $table = new Table($output);
 
@@ -125,14 +110,14 @@ class UpdateFieldCommand extends Command
                 $field->getHandle(),
                 $field->getFieldType()->getType(),
                 (string) $field->getConfig(),
-                $field->getCreated()->format(\DateTime::ATOM),
-                $field->getUpdated()->format(\DateTime::ATOM)
+                (string) $field->getCreated(),
+                (string) $field->getUpdated()
             ];
         }
 
         $rows[] = new TableSeparator();
         $rows[] = [
-            new TableCell('<info>All installed Fields</info>', array('colspan' => 6))
+            new TableCell('<info>All installed Fields</info>', ['colspan' => 6])
         ];
 
         $table

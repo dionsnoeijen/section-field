@@ -1,8 +1,8 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -10,26 +10,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\Service\FieldTypeManager;
+use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 
 class InstallFieldTypeCommand extends Command
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
     /**
      * @var FieldTypeManager
      */
     private $fieldTypeManager;
 
     public function __construct(
-        EntityManager $entityManager,
         FieldTypeManager $fieldTypeManager
     ) {
-        $this->entityManager = $entityManager;
         $this->fieldTypeManager = $fieldTypeManager;
 
         parent::__construct('sf:install-field-type');
@@ -47,7 +40,7 @@ class InstallFieldTypeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $namespace = $input->getArgument('namespace');
-        $fieldType = $this->fieldTypeManager->createWithNamespace(
+        $fieldType = $this->fieldTypeManager->createWithFullyQualifiedClassName(
             FullyQualifiedClassName::create($namespace)
         );
 
@@ -64,8 +57,8 @@ class InstallFieldTypeCommand extends Command
                 $fieldType->getId(),
                 $fieldType->getType(),
                 $fieldType->getNamespace(),
-                $fieldType->getCreated()->format('Y-m-d'),
-                $fieldType->getUpdated()->format('Y-m-d')
+                (string) $fieldType->getCreated(),
+                (string) $fieldType->getUpdated()
             ];
         }
 

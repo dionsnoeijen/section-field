@@ -3,10 +3,15 @@
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
+use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
+use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
+use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\Id;
+use Tardigrades\SectionField\ValueObject\Name;
+use Tardigrades\SectionField\ValueObject\Updated;
 
-class Field implements StructureEntity
+class Field implements FieldInterface
 {
     /** @var int */
     protected $id;
@@ -38,53 +43,63 @@ class Field implements StructureEntity
         $this->sections = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): Id
     {
-        return $this->id;
+        return Id::create($this->id);
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
-        return $this->name;
+        return Name::create($this->name);
     }
 
-    public function setName(string $name): void
+    public function setName(Name $name): Field
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    public function getHandle(): string
+    public function getHandle(): Handle
     {
-        return $this->handle;
+        return Handle::create($this->handle);
     }
 
-    public function setHandle(string $handle): void
+    public function setHandle(string $handle): Field
     {
         $this->handle = $handle;
+
+        return $this;
     }
 
-    public function addSection(Section $section): void
+    public function addSection(Section $section): Field
     {
         if ($this->sections->contains($section)) {
-            return;
+            return $this;
         }
         $this->sections->add($section);
         $section->addField($this);
+
+        return $this;
     }
 
-    public function removeSection(Section $section): void
+    public function removeSection(Section $section): Field
     {
         if ($this->sections->contains($section)) {
-            return;
+            return $this;
         }
         $this->sections->remove($section);
         $section->removeField($this);
+
+        return $this;
     }
 
-    public function setFieldType(FieldType $fieldType)
+    public function setFieldType(FieldType $fieldType): Field
     {
         $fieldType->addField($this);
         $this->fieldType = $fieldType;
+
+        return $this;
     }
 
     public function getFieldType(): FieldType
@@ -92,9 +107,11 @@ class Field implements StructureEntity
         return $this->fieldType;
     }
 
-    public function setConfig(\stdClass $config): void
+    public function setConfig(\stdClass $config): Field
     {
         $this->config = $config;
+
+        return $this;
     }
 
     public function getConfig(): FieldConfig
@@ -107,33 +124,37 @@ class Field implements StructureEntity
         return $this->sections;
     }
 
-    public function setCreated(\DateTime $created): void
+    public function setCreated(\DateTime $created): Field
     {
         $this->created = $created;
+
+        return $this;
     }
 
-    public function getCreated(): \DateTime
+    public function getCreated(): Created
     {
-        return $this->created;
+        return Created::create($this->created);
     }
 
-    public function setUpdated(\DateTime $updated): void
+    public function setUpdated(\DateTime $updated): Field
     {
         $this->updated = $updated;
+
+        return $this;
     }
 
-    public function getUpdated(): \DateTime
+    public function getUpdated(): Updated
     {
-        return $this->updated;
+        return Updated::create($this->updated);
     }
 
-    public function onPrePersist()
+    public function onPrePersist(): void
     {
         $this->created = new \DateTime("now");
         $this->updated = new \DateTime("now");
     }
 
-    public function onPreUpdate()
+    public function onPreUpdate(): void
     {
         $this->updated = new \DateTime("now");
     }

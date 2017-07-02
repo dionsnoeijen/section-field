@@ -1,34 +1,34 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
-use Tardigrades\Entity\FieldType;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 
 class ListFieldTypeCommand extends Command
 {
     /**
-     * @var EntityManager
+     * @var FieldTypeManager
      */
-    private $entityManager;
+    private $fieldTypeManager;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(
+        FieldTypeManager $fieldTypeManager
+    ) {
+        $this->fieldTypeManager = $fieldTypeManager;
 
-        parent::__construct(null);
+        parent::__construct('sf:list-field-type');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:list-field-type')
             ->setDescription('Show installed field types.')
             ->setHelp('This command lists all installed field types.')
         ;
@@ -36,9 +36,7 @@ class ListFieldTypeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
-
-        $fieldTypes = $fieldTypeRepository->findAll();
+        $fieldTypes = $this->fieldTypeManager->readAll();
 
         $this->renderTable($output, $fieldTypes);
     }
@@ -53,14 +51,14 @@ class ListFieldTypeCommand extends Command
                 $fieldType->getId(),
                 $fieldType->getType(),
                 $fieldType->getNamespace(),
-                $fieldType->getCreated()->format(\DateTime::ATOM),
-                $fieldType->getUpdated()->format(\DateTime::ATOM)
+                (string) $fieldType->getCreated(),
+                (string) $fieldType->getUpdated()
             ];
         }
 
         $rows[] = new TableSeparator();
         $rows[] = [
-            new TableCell('<info>All installed FieldTypes</info>', array('colspan' => 5))
+            new TableCell('<info>All installed FieldTypes</info>', ['colspan' => 5])
         ];
 
         $table

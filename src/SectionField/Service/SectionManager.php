@@ -53,6 +53,18 @@ class SectionManager implements SectionManagerInterface
         return $section;
     }
 
+    public function readAll(): array
+    {
+        $sectionRepository = $this->entityManager->getRepository(SectionEntity::class);
+        $sections = $sectionRepository->findAll();
+
+        if (empty($sections)) {
+            throw new SectionNotFoundException();
+        }
+
+        return $sections;
+    }
+
     public function update(Section $entity): Section
     {
         $this->entityManager->persist($entity);

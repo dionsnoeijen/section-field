@@ -1,11 +1,18 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Tardigrades\SectionField\SectionFieldInterface\StructureEntity;
+use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
+use Tardigrades\SectionField\ValueObject\Created;
+use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
+use Tardigrades\SectionField\ValueObject\Id;
+use Tardigrades\SectionField\ValueObject\Name;
+use Tardigrades\SectionField\ValueObject\Type;
+use Tardigrades\SectionField\ValueObject\Updated;
 
-class FieldType implements StructureEntity
+class FieldType implements FieldTypeInterface
 {
     /** @var int */
     protected $id;
@@ -30,24 +37,28 @@ class FieldType implements StructureEntity
         $this->fields = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): Id
     {
-        return $this->id;
+        return Id::create($this->id);
     }
 
-    public function getType(): string
+    public function getType(): Type
     {
-        return $this->type;
+        return Type::create($this->type);
     }
 
-    public function setType(string $type): void
+    public function setType(string $type): FieldType
     {
         $this->type = $type;
+
+        return $this;
     }
 
-    public function addField(Field $field): void
+    public function addField(Field $field): FieldType
     {
         $this->fields->add($field);
+
+        return $this;
     }
 
     public function getFields(): ArrayCollection
@@ -55,58 +66,62 @@ class FieldType implements StructureEntity
         return $this->fields;
     }
 
-    public function setNamespace(string $namespace): void
+    public function setNamespace(string $namespace): FieldType
     {
         $this->namespace = $namespace;
+
+        return $this;
     }
 
-    public function getNamespace(): string
+    public function getNamespace(): FullyQualifiedClassName
     {
-        return $this->namespace;
+        return FullyQualifiedClassName::create($this->namespace);
     }
 
-    public function setCreated(\DateTime $created): self
+    public function setCreated(\DateTime $created): FieldType
     {
         $this->created = $created;
 
         return $this;
     }
 
-    public function getCreated(): \DateTime
+    public function getCreated(): Created
     {
-        return $this->created;
+        return Created::create($this->created);
     }
 
-    public function setUpdated(\DateTime $updated): self
+    public function setUpdated(\DateTime $updated): FieldType
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    public function getUpdated(): \DateTime
+    public function getUpdated(): Updated
     {
-        return $this->updated;
+        return Updated::create($this->updated);
     }
 
-    public function onPrePersist()
+    public function onPrePersist(): void
     {
         $this->created = new \DateTime("now");
         $this->updated = new \DateTime("now");
     }
 
-    public function onPreUpdate()
+    public function onPreUpdate(): void
     {
         $this->updated = new \DateTime("now");
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
-        return $this->type;
+        return Name::create($this->type);
     }
 
-    public function setName(string $name): string
+    public function setName(string $name): FieldType
     {
         $this->type = $name;
+
+        return $this;
     }
 }

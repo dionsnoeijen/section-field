@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Tardigrades\Command;
 
 use Assert\Assertion;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
@@ -15,16 +14,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\Service\SectionManager;
+use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\Service\SectionNotFoundException;
+use Tardigrades\SectionField\ValueObject\Id;
 
 class DeleteSectionCommand extends Command
 {
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
     /**
      * @var QuestionHelper
      */
@@ -36,10 +31,8 @@ class DeleteSectionCommand extends Command
     private $sectionManager;
 
     public function __construct(
-        EntityManager $entityManager,
         SectionManager $sectionManager
     ) {
-        $this->entityManager = $entityManager;
         $this->sectionManager = $sectionManager;
 
         parent::__construct('sf:delete-section');
@@ -62,9 +55,7 @@ class DeleteSectionCommand extends Command
 
     private function showInstalledSections(InputInterface $input, OutputInterface $output)
     {
-        $sectionRepository = $this->entityManager->getRepository(Section::class);
-
-        $sections = $sectionRepository->findAll();
+        $sections = $this->sectionManager->readAll();
 
         $this->renderTable($output, $sections);
         $this->deleteWhatRecord($input, $output);
@@ -75,15 +66,12 @@ class DeleteSectionCommand extends Command
         $question = new Question('<question>What record do you want to delete?</question> (#id): ');
 
         $question->setValidator(function ($id) use ($output) {
-            Assertion::integerish($id, 'Not an id (int), sorry.');
             try {
-                $section = $this->sectionManager->read($id);
+                return $this->sectionManager->read(Id::create($id));
             } catch (SectionNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
-                return null;
             }
-
-            return $section;
+            return null;
         });
 
         return $this->questionHelper->ask($input, $output, $question);

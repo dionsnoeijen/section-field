@@ -52,6 +52,18 @@ class FieldManager implements FieldManagerInterface
         return $field;
     }
 
+    public function readAll(): array
+    {
+        $fieldRepository = $this->entityManager->getRepository(Field::class);
+        $fields = $fieldRepository->findAll();
+
+        if (empty($fields)) {
+            throw new FieldNotFoundException();
+        }
+
+        return $fields;
+    }
+
     public function update(Field $entity): Field
     {
         $this->entityManager->persist($entity);

@@ -1,9 +1,9 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Assert\Assertion;
-use Doctrine\ORM\EntityManager;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -13,27 +13,34 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
+use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
+use Tardigrades\SectionField\ValueObject\Id;
 
 class UpdateFieldTypeCommand extends Command
 {
     /**
-     * @var EntityManager
+     * @var QuestionHelper
      */
-    private $entityManager;
-
     private $questionHelper;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    /**
+     * @var FieldTypeManager
+     */
+    private $fieldTypeManager;
 
-        parent::__construct(null);
+    public function __construct(
+        FieldTypeManager $fieldTypeManager
+    ) {
+        $this->fieldTypeManager = $fieldTypeManager;
+
+        parent::__construct('sf:update-field-type');
     }
 
     protected function configure()
     {
         $this
-            ->setName('sf:update-field-type')
             ->setDescription('Creates a new section.')
             ->setHelp('This command allows you to create a section...')
         ;
@@ -75,8 +82,7 @@ class UpdateFieldTypeCommand extends Command
 
     private function showInstalledFieldTypes(InputInterface $input, OutputInterface $output)
     {
-        $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
-        $fieldTypes = $fieldTypeRepository->findAll();
+        $fieldTypes = $this->fieldTypeManager->readAll();
 
         $this->renderTable($output, $fieldTypes);
         $this->updateWhatRecord($input, $output);
@@ -87,30 +93,30 @@ class UpdateFieldTypeCommand extends Command
      * @param OutputInterface $output
      * @return FieldType|null
      */
-    private function getFieldType(InputInterface $input, OutputInterface $output)
+    private function getFieldType(InputInterface $input, OutputInterface $output): FieldType
     {
-        $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
-
         $question = new Question('<question>What record do you want to update?</question> (#id): ');
-        $question->setValidator(function ($id) use ($output, $fieldTypeRepository) {
-            Assertion::integerish($id, 'Not an id (int), sorry.');
-            $fieldType = $fieldTypeRepository->find($id);
-            if (!$fieldType) {
-                throw new \Exception('No record with that id in database.');
+        $question->setValidator(function ($id) use ($output) {
+            try {
+                return $this->fieldTypeManager->read(Id::create($id));
+            } catch (FieldTypeNotFoundException $exception) {
+                $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
-            return $fieldType;
+            return null;
         });
 
         return $this->questionHelper->ask($input, $output, $question);
     }
 
-    private function getNamespace(InputInterface $input, OutputInterface $output, FieldType $fieldType)
+    private function getNamespace(InputInterface $input, OutputInterface $output, FieldType $fieldType): FullyQualifiedClassName
     {
         $updateQuestion = new Question('<question>Give a new namespace</question> (old: ' . $fieldType->getNamespace() . '): ');
-        $updateQuestion->setValidator(function ($namespace) {
-            Assertion::notEmpty($namespace, 'Oh come on, give me at least something.');
-
-            return $namespace;
+        $updateQuestion->setValidator(function ($namespace) use ($output) {
+            try {
+                return FullyQualifiedClassName::create($namespace);
+            } catch (\Exception $exception) {
+                $output->writeln('<error>' . $exception->getMessage() . '</error>');
+            }
         });
 
         return $this->questionHelper->ask($input, $output, $updateQuestion);
@@ -121,7 +127,7 @@ class UpdateFieldTypeCommand extends Command
         $fieldType = $this->getFieldType($input, $output);
         $namespace = $this->getNamespace($input, $output, $fieldType);
 
-        $output->writeln('<info>Record with id #' . $fieldType->getId() . ' will be updated with namespace: </info>' . $namespace);
+        $output->writeln('<info>Record with id #' . $fieldType->getId() . ' will be updated with namespace: </info>' . (string) $namespace);
 
         $sure = new ConfirmationQuestion('<comment>Are you sure?</comment> (y/n) ', false);
 
@@ -133,16 +139,11 @@ class UpdateFieldTypeCommand extends Command
         $this->updateRecord($input, $output, $fieldType, $namespace);
     }
 
-    private function updateRecord(InputInterface $input, OutputInterface $output, FieldType $fieldType, string $namespace)
+    private function updateRecord(InputInterface $input, OutputInterface $output, FieldType $fieldType, FullyQualifiedClassName $namespace)
     {
-        $output->writeln('<info>Querying</info>');
-
-        $type = explode('\\', $namespace);
-        $type = $type[count($type) - 1];
-        $fieldType->setType($type);
-        $fieldType->setNamespace($namespace);
-
-        $this->entityManager->flush();
+        $fieldType->setType($namespace->getClassName());
+        $fieldType->setNamespace((string) $namespace);
+        $fieldType = $this->fieldTypeManager->update($fieldType);
         $this->renderTable($output, [$fieldType]);
 
         $output->writeln('<info>Done!</info>');

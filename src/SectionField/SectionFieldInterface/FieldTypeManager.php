@@ -12,6 +12,7 @@ interface FieldTypeManager
 {
     public function create(FieldType $entity): FieldType;
     public function read(Id $id): FieldType;
+    public function readAll(): array;
     public function update(FieldType $entity): FieldType;
     public function delete(FieldType $entity): void;
     public function createWithFullyQualifiedClassName(FullyQualifiedClassName $fullyQualifiedClassName): FieldType;

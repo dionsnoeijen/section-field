@@ -2,25 +2,25 @@
 
 namespace Tardigrades\Command;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
-use Tardigrades\Entity\Field;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 
 class ListFieldCommand extends Command
 {
     /**
-     * @var EntityManager
+     * @var FieldManager
      */
-    private $entityManager;
+    private $fieldManager;
 
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(
+        FieldManager $fieldManager
+    ) {
+        $this->fieldManager = $fieldManager;
 
         parent::__construct('sf:list-field');
     }
@@ -35,9 +35,7 @@ class ListFieldCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fieldRepository = $this->entityManager->getRepository(Field::class);
-
-        $fields = $fieldRepository->findAll();
+        $fields = $this->fieldManager->readAll();
 
         $this->renderTable($output, $fields);
     }
@@ -54,14 +52,14 @@ class ListFieldCommand extends Command
                 $field->getHandle(),
                 $field->getFieldType()->getType(),
                 (string) $field->getConfig(),
-                $field->getCreated()->format('Y-m-d'),
-                $field->getUpdated()->format('Y-m-d')
+                (string) $field->getCreated(),
+                (string) $field->getUpdated()
             ];
         }
 
         $rows[] = new TableSeparator();
         $rows[] = [
-            new TableCell('<info>All installed Fields</info>', array('colspan' => 6))
+            new TableCell('<info>All installed Fields</info>', ['colspan' => 6])
         ];
 
         $table
