@@ -4,7 +4,7 @@ namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
 
-class FullyQualifiedClassName {
+final class FullyQualifiedClassName {
 
     /**
      * @var string

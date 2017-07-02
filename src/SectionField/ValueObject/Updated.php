@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\ValueObject;
 
-class Updated
+final class Updated
 {
     /**
      * @var \DateTime

@@ -5,7 +5,7 @@ namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
 
-class Handle
+final class Handle
 {
     /** @var string */
     private $handle;

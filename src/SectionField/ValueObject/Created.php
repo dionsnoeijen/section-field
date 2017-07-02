@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\ValueObject;
 
-class Created
+final class Created
 {
     /**
      * @var \DateTime
