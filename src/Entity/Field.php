@@ -105,8 +105,14 @@ class Field implements FieldInterface
 
     public function setFieldType(FieldTypeInterface $fieldType): Field
     {
-        $fieldType->addField($this);
         $this->fieldType = $fieldType;
+
+        return $this;
+    }
+
+    public function removeFieldType(FieldTypeInterface $fieldType): Field
+    {
+        $this->fieldType = null;
 
         return $this;
     }

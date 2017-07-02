@@ -24,6 +24,7 @@ interface Field
     public function removeSection(Section $section): FieldEntity;
     public function getSections(): Collection;
     public function setFieldType(FieldType $fieldType): FieldEntity;
+    public function removeFieldType(FieldType $fieldType): FieldEntity;
     public function getFieldType(): FieldType;
     public function setConfig(array $config): FieldEntity;
     public function getConfig(): FieldConfig;

@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
+use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -32,9 +34,10 @@ class FieldType implements FieldTypeInterface
     /** @var \DateTime */
     protected $updated;
 
-    public function __construct()
-    {
-        $this->fields = new ArrayCollection();
+    public function __construct(
+        Collection $fields = null
+    ) {
+        $this->fields = is_null($fields) ? new ArrayCollection() : $fields;
     }
 
     public function getId(): Id
@@ -54,9 +57,24 @@ class FieldType implements FieldTypeInterface
         return $this;
     }
 
-    public function addField(Field $field): FieldType
+    public function addField(FieldInterface $field): FieldType
     {
+        if ($this->fields->contains($field)) {
+            return $this;
+        }
+        $field->setFieldType($this);
         $this->fields->add($field);
+
+        return $this;
+    }
+
+    public function removeField(FieldInterface $field): FieldType
+    {
+        if (!$this->fields->contains($field)) {
+            return $this;
+        }
+        $field->removeFieldType($this);
+        $this->fields->remove($field);
 
         return $this;
     }

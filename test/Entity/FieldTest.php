@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
 use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
 use Tardigrades\SectionField\ValueObject\Created;
@@ -25,7 +24,7 @@ use TypeError;
 final class FieldTest extends TestCase
 {
     /**
-     * @var FieldInterface
+     * @var Field
      */
     private $field;
 
@@ -147,6 +146,21 @@ final class FieldTest extends TestCase
         $fieldType->shouldReceive('addField')->once()->with($this->field);
 
         $field = $this->field->setFieldType($fieldType);
+
+        $this->assertSame($this->field, $field);
+    }
+
+    /**
+     * @test
+     * @covers ::removeFieldType
+     */
+    public function it_should_remove_the_field_type()
+    {
+        $fieldType = Mockery::mock(FieldTypeInterface::class);
+
+        $fieldType->shouldReceive('removeField')->once()->with($this->field);
+
+        $field = $this->field->removeFieldType($fieldType);
 
         $this->assertSame($this->field, $field);
     }
