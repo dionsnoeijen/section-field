@@ -88,7 +88,6 @@ class Section implements SectionInterface
         if (!$this->fields->contains($field)) {
             return $this;
         }
-        $field->removeSection($this);
         $this->fields->remove($field);
 
         return $this;

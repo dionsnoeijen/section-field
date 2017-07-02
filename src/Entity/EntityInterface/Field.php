@@ -12,12 +12,12 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\Updated;
 
-
 interface Field
 {
-    public function getId(): Id;
+    public function setId(int $id): FieldEntity;
+    public function getId(): ?Id;
     public function getName(): Name;
-    public function setName(Name $name): FieldEntity;
+    public function setName(string $name): FieldEntity;
     public function getHandle(): Handle;
     public function setHandle(string $handle): FieldEntity;
     public function addSection(Section $section): FieldEntity;
@@ -29,9 +29,9 @@ interface Field
     public function setConfig(array $config): FieldEntity;
     public function getConfig(): FieldConfig;
     public function setCreated(\DateTime $created): FieldEntity;
-    public function getCreated(): Created;
+    public function getCreated(): ?Created;
     public function setUpdated(\DateTime $updated): FieldEntity;
-    public function getUpdated(): Updated;
+    public function getUpdated(): ?Updated;
     public function onPrePersist(): void;
     public function onPreUpdate(): void;
 }

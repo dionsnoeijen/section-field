@@ -3,17 +3,19 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Field;
 use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager as FieldManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldTypeManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Id;
+use Tardigrades\SectionField\ValueObject\Type;
 
 class FieldManager implements FieldManagerInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
@@ -23,8 +25,8 @@ class FieldManager implements FieldManagerInterface
     private $fieldTypeManager;
 
     public function __construct(
-        EntityManager $entityManager,
-        FieldTypeManager $fieldTypeManager
+        EntityManagerInterface $entityManager,
+        FieldTypeManagerInterface $fieldTypeManager
     ) {
         $this->entityManager = $entityManager;
         $this->fieldTypeManager = $fieldTypeManager;
@@ -43,7 +45,7 @@ class FieldManager implements FieldManagerInterface
         $fieldRepository = $this->entityManager->getRepository(Field::class);
 
         /** @var $field Field */
-        $field = $fieldRepository->find($id);
+        $field = $fieldRepository->find($id->toInt());
 
         if (empty($field)) {
             throw new FieldNotFoundException();
@@ -80,20 +82,7 @@ class FieldManager implements FieldManagerInterface
 
     public function createByConfig(FieldConfig $fieldConfig): Field
     {
-        $field = $this->updateByConfig($fieldConfig, new Field());
-
-        return $field;
-    }
-
-    public function updateByConfig(FieldConfig $fieldConfig, Field $field): Field
-    {
-        $fieldConfig = $fieldConfig->toArray();
-        $fieldType = $this->fieldTypeManager->readByType($fieldConfig['field']['type']);
-
-        $field->setName($fieldConfig['field']['name']);
-        $field->setHandle(StringConverter::toCamelCase($fieldConfig['field']['name']));
-        $field->setFieldType($fieldType);
-        $field->setConfig((object) $fieldConfig);
+        $field = $this->setUpFieldByConfig($fieldConfig, new Field());
 
         $this->entityManager->persist($field);
         $this->entityManager->flush();
@@ -101,13 +90,35 @@ class FieldManager implements FieldManagerInterface
         return $field;
     }
 
-    public function readFieldsByArray(array $fields): array
+    public function updateByConfig(FieldConfig $fieldConfig, Field $field): Field
     {
-        $fieldsConfig = [];
-        foreach ($fields as $fieldConfig) {
-            $fieldsConfig[] = '\'' . $fieldConfig . '\'';
+        $field = $this->setUpFieldByConfig($fieldConfig, $field);
+
+        $this->entityManager->flush();
+
+        return $field;
+    }
+
+    private function setUpFieldByConfig(FieldConfig $fieldConfig, Field $field): Field
+    {
+        $fieldConfig = $fieldConfig->toArray();
+        $fieldType = $this->fieldTypeManager->readByType(Type::create($fieldConfig['field']['type']));
+
+        $field->setName($fieldConfig['field']['name']);
+        $field->setHandle(StringConverter::toCamelCase($fieldConfig['field']['name']));
+        $field->setFieldType($fieldType);
+        $field->setConfig($fieldConfig);
+
+        return $field;
+    }
+
+    public function readFieldsByHandles(array $handles): array
+    {
+        $fieldHandles = [];
+        foreach ($handles as $handle) {
+            $fieldHandles[] = '\'' . $handle . '\'';
         }
-        $whereIn = implode(',', $fieldsConfig);
+        $whereIn = implode(',', $fieldHandles);
         $query = $this->entityManager->createQuery(
             "SELECT field FROM Tardigrades\Entity\Field field WHERE field.handle IN ({$whereIn})"
         );

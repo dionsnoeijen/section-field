@@ -23,9 +23,14 @@ final class Id
         return (string) $this->id;
     }
 
+    public function toInt(): int
+    {
+        return (int) $this->id;
+    }
+
     public function getId(): int
     {
-        return $this->id;
+        return $this->toInt();
     }
 
     public static function create(int $id): self

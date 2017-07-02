@@ -91,7 +91,7 @@ class SectionManager implements SectionManagerInterface
     {
         $sectionConfig = $sectionConfig->toArray();
 
-        $fields = $this->fieldManager->readFieldsByArray($sectionConfig['section']['fields']);
+        $fields = $this->fieldManager->readFieldsByHandles($sectionConfig['section']['fields']);
 
         $section->setName($sectionConfig['section']['name']);
         $section->setHandle(StringConverter::toCamelCase($sectionConfig['section']['name']));

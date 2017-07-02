@@ -47,9 +47,16 @@ class Field implements FieldInterface
         $this->sections = is_null($sections) ? new ArrayCollection() : $sections;
     }
 
-    public function getId(): Id
+    public function setId(int $id): Field
     {
-        return Id::create($this->id);
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?Id
+    {
+        return $this->id !== null ? Id::create($this->id) : null;
     }
 
     public function getName(): Name
@@ -57,9 +64,9 @@ class Field implements FieldInterface
         return Name::create($this->name);
     }
 
-    public function setName(Name $name): Field
+    public function setName(string $name): Field
     {
-        $this->name = (string) $name;
+        $this->name = $name;
 
         return $this;
     }
@@ -141,9 +148,9 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function getCreated(): Created
+    public function getCreated(): ?Created
     {
-        return Created::create($this->created);
+        return $this->created !== null ? Created::create($this->created) : null;
     }
 
     public function setUpdated(\DateTime $updated): Field
@@ -153,9 +160,9 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function getUpdated(): Updated
+    public function getUpdated(): ?Updated
     {
-        return Updated::create($this->updated);
+        return $this->updated !== null ? Updated::create($this->updated) : null;
     }
 
     public function onPrePersist(): void

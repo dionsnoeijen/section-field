@@ -6,6 +6,7 @@ namespace Tardigrades\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
@@ -22,6 +23,8 @@ use TypeError;
  */
 final class SectionTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var Collection
      */
@@ -97,16 +100,15 @@ final class SectionTest extends TestCase
      */
     public function it_should_remove_a_field()
     {
-        $field = Mockery::mock(FieldInterface::class);
+        $field = new Field();
 
-        $field->shouldReceive('removeSection')->once()->with($this->section);
-        $field->shouldReceive('addSection')->once()->with($this->section);
+        $this->fields
+            ->shouldReceive('contains')
+            ->once()
+            ->with($field)
+            ->andReturn(true);
 
-        $this->fields->shouldReceive('contains')->once()->with($field)->andReturn(false);
-        $this->fields->shouldReceive('add')->once()->with($field);
         $this->fields->shouldReceive('remove')->once()->with($field);
-
-        $this->section->addField($field);
 
         $fieldType = $this->section->removeField($field);
 

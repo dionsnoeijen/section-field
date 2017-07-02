@@ -6,12 +6,13 @@ namespace Tardigrades\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
 use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\Updated;
 use TypeError;
@@ -23,6 +24,8 @@ use TypeError;
  */
 final class FieldTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var Field
      */
@@ -42,12 +45,23 @@ final class FieldTest extends TestCase
 
     /**
      * @test
+     * @covers ::setId
+     */
+    public function it_should_set_and_get_an_id()
+    {
+        $field = $this->field->setId(5);
+
+        $this->assertSame($this->field, $field);
+        $this->assertEquals(Id::create(5), $this->field->getId());
+    }
+
+    /**
+     * @test
      * @covers ::getId
      */
-    public function it_should_get_a_type_error_for_id()
+    public function it_should_get_a_null_asking_for_unset_id()
     {
-        $this->expectException(TypeError::class);
-        $this->field->getId();
+        $this->assertEquals(null, $this->field->getId());
     }
 
     /**
@@ -57,7 +71,7 @@ final class FieldTest extends TestCase
     public function it_should_set_and_get_name()
     {
         $name = Name::create('I have a name');
-        $field = $this->field->setName($name);
+        $field = $this->field->setName('I have a name');
 
         $this->assertEquals($this->field, $field);
         $this->assertEquals($this->field->getName(), $name);
@@ -104,7 +118,7 @@ final class FieldTest extends TestCase
         $section->shouldReceive('removeField')->once()->with($this->field);
         $section->shouldReceive('addField')->once()->with($this->field);
 
-        $this->sections->shouldReceive('contains')->once()->with($section)->andReturn(false);
+        $this->sections->shouldReceive('contains')->twice()->with($section)->andReturn(false);
         $this->sections->shouldReceive('add')->once()->with($section);
         $this->sections->shouldReceive('remove')->once()->with($section);
 
@@ -141,9 +155,7 @@ final class FieldTest extends TestCase
      */
     public function it_should_set_the_field_type()
     {
-        $fieldType = Mockery::mock(FieldTypeInterface::class);
-
-        $fieldType->shouldReceive('addField')->once()->with($this->field);
+        $fieldType = new FieldType();
 
         $field = $this->field->setFieldType($fieldType);
 
@@ -156,9 +168,7 @@ final class FieldTest extends TestCase
      */
     public function it_should_remove_the_field_type()
     {
-        $fieldType = Mockery::mock(FieldTypeInterface::class);
-
-        $fieldType->shouldReceive('removeField')->once()->with($this->field);
+        $fieldType = new FieldType();
 
         $field = $this->field->removeFieldType($fieldType);
 
