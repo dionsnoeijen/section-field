@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Tardigrades\Entity\EntityInterface;
 
 use Doctrine\Common\Collections\Collection;
-use Tardigrades\Entity\Field;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -22,7 +21,7 @@ interface Section
     public function addField(Field $field): Section;
     public function removeField(Field $field): Section;
     public function getFields(): Collection;
-    public function setConfig(\stdClass $config): Section;
+    public function setConfig(array $config): Section;
     public function getConfig(): SectionConfig;
     public function setCreated(\DateTime $created): Section;
     public function getCreated(): Created;
