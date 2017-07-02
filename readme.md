@@ -1,3 +1,5 @@
+![alt text](https://travis-ci.org/dionsnoeijen/section-field.svg?branch=master)
+
 # SectionField
 
 Many web applications share the common trait that it collects input from users. This input is transformed to output in various ways. The section field system aims to simplify and speed up the process of creating basic application functionality so focus can be on the awesome stuff.
