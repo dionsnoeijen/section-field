@@ -98,7 +98,7 @@ class SectionManager implements SectionManagerInterface
         foreach ($fields as $field) {
             $section->addField($field);
         }
-        $section->setConfig((object) $sectionConfig);
+        $section->setConfig($sectionConfig);
 
         $this->entityManager->persist($section);
         $this->entityManager->flush();

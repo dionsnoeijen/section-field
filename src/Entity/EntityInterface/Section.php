@@ -13,7 +13,8 @@ use Tardigrades\SectionField\ValueObject\Updated;
 
 interface Section
 {
-    public function getId(): Id;
+    public function getId(): ?int;
+    public function getIdValueObject(): Id;
     public function getName(): Name;
     public function setName(string $name): Section;
     public function getHandle(): Handle;
@@ -24,9 +25,11 @@ interface Section
     public function setConfig(array $config): Section;
     public function getConfig(): SectionConfig;
     public function setCreated(\DateTime $created): Section;
-    public function getCreated(): Created;
+    public function getCreated(): \DateTime;
+    public function getCreatedValueObject(): Created;
     public function setUpdated(\DateTime $updated): Section;
-    public function getUpdated(): Updated;
+    public function getUpdated(): \DateTime;
+    public function getUpdatedValueObject(): Updated;
     public function onPrePersist(): void;
     public function onPreUpdate(): void;
 }

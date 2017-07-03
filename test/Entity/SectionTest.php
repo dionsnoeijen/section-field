@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\Updated;
@@ -43,12 +44,34 @@ final class SectionTest extends TestCase
 
     /**
      * @test
+     * @covers ::setId
+     */
+    public function it_should_set_and_get_an_id()
+    {
+        $field = $this->section->setId(5);
+
+        $this->assertSame($this->section, $field);
+        $this->assertEquals(5, $this->section->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::getIdValueObject
+     */
+    public function it_should_get_an_id_value_object()
+    {
+        $this->section->setId(10);
+
+        $this->assertEquals(Id::create(10), $this->section->getIdValueObject());
+    }
+
+    /**
+     * @test
      * @covers ::getId
      */
-    public function it_should_get_a_type_error_for_id()
+    public function it_should_get_a_null_asking_for_unset_id()
     {
-        $this->expectException(TypeError::class);
-        $this->section->getId();
+        $this->assertEquals(null, $this->section->getId());
     }
 
     /**
@@ -196,11 +219,10 @@ final class SectionTest extends TestCase
     public function it_should_get_created_date_time()
     {
         $dateTime = new \DateTime('2017-07-02');
-        $created = Created::create($dateTime);
 
         $this->section->setCreated($dateTime);
 
-        $this->assertEquals($this->section->getCreated(), $created);
+        $this->assertEquals($this->section->getCreated(), $dateTime);
     }
 
     /**
@@ -223,11 +245,10 @@ final class SectionTest extends TestCase
     public function it_should_get_updated_date_time()
     {
         $dateTime = new \DateTime('2017-07-02');
-        $updated = Updated::create($dateTime);
 
         $this->section->setUpdated($dateTime);
 
-        $this->assertEquals($this->section->getUpdated(), $updated);
+        $this->assertEquals($this->section->getUpdated(), $dateTime);
     }
 
     /**
@@ -238,25 +259,21 @@ final class SectionTest extends TestCase
     {
         $this->section->onPrePersist();
 
-        $created = Created::create(new \DateTime("now"));
-        $updated = Updated::create(new \DateTime("now"));
+        $created = new \DateTime("now");
+        $updated = new \DateTime("now");
 
         $this->assertEquals(
             $this->section
                 ->getCreated()
-                ->getDateTime()
                 ->format('Y-m-d H:i'),
             $created
-                ->getDateTime()
                 ->format('Y-m-d H:i')
         );
         $this->assertEquals(
             $this->section
                 ->getUpdated()
-                ->getDateTime()
                 ->format('Y-m-d H:i'),
             $updated
-                ->getDateTime()
                 ->format('Y-m-d H:i')
         );
     }
@@ -269,16 +286,44 @@ final class SectionTest extends TestCase
     {
         $this->section->onPreUpdate();
 
-        $updated = Updated::create(new \DateTime("now"));
+        $updated = new \DateTime("now");
 
         $this->assertEquals(
             $this->section
                 ->getUpdated()
-                ->getDateTime()
                 ->format('Y-m-d H:i'),
             $updated
-                ->getDateTime()
                 ->format('Y-m-d H:i')
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getCreatedValueObject
+     */
+    public function it_should_get_a_created_value_object()
+    {
+        $this->section->setCreated(new \DateTime());
+
+        $this->assertInstanceOf(Created::class, $this->section->getCreatedValueObject());
+        $this->assertEquals(
+            $this->section->getCreatedValueObject()->getDateTime()->format('Y-m-d H:i'),
+            (new \DateTime())->format('Y-m-d H:i')
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getUpdatedValueObject
+     */
+    public function it_should_get_a_updated_value_object()
+    {
+        $this->section->setUpdated(new \DateTime());
+
+        $this->assertInstanceOf(Updated::class, $this->section->getUpdatedValueObject());
+        $this->assertEquals(
+            $this->section->getUpdatedValueObject()->getDateTime()->format('Y-m-d H:i'),
+            (new \DateTime())->format('Y-m-d H:i')
         );
     }
 }

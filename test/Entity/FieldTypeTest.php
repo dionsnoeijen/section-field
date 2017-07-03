@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
+use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 use Tardigrades\SectionField\ValueObject\Updated;
 use TypeError;
@@ -42,12 +43,34 @@ final class FieldTypeTest extends TestCase
 
     /**
      * @test
+     * @covers ::setId
+     */
+    public function it_should_set_and_get_an_id()
+    {
+        $field = $this->fieldType->setId(5);
+
+        $this->assertSame($this->fieldType, $field);
+        $this->assertEquals(5, $this->fieldType->getId());
+    }
+
+    /**
+     * @test
+     * @covers ::getIdValueObject
+     */
+    public function it_should_get_an_id_value_object()
+    {
+        $field = $this->fieldType->setId(10);
+
+        $this->assertEquals(Id::create(10), $this->fieldType->getIdValueObject());
+    }
+
+    /**
+     * @test
      * @covers ::getId
      */
-    public function it_should_get_a_type_error_for_id()
+    public function it_should_get_a_null_asking_for_unset_id()
     {
-        $this->expectException(TypeError::class);
-        $this->fieldType->getId();
+        $this->assertEquals(null, $this->fieldType->getId());
     }
 
     /**
@@ -154,11 +177,10 @@ final class FieldTypeTest extends TestCase
     public function it_should_get_created_date_time()
     {
         $dateTime = new \DateTime('2017-07-02');
-        $created = Created::create($dateTime);
 
         $this->fieldType->setCreated($dateTime);
 
-        $this->assertEquals($this->fieldType->getCreated(), $created);
+        $this->assertEquals($this->fieldType->getCreated(), $dateTime);
     }
 
     /**
@@ -181,11 +203,10 @@ final class FieldTypeTest extends TestCase
     public function it_should_get_updated_date_time()
     {
         $dateTime = new \DateTime('2017-07-02');
-        $updated = Updated::create($dateTime);
 
         $this->fieldType->setUpdated($dateTime);
 
-        $this->assertEquals($this->fieldType->getUpdated(), $updated);
+        $this->assertEquals($this->fieldType->getUpdated(), $dateTime);
     }
 
     /**
@@ -196,25 +217,21 @@ final class FieldTypeTest extends TestCase
     {
         $this->fieldType->onPrePersist();
 
-        $created = Created::create(new \DateTime("now"));
-        $updated = Updated::create(new \DateTime("now"));
+        $created = new \DateTime("now");
+        $updated = new \DateTime("now");
 
         $this->assertEquals(
             $this->fieldType
                 ->getCreated()
-                ->getDateTime()
                 ->format('Y-m-d H:i'),
             $created
-                ->getDateTime()
                 ->format('Y-m-d H:i')
         );
         $this->assertEquals(
             $this->fieldType
                 ->getUpdated()
-                ->getDateTime()
                 ->format('Y-m-d H:i'),
             $updated
-                ->getDateTime()
                 ->format('Y-m-d H:i')
         );
     }
@@ -227,16 +244,44 @@ final class FieldTypeTest extends TestCase
     {
         $this->fieldType->onPreUpdate();
 
-        $updated = Updated::create(new \DateTime("now"));
+        $updated = new \DateTime("now");
 
         $this->assertEquals(
             $this->fieldType
                 ->getUpdated()
-                ->getDateTime()
                 ->format('Y-m-d H:i'),
             $updated
-                ->getDateTime()
                 ->format('Y-m-d H:i')
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getCreatedValueObject
+     */
+    public function it_should_get_a_created_value_object()
+    {
+        $this->fieldType->setCreated(new \DateTime());
+
+        $this->assertInstanceOf(Created::class, $this->fieldType->getCreatedValueObject());
+        $this->assertEquals(
+            $this->fieldType->getCreatedValueObject()->getDateTime()->format('Y-m-d H:i'),
+            (new \DateTime())->format('Y-m-d H:i')
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::getUpdatedValueObject
+     */
+    public function it_should_get_a_updated_value_object()
+    {
+        $this->fieldType->setUpdated(new \DateTime());
+
+        $this->assertInstanceOf(Updated::class, $this->fieldType->getUpdatedValueObject());
+        $this->assertEquals(
+            $this->fieldType->getUpdatedValueObject()->getDateTime()->format('Y-m-d H:i'),
+            (new \DateTime())->format('Y-m-d H:i')
         );
     }
 }

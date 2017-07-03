@@ -40,7 +40,19 @@ class FieldType implements FieldTypeInterface
         $this->fields = is_null($fields) ? new ArrayCollection() : $fields;
     }
 
-    public function getId(): Id
+    public function setId(int $id): FieldType
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getIdValueObject(): Id
     {
         return Id::create($this->id);
     }
@@ -102,7 +114,12 @@ class FieldType implements FieldTypeInterface
         return $this;
     }
 
-    public function getCreated(): Created
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    public function getCreatedValueObject(): Created
     {
         return Created::create($this->created);
     }
@@ -114,7 +131,12 @@ class FieldType implements FieldTypeInterface
         return $this;
     }
 
-    public function getUpdated(): Updated
+    public function getUpdated(): \DateTime
+    {
+        return $this->updated;
+    }
+
+    public function getUpdatedValueObject(): Updated
     {
         return Updated::create($this->updated);
     }

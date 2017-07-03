@@ -13,7 +13,9 @@ use Tardigrades\Entity\FieldType as FieldTypeEntity;
 
 interface FieldType
 {
-    public function getId(): Id;
+    public function setId(int $id): FieldTypeEntity;
+    public function getId(): ?int;
+    public function getIdValueObject(): Id;
     public function getType(): Type;
     public function setType(string $type): FieldTypeEntity;
     public function addField(Field $field): FieldTypeEntity;
@@ -22,9 +24,11 @@ interface FieldType
     public function setNamespace(string $namespace): FieldTypeEntity;
     public function getNamespace(): FullyQualifiedClassName;
     public function setCreated(\DateTime $created): FieldTypeEntity;
-    public function getCreated(): Created;
+    public function getCreated(): \DateTime;
+    public function getCreatedValueObject(): Created;
     public function setUpdated(\DateTime $updated): FieldTypeEntity;
-    public function getUpdated(): Updated;
+    public function getUpdated(): \DateTime;
+    public function getUpdatedValueObject(): Updated;
     public function onPrePersist(): void;
     public function onPreUpdate(): void;
 }

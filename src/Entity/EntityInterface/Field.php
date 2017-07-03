@@ -15,7 +15,8 @@ use Tardigrades\SectionField\ValueObject\Updated;
 interface Field
 {
     public function setId(int $id): FieldEntity;
-    public function getId(): ?Id;
+    public function getId(): ?int;
+    public function getIdValueObject(): Id;
     public function getName(): Name;
     public function setName(string $name): FieldEntity;
     public function getHandle(): Handle;
@@ -29,9 +30,11 @@ interface Field
     public function setConfig(array $config): FieldEntity;
     public function getConfig(): FieldConfig;
     public function setCreated(\DateTime $created): FieldEntity;
-    public function getCreated(): ?Created;
+    public function getCreated(): \DateTime;
+    public function getCreatedValueObject(): Created;
     public function setUpdated(\DateTime $updated): FieldEntity;
-    public function getUpdated(): ?Updated;
+    public function getUpdated(): \DateTime;
+    public function getUpdatedValueObject(): Updated;
     public function onPrePersist(): void;
     public function onPreUpdate(): void;
 }

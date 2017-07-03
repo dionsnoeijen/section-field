@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldTypeManagerInterface;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
@@ -13,11 +13,11 @@ use Tardigrades\SectionField\ValueObject\Type;
 class FieldTypeManager implements FieldTypeManagerInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
@@ -35,7 +35,7 @@ class FieldTypeManager implements FieldTypeManagerInterface
         $fieldTypeRepo = $this->entityManager->getRepository(FieldType::class);
 
         /** @var $fieldType FieldType */
-        $fieldType = $fieldTypeRepo->find($id);
+        $fieldType = $fieldTypeRepo->find($id->toInt());
 
         if (empty($fieldType)) {
             throw new FieldTypeNotFoundException();
@@ -50,7 +50,7 @@ class FieldTypeManager implements FieldTypeManagerInterface
         $fieldTypes = $fieldTypeRepository->findAll();
 
         if (empty($fieldTypes)) {
-            throw new FieldNotFoundException();
+            throw new FieldTypeNotFoundException();
         }
 
         return $fieldTypes;

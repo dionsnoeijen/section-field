@@ -54,9 +54,14 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function getId(): ?Id
+    public function getId(): ?int
     {
-        return $this->id !== null ? Id::create($this->id) : null;
+        return $this->id;
+    }
+
+    public function getIdValueObject(): Id
+    {
+        return Id::create($this->id);
     }
 
     public function getName(): Name
@@ -148,9 +153,14 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function getCreated(): ?Created
+    public function getCreated(): \DateTime
     {
-        return $this->created !== null ? Created::create($this->created) : null;
+        return $this->created;
+    }
+
+    public function getCreatedValueObject(): Created
+    {
+        return Created::create($this->created);
     }
 
     public function setUpdated(\DateTime $updated): Field
@@ -160,9 +170,14 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function getUpdated(): ?Updated
+    public function getUpdated(): \DateTime
     {
-        return $this->updated !== null ? Updated::create($this->updated) : null;
+        return $this->updated;
+    }
+
+    public function getUpdatedValueObject(): Updated
+    {
+        return Updated::create($this->updated);
     }
 
     public function onPrePersist(): void
