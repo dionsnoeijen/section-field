@@ -3,7 +3,8 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Doctrine\ORM\EntityManager;
+use Tardigrades\SectionField\SectionFieldInterface\FieldManager as FieldManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Section as SectionEntity;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\Helper\StringConverter;
@@ -14,7 +15,7 @@ use Tardigrades\SectionField\ValueObject\SectionConfig;
 class SectionManager implements SectionManagerInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
@@ -24,8 +25,8 @@ class SectionManager implements SectionManagerInterface
     private $fieldManager;
 
     public function __construct(
-        EntityManager $entityManager,
-        FieldManager $fieldManager
+        EntityManagerInterface $entityManager,
+        FieldManagerInterface $fieldManager
     ) {
         $this->entityManager = $entityManager;
         $this->fieldManager = $fieldManager;
@@ -44,7 +45,7 @@ class SectionManager implements SectionManagerInterface
         $sectionRepository = $this->entityManager->getRepository(SectionEntity::class);
 
         /** @var $section Section */
-        $section = $sectionRepository->find($id);
+        $section = $sectionRepository->find($id->toInt());
 
         if (empty($section)) {
             throw new SectionNotFoundException();
@@ -79,15 +80,15 @@ class SectionManager implements SectionManagerInterface
         $this->entityManager->flush();
     }
 
-    public function createFromConfig(SectionConfig $sectionConfig): Section
+    public function createByConfig(SectionConfig $sectionConfig): Section
     {
         $section = new SectionEntity();
-        $this->updateFromConfig($sectionConfig, $section);
+        $this->updateByConfig($sectionConfig, $section);
 
         return $section;
     }
 
-    public function updateFromConfig(SectionConfig $sectionConfig, Section $section): Section
+    public function updateByConfig(SectionConfig $sectionConfig, Section $section): Section
     {
         $sectionConfig = $sectionConfig->toArray();
 

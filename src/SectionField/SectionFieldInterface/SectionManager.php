@@ -14,6 +14,6 @@ interface SectionManager
     public function readAll(): array;
     public function update(Section $entity): Section;
     public function delete(Section $entity): void;
-    public function createFromConfig(SectionConfig $sectionConfig): Section;
-    public function updateFromConfig(SectionConfig $sectionConfig, Section $section): Section;
+    public function createByConfig(SectionConfig $sectionConfig): Section;
+    public function updateByConfig(SectionConfig $sectionConfig, Section $section): Section;
 }
