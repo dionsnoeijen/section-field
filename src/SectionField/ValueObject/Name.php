@@ -12,7 +12,7 @@ final class Name
      */
     private $name;
 
-    public function __construct(string $name)
+    private function __construct(string $name)
     {
         Assertion::string($name, 'The name has to be a string');
 
