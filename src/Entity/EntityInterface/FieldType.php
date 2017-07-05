@@ -21,8 +21,8 @@ interface FieldType
     public function addField(Field $field): FieldTypeEntity;
     public function removeField(Field $field): FieldTypeEntity;
     public function getFields(): ArrayCollection;
-    public function setNamespace(string $namespace): FieldTypeEntity;
-    public function getNamespace(): FullyQualifiedClassName;
+    public function setFullyQualifiedClassName(string $fullyQualifiedClassName): FieldTypeEntity;
+    public function getFullyQualifiedClassName(): FullyQualifiedClassName;
     public function setCreated(\DateTime $created): FieldTypeEntity;
     public function getCreated(): \DateTime;
     public function getCreatedValueObject(): Created;

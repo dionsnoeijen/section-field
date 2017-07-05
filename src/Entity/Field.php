@@ -6,22 +6,19 @@ namespace Tardigrades\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
+use Tardigrades\Entity\EntityInterface\FieldTranslation;
 use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
 use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
-use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\Updated;
 
 class Field implements FieldInterface
 {
     /** @var int */
     protected $id;
-
-    /** @var string **/
-    protected $name;
 
     /** @var string */
     protected $handle;
@@ -31,6 +28,9 @@ class Field implements FieldInterface
 
     /** @var FieldType */
     protected $fieldType;
+
+    /** @var Collection */
+    protected $fieldTranslations;
 
     /** @var array */
     protected $config;
@@ -42,12 +42,14 @@ class Field implements FieldInterface
     protected $updated;
 
     public function __construct(
-        Collection $sections = null
+        Collection $sections = null,
+        Collection $translations = null
     ) {
         $this->sections = is_null($sections) ? new ArrayCollection() : $sections;
+        $this->fieldTranslations = is_null($translations) ? new ArrayCollection() : $translations;
     }
 
-    public function setId(int $id): Field
+    public function setId(int $id): FieldInterface
     {
         $this->id = $id;
 
@@ -59,19 +61,9 @@ class Field implements FieldInterface
         return $this->id;
     }
 
-    public function getIdValueObject(): Id
+    public function setHandle(string $handle): FieldInterface
     {
-        return Id::create($this->id);
-    }
-
-    public function getName(): Name
-    {
-        return Name::create($this->name);
-    }
-
-    public function setName(string $name): Field
-    {
-        $this->name = $name;
+        $this->handle = $handle;
 
         return $this;
     }
@@ -81,14 +73,12 @@ class Field implements FieldInterface
         return Handle::create($this->handle);
     }
 
-    public function setHandle(string $handle): Field
+    public function getIdValueObject(): Id
     {
-        $this->handle = $handle;
-
-        return $this;
+        return Id::create($this->id);
     }
 
-    public function addSection(SectionInterface $section): Field
+    public function addSection(SectionInterface $section): FieldInterface
     {
         if ($this->sections->contains($section)) {
             return $this;
@@ -99,7 +89,7 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function removeSection(SectionInterface $section): Field
+    public function removeSection(SectionInterface $section): FieldInterface
     {
         if ($this->sections->contains($section)) {
             return $this;
@@ -115,14 +105,41 @@ class Field implements FieldInterface
         return $this->sections;
     }
 
-    public function setFieldType(FieldTypeInterface $fieldType): Field
+    public function getFieldTranslations(): Collection
+    {
+        return $this->fieldTranslations;
+    }
+
+    public function addFieldTranslation(FieldTranslation $fieldTranslation): FieldInterface
+    {
+        if ($this->fieldTranslations->contains($fieldTranslation)) {
+            return $this;
+        }
+        $this->fieldTranslations->remove($fieldTranslation);
+        $fieldTranslation->setField($this);
+
+        return $this;
+    }
+
+    public function removeFieldTranslation(FieldTranslation $fieldTranslation): FieldInterface
+    {
+        if (!$this->fieldTranslations->contains($fieldTranslation)) {
+            return $this;
+        }
+        $this->fieldTranslations->remove($fieldTranslation);
+        $fieldTranslation->removeField($this);
+
+        return $this;
+    }
+
+    public function setFieldType(FieldTypeInterface $fieldType): FieldInterface
     {
         $this->fieldType = $fieldType;
 
         return $this;
     }
 
-    public function removeFieldType(FieldTypeInterface $fieldType): Field
+    public function removeFieldType(FieldTypeInterface $fieldType): FieldInterface
     {
         $this->fieldType = null;
 
@@ -134,7 +151,7 @@ class Field implements FieldInterface
         return $this->fieldType;
     }
 
-    public function setConfig(array $config): Field
+    public function setConfig(array $config): FieldInterface
     {
         $this->config = $config;
 
@@ -146,7 +163,7 @@ class Field implements FieldInterface
         return FieldConfig::create((array) $this->config);
     }
 
-    public function setCreated(\DateTime $created): Field
+    public function setCreated(\DateTime $created): FieldInterface
     {
         $this->created = $created;
 
@@ -163,7 +180,7 @@ class Field implements FieldInterface
         return Created::create($this->created);
     }
 
-    public function setUpdated(\DateTime $updated): Field
+    public function setUpdated(\DateTime $updated): FieldInterface
     {
         $this->updated = $updated;
 

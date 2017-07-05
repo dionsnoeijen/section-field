@@ -5,6 +5,7 @@ namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Tardigrades\Entity\EntityInterface\Application;
 use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
@@ -31,6 +32,9 @@ class Section implements SectionInterface
     /** @var array */
     protected $config;
 
+    /** @var ArrayCollection */
+    protected $applications;
+
     /** @var \DateTime */
     protected $created;
 
@@ -38,9 +42,11 @@ class Section implements SectionInterface
     protected $updated;
 
     public function __construct(
-        Collection $fields = null
+        Collection $fields = null,
+        Collection $applications = null
     ) {
         $this->fields = is_null($fields) ? new ArrayCollection() : $fields;
+        $this->applications = is_null($applications) ? new ArrayCollection() : $applications;
     }
 
     public function setId(int $id): SectionInterface
@@ -120,6 +126,32 @@ class Section implements SectionInterface
     public function getConfig(): SectionConfig
     {
         return SectionConfig::create($this->config);
+    }
+
+    public function addApplication(Application $application): SectionInterface
+    {
+        if ($this->applications->contains($application)) {
+            return $this;
+        }
+        $this->applications->add($application);
+        $application->addSection($this);
+
+        return $this;
+    }
+
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function removeApplication(Application $application): SectionInterface
+    {
+        if (!$this->applications->contains($application)) {
+            return $this;
+        }
+        $this->applications->remove($application);
+
+        return $this;
     }
 
     public function setCreated(\DateTime $created): SectionInterface

@@ -23,7 +23,7 @@ class FieldType implements FieldTypeInterface
     protected $type;
 
     /** @var string */
-    protected $namespace;
+    protected $fullyQualifiedClassName;
 
     /** @var ArrayCollection */
     protected $fields;
@@ -95,16 +95,28 @@ class FieldType implements FieldTypeInterface
         return $this->fields;
     }
 
-    public function setNamespace(string $namespace): FieldType
+    public function setFullyQualifiedClassName(string $fullyQualifiedClassName): FieldType
     {
-        $this->namespace = $namespace;
+        $this->fullyQualifiedClassName = $fullyQualifiedClassName;
 
         return $this;
     }
 
-    public function getNamespace(): FullyQualifiedClassName
+    public function getFullyQualifiedClassName(): FullyQualifiedClassName
     {
-        return FullyQualifiedClassName::create($this->namespace);
+        return FullyQualifiedClassName::create($this->fullyQualifiedClassName);
+    }
+
+    public function getName(): Name
+    {
+        return Name::create($this->type);
+    }
+
+    public function setName(string $name): FieldType
+    {
+        $this->type = $name;
+
+        return $this;
     }
 
     public function setCreated(\DateTime $created): FieldType
@@ -150,17 +162,5 @@ class FieldType implements FieldTypeInterface
     public function onPreUpdate(): void
     {
         $this->updated = new \DateTime("now");
-    }
-
-    public function getName(): Name
-    {
-        return Name::create($this->type);
-    }
-
-    public function setName(string $name): FieldType
-    {
-        $this->type = $name;
-
-        return $this;
     }
 }
