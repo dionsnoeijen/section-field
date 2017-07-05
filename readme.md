@@ -20,6 +20,9 @@ While the aim for this tool is to be very high level, simplicity should never pr
 - All commands that list something should check if there are entries.
 - Refactor commands so shared functions are in a BaseClass.
 - Unit tests for commands.
+- Unit tests for value objects.
+- Make it multilang from the core.
+- Make it multi app from the core.
 
 ## Config
 
