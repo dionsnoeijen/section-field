@@ -11,11 +11,20 @@
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>
-        <field name="handle" type="string" length="156" unique="true" />
+        <field name="handle" type="string" unique="true" />
         <field name="created" type="datetime" />
         <field name="updated" type="datetime" />
         <field name="name" type="string" />
         <field name="config" type="json_array" />
-        <many-to-many field="fields" target-entity="Tardigrades\Entity\Field" mapped-by="sections" />
+        <many-to-many
+            target-entity="Tardigrades\Entity\Field"
+            field="fields"
+            mapped-by="sections"
+        />
+        <many-to-many
+            target-entity="Tardigrades\Entity\Application"
+            field="applications"
+            mapped-by="sections"
+        />
     </entity>
 </doctrine-mapping>
