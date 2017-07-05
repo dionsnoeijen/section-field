@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class CreateSectionCommand extends Command
 {
@@ -37,10 +38,13 @@ class CreateSectionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $config = $input->getArgument('config');
-        $sectionConfig = Yaml::parse(file_get_contents($config));
 
         try {
-            $this->sectionManager->createFromConfig($sectionConfig);
+            $sectionConfig = SectionConfig::create(
+                Yaml::parse(file_get_contents($config))
+            );
+            $this->sectionManager->createByConfig($sectionConfig);
+            $output->writeln('<info>Section created!</info>');
         } catch (\Exception $exception) {
             $output->writeln("<error>Invalid configuration file.  {$exception->getMessage()}</error>");
         }

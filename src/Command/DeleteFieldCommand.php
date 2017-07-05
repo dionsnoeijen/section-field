@@ -3,7 +3,6 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Assert\Assertion;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
@@ -55,9 +54,9 @@ class DeleteFieldCommand extends Command
 
     private function showInstalledFields(InputInterface $input, OutputInterface $output): void
     {
-        $fieldTypes = $this->fieldManager->readAll();
+        $fields = $this->fieldManager->readAll();
 
-        $this->renderTable($output, $fieldTypes);
+        $this->renderTable($output, $fields);
         $this->deleteWhatRecord($input, $output);
     }
 
@@ -67,13 +66,13 @@ class DeleteFieldCommand extends Command
 
         $output->writeln('<info>Record with id #' . $field->getId() . ' will be deleted</info>');
 
+
         $sure = new ConfirmationQuestion('<comment>Are you sure?</comment> (y/n) ', false);
 
         if (!$this->questionHelper->ask($input, $output, $sure)) {
             $output->writeln('<comment>Cancelled, nothing deleted.</comment>');
             return;
         }
-
         $this->fieldManager->delete($field);
 
         $output->writeln('<info>Removed!</info>');
@@ -84,7 +83,7 @@ class DeleteFieldCommand extends Command
         $question = new Question('<question>What record do you want to delete?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->fieldManager->read(Id::create($id));
+                return $this->fieldManager->read(Id::create((int) $id));
             } catch (FieldNotFoundException $exception) {
                 $output->writeln("<error>{$exception->getMessage()}</error>");
             }
@@ -106,8 +105,8 @@ class DeleteFieldCommand extends Command
                 $field->getHandle(),
                 $field->getFieldType()->getType(),
                 (string) $field->getConfig(),
-                (string) $field->getCreated(),
-                (string) $field->getUpdated()
+                $field->getCreated()->format('D-m-y'),
+                $field->getUpdated()->format('D-m-y')
             ];
         }
 

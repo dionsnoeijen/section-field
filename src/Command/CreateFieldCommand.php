@@ -44,6 +44,7 @@ class CreateFieldCommand extends Command
                 Yaml::parse(file_get_contents($config))
             );
             $this->fieldManager->createByConfig($fieldConfig);
+            $output->writeln('<info>Field created!</info>');
         } catch (\Exception $exception) {
             $output->writeln("<error>Invalid field config. {$exception->getMessage()}</error>");
         }
