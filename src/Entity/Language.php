@@ -68,6 +68,15 @@ class Language implements LanguageInterface
         return $this->application;
     }
 
+    public function removeApplication(Application $application): LanguageInterface
+    {
+        if ($this->application === $application) {
+            $this->application = null;
+            $application->removeLanguage($this);
+        }
+        return $this;
+    }
+
     public function setCreated(\DateTime $created): LanguageInterface
     {
         $this->created = $created;
@@ -88,6 +97,8 @@ class Language implements LanguageInterface
     public function setUpdated(\DateTime $updated): LanguageInterface
     {
         $this->updated = $updated;
+
+        return $this;
     }
 
     public function getUpdated(): \DateTime

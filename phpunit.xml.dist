@@ -12,21 +12,19 @@
     </testsuites>
 
     <filter>
-        <blacklist>
-            <directory suffix=".php"></directory>
-            <file></file>
-            <exclude>
-                <directory suffix=".php"></directory>
-                <file></file>
-            </exclude>
-        </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php"></directory>
-            <file></file>
-            <exclude>
-                <directory suffix=".php"></directory>
-                <file></file>
-            </exclude>
+            <directory suffix=".php">./test/unit</directory>
         </whitelist>
     </filter>
+
+    <logging>
+        <log type="coverage-html"
+             target="./coverage"
+             charset="UTF-8"
+             highlight="true"
+             lowUpperBound="50"
+             highLowerBound="80"
+        />
+    </logging>
+
 </phpunit>

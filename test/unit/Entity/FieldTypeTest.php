@@ -14,12 +14,11 @@ use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 use Tardigrades\SectionField\ValueObject\Updated;
-use TypeError;
 
 /**
  * @coversDefaultClass Tardigrades\Entity\FieldType
- * @covers ::<private>
  * @covers ::__construct
+ * @covers ::<private>
  */
 final class FieldTypeTest extends TestCase
 {

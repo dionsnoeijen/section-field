@@ -13,13 +13,11 @@ use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
-use Tardigrades\SectionField\ValueObject\Name;
-use Tardigrades\SectionField\ValueObject\Updated;
 
 /**
  * @coversDefaultClass Tardigrades\Entity\Field
- * @covers ::<private>
  * @covers ::__construct
+ * @covers ::<private>
  */
 final class FieldTest extends TestCase
 {
@@ -31,7 +29,7 @@ final class FieldTest extends TestCase
     private $field;
 
     /**
-     * @var Collection
+     * @var Collection|Mockery\MockInterface
      */
     private $sections;
 
@@ -45,6 +43,7 @@ final class FieldTest extends TestCase
     /**
      * @test
      * @covers ::setId
+     * @covers ::getId
      */
     public function it_should_set_and_get_an_id()
     {
@@ -76,7 +75,8 @@ final class FieldTest extends TestCase
 
     /**
      * @test
-     * @covers ::setHandle ::getHandle
+     * @covers ::setHandle
+     * @covers ::getHandle
      */
     public function it_should_set_and_get_handle()
     {
@@ -89,7 +89,9 @@ final class FieldTest extends TestCase
 
     /**
      * @test
-     * @covers ::addFieldTranslation ::getFieldTranslation ::removeFieldTranslation
+     * @covers ::addFieldTranslation
+     * @covers ::getFieldTranslations
+     * @covers ::removeFieldTranslation
      */
     public function it_should_add_get_and_remove_a_field_translation()
     {

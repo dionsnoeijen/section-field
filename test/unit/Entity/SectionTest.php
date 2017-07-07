@@ -15,12 +15,11 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\Updated;
-use TypeError;
 
 /**
- * @coversDefaultClass Tardigrades\Entity\FieldType
- * @covers ::<private>
+ * @coversDefaultClass \Tardigrades\Entity\Section
  * @covers ::__construct
+ * @covers ::<private>
  */
 final class SectionTest extends TestCase
 {
@@ -76,7 +75,8 @@ final class SectionTest extends TestCase
 
     /**
      * @test
-     * @covers ::setName ::getName
+     * @covers ::setName
+     * @covers ::getName
      */
     public function it_should_set_and_get_name()
     {
@@ -89,7 +89,8 @@ final class SectionTest extends TestCase
 
     /**
      * @test
-     * @covers ::setHandle ::getHandle
+     * @covers ::setHandle
+     * @covers ::getHandle
      */
     public function it_should_set_and_get_handle()
     {
@@ -119,7 +120,7 @@ final class SectionTest extends TestCase
 
     /**
      * @test
-     * @covers ::removeSection
+     * @covers ::removeField
      */
     public function it_should_remove_a_field()
     {
