@@ -5,6 +5,7 @@ namespace Tardigrades\SectionField\Service;
 
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
 use Tardigrades\Entity\EntityInterface\Language;
+use Tardigrades\Entity\Language as LanguageEntity;
 use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,9 +33,9 @@ class LanguageManager implements LanguageManagerInterface
 
     public function read(Id $id): Language
     {
-        $languageRepository = $this->entityManager->getRepository(Language::class);
+        $languageRepository = $this->entityManager->getRepository(LanguageEntity::class);
 
-        /** @var $field Language */
+        /** @var $language Language */
         $language = $languageRepository->find($id->toInt());
 
         if (empty($language)) {
@@ -46,7 +47,7 @@ class LanguageManager implements LanguageManagerInterface
 
     public function readAll(): array
     {
-        $languageRepository = $this->entityManager->getRepository(Language::class);
+        $languageRepository = $this->entityManager->getRepository(LanguageEntity::class);
         $languages = $languageRepository->findAll();
 
         if (empty($languages)) {
@@ -56,12 +57,9 @@ class LanguageManager implements LanguageManagerInterface
         return $languages;
     }
 
-    public function update(Language $entity): Language
+    public function update(): void
     {
-        $this->entityManager->persist($entity);
         $this->entityManager->flush();
-
-        return $entity;
     }
 
     public function delete(Language $entity): void
@@ -72,7 +70,7 @@ class LanguageManager implements LanguageManagerInterface
 
     public function readByI18n(I18n $i18n): Language
     {
-        $languageRepo = $this->entityManager->getRepository(Language::class);
+        $languageRepo = $this->entityManager->getRepository(LanguageEntity::class);
 
         /** @var Language $language */
         $language = $languageRepo->findOneBy([

@@ -12,7 +12,7 @@ interface LanguageManager
     public function create(Language $entity): Language;
     public function read(Id $id): Language;
     public function readAll(): array;
-    public function update(Language $entity): Language;
+    public function update(): void;
     public function delete(Language $entity): void;
     public function readByI18n(I18n $i18n): Language;
 }
