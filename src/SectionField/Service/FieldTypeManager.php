@@ -83,10 +83,10 @@ class FieldTypeManager implements FieldTypeManagerInterface
 
     public function readByType(Type $type): FieldType
     {
-        $fieldTypeRepo = $this->entityManager->getRepository(FieldType::class);
+        $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
 
         /** @var $fieldType FieldType */
-        $fieldType = $fieldTypeRepo->findOneBy([
+        $fieldType = $fieldTypeRepository->findOneBy([
             'type' => (string) $type
         ]);
 

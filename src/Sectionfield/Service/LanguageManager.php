@@ -70,10 +70,10 @@ class LanguageManager implements LanguageManagerInterface
 
     public function readByI18n(I18n $i18n): Language
     {
-        $languageRepo = $this->entityManager->getRepository(LanguageEntity::class);
+        $languageRepository = $this->entityManager->getRepository(LanguageEntity::class);
 
         /** @var Language $language */
-        $language = $languageRepo->findOneBy([
+        $language = $languageRepository->findOneBy([
             'i18n' => (string) $i18n
         ]);
 

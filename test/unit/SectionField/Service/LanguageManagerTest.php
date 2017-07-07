@@ -8,8 +8,8 @@ use Mockery;
 use Doctrine\ORM\EntityManagerInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Tardigrades\Entity\Application;
 use Tardigrades\Entity\Language;
+use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 
 /**
@@ -194,6 +194,35 @@ final class LanguageManagerTest extends TestCase
         $this->entityManager->shouldReceive('flush')->once();
 
         $this->languageManager->delete($language);
+    }
+
+    /**
+     * @test
+     * @covers ::readByI18n
+     */
+    public function it_should_read_by_i18n()
+    {
+        $i18n = I18n::create('nl_NL');
+
+        $languageRepository = Mockery::mock(ObjectRepository::class);
+
+        $language = (new Language())->setI18n((string) $i18n);
+
+        $this->entityManager
+            ->shouldReceive('getRepository')
+            ->once()
+            ->with(Language::class)
+            ->andReturn($languageRepository);
+
+        $languageRepository
+            ->shouldReceive('findOneBy')
+            ->once()
+            ->with(['i18n' => (string) $i18n])
+            ->andReturn($language);
+
+        $returnedLanguage = $this->languageManager->readByI18n($i18n);
+
+        $this->assertEquals($language->getI18n(), $returnedLanguage->getI18n());
     }
 }
 
