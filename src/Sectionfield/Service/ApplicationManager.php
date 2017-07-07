@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Service;
 
 use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager as ApplicationManagerInterface;
-
 use Tardigrades\Entity\EntityInterface\Application;
 use Tardigrades\Entity\Application as ApplicationEntity;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -35,7 +34,7 @@ class ApplicationManager implements ApplicationManagerInterface
     {
         $applicationRepository = $this->entityManager->getRepository(ApplicationEntity::class);
 
-        /** @var $field Application */
+        /** @var $application Application */
         $application = $applicationRepository->find($id->toInt());
 
         if (empty($application)) {
