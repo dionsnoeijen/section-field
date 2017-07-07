@@ -14,8 +14,6 @@ interface FieldTranslation {
     public function getId(): ?int;
     public function getName(): Name;
     public function setName(string $name): FieldTranslation;
-    public function getHandle(): Handle;
-    public function setHandle(string $handle): FieldTranslation;
     public function getLabel(): Label;
     public function setLabel(string $label): FieldTranslation;
     public function getField(): Field;

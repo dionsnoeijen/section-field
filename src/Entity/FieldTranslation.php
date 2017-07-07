@@ -62,18 +62,6 @@ class FieldTranslation implements FieldTranslationInterface
         return $this;
     }
 
-    public function getHandle(): Handle
-    {
-        return Handle::create($this->handle);
-    }
-
-    public function setHandle(string $handle): FieldTranslationInterface
-    {
-        $this->handle = $handle;
-
-        return $this;
-    }
-
     public function getLabel(): Label
     {
         return Label::create($this->label);
@@ -100,7 +88,9 @@ class FieldTranslation implements FieldTranslationInterface
 
     public function removeField(Field $field): FieldTranslationInterface
     {
-        $this->field = null;
+        if ($this->field === $field) {
+            $this->field = null;
+        }
 
         return $this;
     }

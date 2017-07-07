@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
+use Tardigrades\Entity\EntityInterface\FieldTranslation;
 use Tardigrades\Entity\Field;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\Service\FieldNotFoundException;
@@ -98,10 +99,21 @@ class DeleteFieldCommand extends Command
         $table = new Table($output);
 
         $rows = [];
+        /** @var Field $field */
         foreach ($fields as $field) {
+
+            $translations = $field->getFieldTranslations();
+            /** @var FieldTranslation $translation */
+            $names = '';
+            foreach ($translations as $translation) {
+                $names .=
+                    $translation->getLanguage()->getI18n() . ' ' .
+                    $translation->getName() . "\n";
+            }
+
             $rows[] = [
                 $field->getId(),
-                $field->getName(),
+                $names,
                 $field->getHandle(),
                 $field->getFieldType()->getType(),
                 (string) $field->getConfig(),

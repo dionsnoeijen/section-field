@@ -5,10 +5,15 @@ namespace Tardigrades\SectionField\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Field;
+use Tardigrades\Entity\FieldTranslation;
+use Tardigrades\Entity\Language;
 use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager as FieldManagerInterface;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldTypeManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
+use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 
@@ -20,16 +25,23 @@ class FieldManager implements FieldManagerInterface
     private $entityManager;
 
     /**
-     * @var FieldTypeManager
+     * @var FieldTypeManagerInterface
      */
     private $fieldTypeManager;
 
+    /**
+     * @var LanguageManagerInterface
+     */
+    private $languageManager;
+
     public function __construct(
         EntityManagerInterface $entityManager,
-        FieldTypeManagerInterface $fieldTypeManager
+        FieldTypeManagerInterface $fieldTypeManager,
+        LanguageManagerInterface $languageManager
     ) {
         $this->entityManager = $entityManager;
         $this->fieldTypeManager = $fieldTypeManager;
+        $this->languageManager = $languageManager;
     }
 
     public function create(Field $entity): Field
@@ -104,8 +116,25 @@ class FieldManager implements FieldManagerInterface
         $fieldConfig = $fieldConfig->toArray();
         $fieldType = $this->fieldTypeManager->readByType(Type::create($fieldConfig['field']['type']));
 
-        $field->setName($fieldConfig['field']['name']);
-        $field->setHandle(StringConverter::toCamelCase($fieldConfig['field']['name']));
+        if (!is_array($fieldConfig['field']['name'])) {
+            throw new NoFieldNameDefinedException();
+        }
+
+        $handle = null;
+        foreach ($fieldConfig['field']['name'] as $i18n => $name) {
+            $language = $this->languageManager->readByI18n(I18n::create($i18n));
+            $fieldTranslation = new FieldTranslation();
+            $fieldTranslation->setName($name);
+            $fieldTranslation->setLanguage($language);
+
+            if (is_null($handle)) {
+                $handle = StringConverter::toCamelCase($name);
+            }
+
+            $field->addFieldTranslation($fieldTranslation);
+        }
+
+        $field->setHandle($handle);
         $field->setFieldType($fieldType);
         $field->setConfig($fieldConfig);
 

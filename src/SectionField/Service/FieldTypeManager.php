@@ -74,7 +74,7 @@ class FieldTypeManager implements FieldTypeManagerInterface
     {
         $fieldType = new FieldType();
         $fieldType->setType($fullyQualifiedClassName->getClassName());
-        $fieldType->setNamespace((string) $fullyQualifiedClassName);
+        $fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
 
         /** @var $fieldType FieldType */
         $fieldType = $this->create($fieldType);

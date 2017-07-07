@@ -13,9 +13,13 @@
             <generator strategy="AUTO" />
         </id>
         <field name="name" type="string" />
-        <field name="handle" type="string" />
+        <field name="label" type="string" />
         <field name="created" type="datetime" />
         <field name="updated" type="datetime" />
+        <many-to-one
+            target-entity="Tardigrades\Entity\Language"
+            field="language"
+        />
         <many-to-one
             target-entity="Tardigrades\Entity\Field"
             field="field"

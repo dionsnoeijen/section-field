@@ -199,7 +199,7 @@ final class FieldTypeManagerTest extends TestCase
 
         $fieldType = new FieldType();
         $fieldType->setType($fullyQualifiedClassName->getClassName());
-        $fieldType->setNamespace((string) $fullyQualifiedClassName);
+        $fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
 
         $this->entityManager
             ->shouldReceive('persist')
@@ -209,7 +209,8 @@ final class FieldTypeManagerTest extends TestCase
             ->shouldReceive('flush')
             ->once();
 
-        $createdFieldType = $this->fieldTypeManager->createWithFullyQualifiedClassName($fullyQualifiedClassName);
+        $createdFieldType = $this->fieldTypeManager
+            ->createWithFullyQualifiedClassName($fullyQualifiedClassName);
 
         $this->assertEquals($createdFieldType, $fieldType);
     }

@@ -53,7 +53,7 @@ class Language implements LanguageInterface
 
     public function getI18n(): I18n
     {
-        $this->i18n = I18n::create($this->i18n);
+        return I18n::create($this->i18n);
     }
 
     public function setApplication(Application $application): LanguageInterface

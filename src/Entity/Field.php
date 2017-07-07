@@ -115,7 +115,7 @@ class Field implements FieldInterface
         if ($this->fieldTranslations->contains($fieldTranslation)) {
             return $this;
         }
-        $this->fieldTranslations->remove($fieldTranslation);
+        $this->fieldTranslations->add($fieldTranslation);
         $fieldTranslation->setField($this);
 
         return $this;
@@ -126,7 +126,7 @@ class Field implements FieldInterface
         if (!$this->fieldTranslations->contains($fieldTranslation)) {
             return $this;
         }
-        $this->fieldTranslations->remove($fieldTranslation);
+        $this->fieldTranslations->removeElement($fieldTranslation);
         $fieldTranslation->removeField($this);
 
         return $this;

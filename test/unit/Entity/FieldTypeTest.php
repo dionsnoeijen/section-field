@@ -88,15 +88,18 @@ final class FieldTypeTest extends TestCase
 
     /**
      * @test
-     * @covers ::setNamespace ::getNamespace
+     * @covers ::setFullyQualifiedClassName ::getFullyQualifiedClassName
      */
-    public function it_should_set_and_get_namespace()
+    public function it_should_set_and_get_fully_qualified_class_name()
     {
         $fullyQualifiedClassName = FullyQualifiedClassName::create('This\\Is\\A\\Fully\\Qualified\\Class\\Name');
-        $fieldType = $this->fieldType->setNamespace((string) $fullyQualifiedClassName);
+        $fieldType = $this->fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
 
         $this->assertSame($this->fieldType, $fieldType);
-        $this->assertEquals($this->fieldType->getNamespace(), $fullyQualifiedClassName);
+        $this->assertEquals(
+            $this->fieldType->getFullyQualifiedClassName(),
+            $fullyQualifiedClassName
+        );
     }
 
     /**

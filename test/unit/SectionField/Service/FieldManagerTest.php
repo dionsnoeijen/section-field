@@ -10,8 +10,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Tardigrades\Entity\Field;
+use Tardigrades\Entity\FieldTranslation;
 use Tardigrades\Entity\FieldType;
+use Tardigrades\Entity\Language;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldTypeManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Id;
 
@@ -39,13 +42,20 @@ final class FieldManagerTest extends TestCase
      */
     private $fieldTypeManager;
 
+    /**
+     * @var LanguageManagerInterface
+     */
+    private $languageManager;
+
     public function setUp()
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
         $this->fieldTypeManager = Mockery::mock(FieldTypeManagerInterface::class);
+        $this->languageManager = Mockery::mock(LanguageManagerInterface::class);
         $this->fieldManager = new FieldManager(
             $this->entityManager,
-            $this->fieldTypeManager
+            $this->fieldTypeManager,
+            $this->languageManager
         );
     }
 
@@ -208,7 +218,10 @@ final class FieldManagerTest extends TestCase
     {
         $fieldConfig = FieldConfig::create([
             'field' => [
-                'name' => 'I have a name',
+                'name' => [
+                    'en_EN' => 'This is my name',
+                    'nl_NL' => 'Dit is mijn naam'
+                ],
                 'type' => 'TextField'
             ]
         ]);
@@ -219,6 +232,14 @@ final class FieldManagerTest extends TestCase
             ->shouldReceive('readByType')
             ->once();
 
+        $this->languageManager
+            ->shouldReceive('readByI18n')
+            ->twice()
+            ->andReturn(
+                (new Language())->setI18n('nl_NL'),
+                (new Language())->setI18n('en_EN')
+            );
+
         $this->entityManager
             ->shouldReceive('persist')
             ->once();
@@ -227,10 +248,13 @@ final class FieldManagerTest extends TestCase
             ->shouldReceive('flush')
             ->once();
 
-        $returnedField = $this->fieldManager->createByConfig($fieldConfig);
+        $returnedField = $this->fieldManager
+            ->createByConfig($fieldConfig);
 
-        $this->assertEquals($returnedField->getName(), $field->getName());
-        $this->assertEquals($returnedField->getHandle(), $field->getHandle());
+        $this->assertEquals(
+            $returnedField->getHandle(),
+            $field->getHandle()
+        );
     }
 
     /**
@@ -241,7 +265,10 @@ final class FieldManagerTest extends TestCase
     {
         $fieldConfig = FieldConfig::create([
             'field' => [
-                'name' => 'I have another name',
+                'name' => [
+                    'en_EN' => 'This is my other name',
+                    'nl_NL' => 'Dit is mijn andere naam'
+                ],
                 'type' => 'TextArea'
             ]
         ]);
@@ -252,6 +279,14 @@ final class FieldManagerTest extends TestCase
             ->shouldReceive('readByType')
             ->once();
 
+        $this->languageManager
+            ->shouldReceive('readByI18n')
+            ->twice()
+            ->andReturn(
+                (new Language())->setI18n('nl_NL'),
+                (new Language())->setI18n('en_EN')
+            );
+
         $this->entityManager
             ->shouldReceive('flush')
             ->once();
@@ -259,8 +294,30 @@ final class FieldManagerTest extends TestCase
         $returnedField = $this->fieldManager->updateByConfig($fieldConfig, $field);
 
         $this->assertSame($field, $returnedField);
-        $this->assertEquals($returnedField->getName(), $field->getName());
         $this->assertEquals($returnedField->getHandle(), $field->getHandle());
+    }
+
+    /**
+     * @test
+     * @covers ::createByConfig
+     */
+    public function it_should_receive_a_no_field_name_defined_exception()
+    {
+        $fieldConfig = FieldConfig::create([
+            'field' => [
+                'name' => 'This should be an array',
+                'type' => 'TextArea'
+            ]
+        ]);
+
+        $field = $this->givenAField();
+        $this->fieldTypeManager
+            ->shouldReceive('readByType')
+            ->once();
+
+        $this->expectException(NoFieldNameDefinedException::class);
+
+        $returnedField = $this->fieldManager->createByConfig($fieldConfig, $field);
     }
 
     /**
@@ -293,8 +350,15 @@ final class FieldManagerTest extends TestCase
         $fieldType = new FieldType();
 
         $field->setFieldType($fieldType);
-        $field->setName('I have a name');
-        $field->setHandle('iHaveAName');
+        $field->setHandle('thisIsMyName');
+        $field->addFieldTranslation(
+            (new FieldTranslation())
+                ->setName('I have a name')
+                ->setLanguage(
+                    (new Language())
+                        ->setI18n('en_EN')
+                )
+        );
 
         return $field;
     }

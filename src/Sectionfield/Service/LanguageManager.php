@@ -5,6 +5,7 @@ namespace Tardigrades\SectionField\Service;
 
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
 use Tardigrades\Entity\EntityInterface\Language;
+use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -67,5 +68,21 @@ class LanguageManager implements LanguageManagerInterface
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+    }
+
+    public function readByI18n(I18n $i18n): Language
+    {
+        $languageRepo = $this->entityManager->getRepository(Language::class);
+
+        /** @var Language $language */
+        $language = $languageRepo->findOneBy([
+            'i18n' => (string) $i18n
+        ]);
+
+        if (empty($language)) {
+            throw new LanguageNotFoundException();
+        }
+
+        return $language;
     }
 }

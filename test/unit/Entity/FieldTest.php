@@ -76,19 +76,6 @@ final class FieldTest extends TestCase
 
     /**
      * @test
-     * @covers ::setName ::getName
-     */
-    public function it_should_set_and_get_name()
-    {
-        $name = Name::create('I have a name');
-        $field = $this->field->setName('I have a name');
-
-        $this->assertEquals($this->field, $field);
-        $this->assertEquals($this->field->getName(), $name);
-    }
-
-    /**
-     * @test
      * @covers ::setHandle ::getHandle
      */
     public function it_should_set_and_get_handle()
@@ -98,6 +85,27 @@ final class FieldTest extends TestCase
 
         $this->assertEquals($this->field, $field);
         $this->assertEquals($this->field->getHandle(), $handle);
+    }
+
+    /**
+     * @test
+     * @covers ::addFieldTranslation ::getFieldTranslation ::removeFieldTranslation
+     */
+    public function it_should_add_get_and_remove_a_field_translation()
+    {
+        $translation = (new FieldTranslation())
+            ->setName('No name is to blame')
+            ->setLanguage((new Language())->setI18n('nl_NL'));
+
+        $field = new Field();
+        $field->setHandle('noNameIsToBlame');
+        $field->addFieldTranslation($translation);
+
+        $this->assertSame($translation, $field->getFieldTranslations()->get(0));
+
+        $field->removeFieldTranslation($translation);
+
+        $this->assertNull($field->getFieldTranslations()->get(0));
     }
 
     /**

@@ -9,7 +9,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Field;
+use Tardigrades\Entity\FieldTranslation;
 use Tardigrades\Entity\FieldType;
+use Tardigrades\Entity\Language;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 
 /**
@@ -49,11 +51,30 @@ final class DeleteFieldCommandTest extends TestCase
         return [
             (new Field())
                 ->setId(1)
-                ->setName('Some name')
                 ->setHandle('someName')
                 ->setFieldType(
                     (new FieldType())
                         ->setName('TextInput')
+                )
+                ->addFieldTranslation(
+                    (new FieldTranslation())
+                        ->setName('Some field name')
+                        ->setLanguage(
+                            (new Language())
+                                ->setI18n('en_EN')
+                        )
+                        ->setCreated(new \DateTime())
+                        ->setUpdated(new \DateTime())
+                )
+                ->addFieldTranslation(
+                    (new FieldTranslation())
+                        ->setName('Een veldnaam')
+                        ->setLanguage(
+                            (new Language())
+                                ->setI18n('nl_NL')
+                        )
+                        ->setCreated(new \DateTime())
+                        ->setUpdated(new \DateTime())
                 )
                 ->setConfig([
                     'field' => [
@@ -65,11 +86,30 @@ final class DeleteFieldCommandTest extends TestCase
                 ->setUpdated(new \DateTime()),
             (new Field())
                 ->setId(2)
-                ->setName('Some other name')
                 ->setHandle('someOtherName')
                 ->setFieldType(
                     (new FieldType())
                         ->setName('TextArea')
+                )
+                ->addFieldTranslation(
+                    (new FieldTranslation())
+                        ->setName('Some other field name')
+                        ->setLanguage(
+                            (new Language())
+                                ->setI18n('en_EN')
+                        )
+                        ->setCreated(new \DateTime())
+                        ->setUpdated(new \DateTime())
+                )
+                ->addFieldTranslation(
+                    (new FieldTranslation())
+                        ->setName('Een andere veldnaam')
+                        ->setLanguage(
+                            (new Language())
+                                ->setI18n('nl_NL')
+                        )
+                        ->setCreated(new \DateTime())
+                        ->setUpdated(new \DateTime())
                 )
                 ->setConfig([
                     'field' => [
@@ -81,11 +121,30 @@ final class DeleteFieldCommandTest extends TestCase
                 ->setUpdated(new \DateTime()),
             (new Field())
                 ->setId(3)
-                ->setName('And another name')
                 ->setHandle('andAnotherName')
                 ->setFieldType(
                     (new FieldType())
                         ->setName('TextArea')
+                )
+                ->addFieldTranslation(
+                    (new FieldTranslation())
+                        ->setName('And another field name')
+                        ->setLanguage(
+                            (new Language())
+                                ->setI18n('en_EN')
+                        )
+                        ->setCreated(new \DateTime())
+                        ->setUpdated(new \DateTime())
+                )
+                ->addFieldTranslation(
+                    (new FieldTranslation())
+                        ->setName('En nog een veldnaam')
+                        ->setLanguage(
+                            (new Language())
+                                ->setI18n('nl_NL')
+                        )
+                        ->setCreated(new \DateTime())
+                        ->setUpdated(new \DateTime())
                 )
                 ->setConfig([
                     'field' => [
