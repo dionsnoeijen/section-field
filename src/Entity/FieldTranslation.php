@@ -6,7 +6,7 @@ namespace Tardigrades\Entity;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Language;
 use Tardigrades\Entity\EntityInterface\FieldTranslation as FieldTranslationInterface;
-use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Label;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\Created;
@@ -19,9 +19,6 @@ class FieldTranslation implements FieldTranslationInterface
 
     /** @var string */
     protected $name;
-
-    /** @var string */
-    protected $handle;
 
     /** @var string */
     protected $label;
@@ -48,6 +45,11 @@ class FieldTranslation implements FieldTranslationInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIdValueObject(): Id
+    {
+        return Id::create($this->id);
     }
 
     public function getName(): Name

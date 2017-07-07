@@ -5,6 +5,7 @@ namespace Tardigrades\Entity\EntityInterface;
 
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\Label;
 use Tardigrades\SectionField\ValueObject\Updated;
@@ -12,6 +13,7 @@ use Tardigrades\SectionField\ValueObject\Updated;
 interface FieldTranslation {
     public function setId(int $id): FieldTranslation;
     public function getId(): ?int;
+    public function getIdValueObject(): Id;
     public function getName(): Name;
     public function setName(string $name): FieldTranslation;
     public function getLabel(): Label;
