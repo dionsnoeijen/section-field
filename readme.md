@@ -53,7 +53,9 @@ default: In a lot of cases you would want't to have access to a default field so
 
   ###### field/title.yml
 	field:
-	  name: Title
+	  name:
+	   - nl_NL: Titel
+	   - en_EN: Title
 	  type: TextInput
 	  length: 255
     
@@ -61,7 +63,9 @@ This is a simple text input field.
 
   ###### field/email.yml
 	field:
-	  name: Email
+	  name:
+	    - nl_NL: Email
+	    - en_EN: Email
 	  type: TextInput
 	  length: 255
 	  validate: email
@@ -70,7 +74,9 @@ Another one, but with a validation specified.
 	  
   ###### field/blog.yml
 	field:
-	  name: Blog
+	  name:
+	    - nl_NL: Blog
+	    - en_EN: Blog
 	  type: Relationship
 	  variant: hidden
 	  kind: many-to-one
@@ -126,7 +132,7 @@ variant: There are many way's one might associate relationships. In this case th
 `bin/console sf:list-field`
 
 
-### Section commands
+#### Section commands
 
 `bin/console sf:create-section <path to config yml>`
 
