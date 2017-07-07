@@ -106,7 +106,7 @@ class Application implements ApplicationInterface
         if (!$this->languages->contains($language)) {
             return $this;
         }
-        $this->languages->remove($language);
+        $this->languages->removeElement($language);
 
         return $this;
     }
@@ -131,7 +131,7 @@ class Application implements ApplicationInterface
         if (!$this->sections->contains($section)) {
             return $this;
         }
-        $this->sections->remove($section);
+        $this->sections->removeElement($section);
 
         return $this;
     }
