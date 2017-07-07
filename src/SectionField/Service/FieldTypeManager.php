@@ -26,21 +26,17 @@ class FieldTypeManager implements FieldTypeManagerInterface
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
-
         return $entity;
     }
 
     public function read(Id $id): FieldType
     {
         $fieldTypeRepo = $this->entityManager->getRepository(FieldType::class);
-
         /** @var $fieldType FieldType */
         $fieldType = $fieldTypeRepo->find($id->toInt());
-
         if (empty($fieldType)) {
             throw new FieldTypeNotFoundException();
         }
-
         return $fieldType;
     }
 
@@ -48,11 +44,9 @@ class FieldTypeManager implements FieldTypeManagerInterface
     {
         $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
         $fieldTypes = $fieldTypeRepository->findAll();
-
         if (empty($fieldTypes)) {
             throw new FieldTypeNotFoundException();
         }
-
         return $fieldTypes;
     }
 
@@ -60,7 +54,6 @@ class FieldTypeManager implements FieldTypeManagerInterface
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
-
         return $entity;
     }
 
@@ -75,7 +68,6 @@ class FieldTypeManager implements FieldTypeManagerInterface
         $fieldType = new FieldType();
         $fieldType->setType($fullyQualifiedClassName->getClassName());
         $fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
-
         /** @var $fieldType FieldType */
         $fieldType = $this->create($fieldType);
         return $fieldType;
@@ -84,16 +76,13 @@ class FieldTypeManager implements FieldTypeManagerInterface
     public function readByType(Type $type): FieldType
     {
         $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
-
         /** @var $fieldType FieldType */
         $fieldType = $fieldTypeRepository->findOneBy([
             'type' => (string) $type
         ]);
-
         if (empty($fieldType)) {
             throw new FieldTypeNotFoundException();
         }
-
         return $fieldType;
     }
 }
