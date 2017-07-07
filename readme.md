@@ -28,12 +28,38 @@ On the configuration of sections and fields
 
 For the development of the application itself the use of yml configurations is recommended because of having your application structure versioned.
 
-However, in some situations, you would want users to be able to create or configure sections and fields through the use of the ui. Therefore a database structure is needed, regardless of where section data is stored. (EventStore, MySql, Mongo, ElasticSearch)
+However, in some situations, you would want users to be able to create or configure sections and fields through the use of the ui. Therefore a database structure is needed.
 
-#### Example section config
+#### Language config
+
+	language:
+    - nl_NL
+    - en_EN
+    
+location: ./language/language.yml
+
+Your application will need at least one language. Configure it by adding it to an array that contains i18n language definitions.
+
+Run the create language command and point to that language.yml. That way the database will be populated with the available languages.
+
+#### Application config
+
+	application:
+    name: Blog
+    handle: blog
+    languages:
+      - nl_NL
+      - en_EN
+
+location: ./application/language.yml
+
+You have to define at least one application. Every application has it's own application.yml config. You need a name, handle and languages that are available for this application. This provides multi-site or multi-application configurations for your platform.
+
+#### Section config
 
 	section:
     name: Comments
+    handle: comments
     fields:
       - name
       - email
@@ -42,12 +68,31 @@ However, in some situations, you would want users to be able to create or config
     slug: [name]
     required: [name, email, comment, blog]
     default: name
+    application: [blog]
     
+A section contains fields. By this configuration things are tied together if you will. 
+
 name: Defines the section name, will be converted to handle aswel.
-fields: Assign fields to this section as array
+
+handle: Your sections will be accessible by the use of a handle. For example, an endpoint to get entries that is generated for this section might look like this: `https://example.com/v1/section/comments`. Or accessing section data in your twig template might look like:
+
+	{% for entry in section('comments').limit(10).read() %}
+	    <h3>{{ entry.name }}</h3>
+	    <p>{{ entry.email }}</p>
+	    <p>{{ entry.comment }}</p>
+	{% endfor %}
+
+The keys in the config stand for:
+
+fields: Assign fields to this section as array.
+
 slug: What field should the section base it's slug on?
+
 required: Required fields are defined on section level, not field level. It promotes reusability of the fields.
+
 default: In a lot of cases you would want't to have access to a default field so the application won't break on changing fields in sections. The `default` config is required. All field types should be able to provide a value for default.
+
+application: For what application(s) is this section available.
 
 #### Example field configs
 
