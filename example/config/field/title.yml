@@ -1,0 +1,7 @@
+field:
+  name:
+    - nl_NL: Titel
+    - en_EN: Title
+  handle: title
+  type: TextInput
+  length: 255

@@ -1,0 +1,29 @@
+services:
+  section_field.manager.application_manager:
+    class: Tardigrades\SectionField\Service\ApplicationManager
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.language_manager'
+
+  section_field.manager.language_manager:
+    class: Tardigrades\SectionField\Service\LanguageManager
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
+  section_field.manager.section_manager:
+    class: Tardigrades\SectionField\Service\SectionManager
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_manager'
+
+  section_field.manager.field_type_manager:
+    class: Tardigrades\SectionField\Service\FieldTypeManager
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
+  section_field.manager.field_manager:
+    class: Tardigrades\SectionField\Service\FieldManager
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_type_manager'
+      - '@section_field.manager.language_manager'

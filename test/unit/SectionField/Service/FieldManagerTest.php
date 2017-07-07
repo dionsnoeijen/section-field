@@ -339,7 +339,39 @@ final class FieldManagerTest extends TestCase
 
         $query->shouldReceive('getResult')
             ->once()
-            ->andReturn([]);
+            ->andReturn([
+                new Field(),
+                new Field()
+            ]);
+
+        $fields = $this->fieldManager->readFieldsByHandles($handles);
+
+        $this->assertEquals(count($fields), 2);
+    }
+
+    /**
+     * @test
+     * @covers ::readFieldsByHandles
+     */
+    public function it_make_exception_when_read_fields_by_handles()
+    {
+        $handles = [
+            'fieldHandle',
+            'anotherFieldHandle'
+        ];
+
+        $query = Mockery::mock(AbstractQuery::class);
+
+        $this->entityManager
+            ->shouldReceive('createQuery')
+            ->andReturn($query);
+
+        $query->shouldReceive('getResult')
+            ->once()
+            ->andReturn([
+            ]);
+
+        $this->expectException(FieldNotFoundException::class);
 
         $this->fieldManager->readFieldsByHandles($handles);
     }

@@ -1,0 +1,6 @@
+field:
+  name:
+    - nl_NL: Geupdated
+    - en_EN: Updated
+  handle: updated
+  type: DateTime

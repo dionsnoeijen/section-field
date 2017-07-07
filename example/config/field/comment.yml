@@ -1,0 +1,6 @@
+field:
+  name:
+    - nl_NL: Commentaar
+    - en_EN: Comment
+  handle: comment
+  type: TextArea

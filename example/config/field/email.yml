@@ -1,0 +1,8 @@
+field:
+  name:
+    - nl_NL: Email
+    - en_EN: Email
+  handle: email
+  type: TextInput
+  length: 255
+  validate: email

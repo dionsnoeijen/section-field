@@ -1,0 +1,7 @@
+field:
+  name:
+    - nl_NL: Onderkopje
+    - en_EN: Subtitle
+  handle: subtitle
+  type: TextInput
+  length: 255

@@ -1,0 +1,6 @@
+field:
+  name:
+    - nl_NL: Aangemaakt
+    - en_EN: Created
+  handle: created
+  type: DateTime

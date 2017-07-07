@@ -1,5 +1,8 @@
 field:
-  name: Blog
+  name:
+    - nl_NL: Blog
+    - en_EN: Blog
+  handle: blog
   type: Relationship
   variant: hidden
   kind: many-to-one

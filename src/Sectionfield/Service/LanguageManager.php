@@ -4,11 +4,12 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Service;
 
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
-use Tardigrades\Entity\EntityInterface\Language;
-use Tardigrades\Entity\Language as LanguageEntity;
+use Tardigrades\Entity\EntityInterface\Language as LanguageInterface;
+use Tardigrades\Entity\Language;
 use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 use Doctrine\ORM\EntityManagerInterface;
+use Tardigrades\SectionField\ValueObject\LanguageConfig;
 
 class LanguageManager implements LanguageManagerInterface
 {
@@ -23,7 +24,7 @@ class LanguageManager implements LanguageManagerInterface
         $this->entityManager = $entityManager;
     }
 
-    public function create(Language $entity): Language
+    public function create(LanguageInterface $entity): LanguageInterface
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -31,9 +32,9 @@ class LanguageManager implements LanguageManagerInterface
         return $entity;
     }
 
-    public function read(Id $id): Language
+    public function read(Id $id): LanguageInterface
     {
-        $languageRepository = $this->entityManager->getRepository(LanguageEntity::class);
+        $languageRepository = $this->entityManager->getRepository(Language::class);
 
         /** @var $language Language */
         $language = $languageRepository->find($id->toInt());
@@ -47,7 +48,7 @@ class LanguageManager implements LanguageManagerInterface
 
     public function readAll(): array
     {
-        $languageRepository = $this->entityManager->getRepository(LanguageEntity::class);
+        $languageRepository = $this->entityManager->getRepository(Language::class);
         $languages = $languageRepository->findAll();
 
         if (empty($languages)) {
@@ -62,15 +63,15 @@ class LanguageManager implements LanguageManagerInterface
         $this->entityManager->flush();
     }
 
-    public function delete(Language $entity): void
+    public function delete(LanguageInterface $entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
 
-    public function readByI18n(I18n $i18n): Language
+    public function readByI18n(I18n $i18n): LanguageInterface
     {
-        $languageRepository = $this->entityManager->getRepository(LanguageEntity::class);
+        $languageRepository = $this->entityManager->getRepository(Language::class);
 
         /** @var Language $language */
         $language = $languageRepository->findOneBy([
@@ -82,5 +83,61 @@ class LanguageManager implements LanguageManagerInterface
         }
 
         return $language;
+    }
+
+    public function readByI18ns(array $i18ns): array
+    {
+        $in = [];
+        foreach ($i18ns as $i18n) {
+            $in[] = '\'' . $i18n . '\'';
+        }
+        $whereIn = implode(',', $in);
+        $query = $this->entityManager->createQuery(
+            "SELECT language FROM Tardigrades\Entity\Language language WHERE language.i18n IN ({$whereIn})"
+        );
+        $results =  $query->getResult();
+
+        if (empty($results)) {
+            throw new LanguageNotFoundException();
+        }
+
+        return $results;
+    }
+
+    public function createByConfig(LanguageConfig $languageConfig): LanguageManagerInterface
+    {
+        $this->setUpByConfig($languageConfig);
+        $this->entityManager->flush();
+
+        return $this;
+    }
+
+    public function updateByConfig(LanguageConfig $languageConfig): LanguageManagerInterface
+    {
+        $this->setUpByConfig($languageConfig);
+        $this->entityManager->flush();
+
+        return $this;
+    }
+
+    public function setUpByConfig(LanguageConfig $languageConfig): void
+    {
+        $languageConfig = $languageConfig->toArray();
+
+        $existing = $this->readByI18ns($languageConfig['language']);
+        $existingCheck = [];
+        /** @var Language $language */
+        foreach ($existing as $language) {
+            $existingCheck[] = (string) $language->getI18n();
+        }
+
+        foreach ($languageConfig['language'] as $configLanguage) {
+            if (!in_array($language, $existingCheck)) {
+                $this->entityManager->persist(
+                    (new Language())->setI18n($configLanguage)
+                );
+            }
+        }
+
     }
 }

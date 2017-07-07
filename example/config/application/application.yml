@@ -1,0 +1,6 @@
+application:
+  name: Blog
+  handle: blog
+  languages:
+    - nl_NL
+    - en_EN

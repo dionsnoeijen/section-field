@@ -1,60 +1,100 @@
 services:
-  install.field.type.command:
+  section_field.create.application.command:
+    class: Tardigrades\Command\CreateApplicationCommand
+    arguments:
+      - '@section_field.manager.application_manager'
+
+  section_field.update.application.command:
+    class: Tardigrades\Command\UpdateApplicationCommand
+    arguments:
+      - '@section_field.manager.application_manager'
+
+  section_field.delete.application.command:
+    class: Tardigrades\Command\DeleteApplicationCommand
+    arguments:
+      - '@section_field.manager.application_manager'
+
+  section_field.list.application.command:
+    class: Tardigrades\Command\ListApplicationCommand
+    arguments:
+      - '@section_field.manager.application_manager'
+
+  section_field.create.language.command:
+    class: Tardigrades\Command\CreateLanguageCommand
+    arguments:
+      - '@section_field.manager.language_manager'
+
+  section_field.update.language.command:
+    class: Tardigrades\Command\UpdateLanguageCommand
+    arguments:
+      - '@section_field.manager.language_manager'
+
+  section_field.delete.language.command:
+    class: Tardigrades\Command\DeleteLanguageCommand
+    arguments:
+      - '@section_field.manager.language_manager'
+
+  section_field.list.language.command:
+    class: Tardigrades\Command\ListLanguageCommand
+    arguments:
+      - '@section_field.manager.language_manager'
+
+  section_field.install.field.type.command:
     class: Tardigrades\Command\InstallFieldTypeCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_type_manager'
 
-  update.field.type.command:
+  section_field.update.field.type.command:
     class: Tardigrades\Command\UpdateFieldTypeCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_type_manager'
 
-  delete.field.type.command:
+  section_field.delete.field.type.command:
     class: Tardigrades\Command\DeleteFieldTypeCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_type_manager'
 
-  list.field.type.command:
+  section_field.list.field.type.command:
     class: Tardigrades\Command\ListFieldTypeCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_type_manager'
 
-  create.section.command:
+  section_field.create.section.command:
     class: Tardigrades\Command\CreateSectionCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.section_manager'
 
-  update.section.command:
+  section_field.update.section.command:
     class: Tardigrades\Command\UpdateSectionCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.section_manager'
 
-  delete.section.command:
+  section_field.delete.section.command:
     class: Tardigrades\Command\DeleteSectionCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.section_manager'
 
-  list.section.command:
+  section_field.list.section.command:
     class: Tardigrades\Command\ListSectionCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.section_manager'
 
-  create.field.command:
+  section_field.create.field.command:
     class: Tardigrades\Command\CreateFieldCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_manager'
 
-  update.field.command:
+  section_field.update.field.command:
     class: Tardigrades\Command\UpdateFieldCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_manager'
 
-  delete.field.command:
+  section_field.delete.field.command:
     class: Tardigrades\Command\DeleteFieldCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_manager'
 
-  list.field.command:
+  section_field.list.field.command:
     class: Tardigrades\Command\ListFieldCommand
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@section_field.manager.field_manager'

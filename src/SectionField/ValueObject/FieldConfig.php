@@ -1,4 +1,5 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\SectionField\ValueObject;
 
@@ -11,7 +12,8 @@ final class FieldConfig
      */
     private $fieldConfig;
 
-    public function __construct(array $fieldConfig) {
+    private function __construct(array $fieldConfig)
+    {
         Assertion::keyIsset($fieldConfig, 'field', 'Config is not a field config');
         Assertion::keyIsset($fieldConfig['field'], 'name', 'No name in config');
         Assertion::notEmpty($fieldConfig['field'], 'name', 'Field has no value');

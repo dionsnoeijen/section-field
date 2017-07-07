@@ -6,13 +6,11 @@ namespace Tardigrades\SectionField\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldTranslation;
-use Tardigrades\Entity\Language;
 use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager as FieldManagerInterface;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldTypeManagerInterface;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
-use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
@@ -151,6 +149,11 @@ class FieldManager implements FieldManagerInterface
         $query = $this->entityManager->createQuery(
             "SELECT field FROM Tardigrades\Entity\Field field WHERE field.handle IN ({$whereIn})"
         );
-        return $query->getResult();
+        $results = $query->getResult();
+        if (empty($results)) {
+            throw new FieldNotFoundException();
+        }
+
+        return $results;
     }
 }

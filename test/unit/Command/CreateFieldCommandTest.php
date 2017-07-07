@@ -108,13 +108,11 @@ field:
     name: Body
     type: RichTextArea
 EOT;
-            break;
         case 'some-erroneous-field-config-file.yml':
             return <<<EOT
 field:
     type: IAmWrongBecauseIHaveNoName
 EOT;
-            break;
         case 'some-section-config-file.yml':
             return <<<EOT
 section:
@@ -126,15 +124,36 @@ section:
     slug: [and, some]
     default: and
 EOT;
-
-            break;
         case 'some-erroneous-section-config-file.yml':
             return <<<EOT
 section:
     name: I have a name but no fields
 EOT;
-
-            break;
+        case 'some-language-config-file.yml':
+            return <<<EOT
+language:
+    - nl_NL
+    - en_EN
+EOT;
+        case 'some-erroneous-language-config-file.yml':
+            return <<<EOT
+error:
+    - nothing
+EOT;
+        case 'some-application-config-file.yml':
+            return <<<EOT
+application:
+    name: Blog
+    handle: blog
+    languages:
+        - nl_NL
+        - en_EN
+EOT;
+        case 'some-erroneous-application-config-file.yml':
+            return <<<EOT
+application:
+    no: Thing
+EOT;
     }
     return 'no';
 }

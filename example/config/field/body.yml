@@ -1,0 +1,6 @@
+field:
+  name:
+    - nl_NL: Body
+    - en_EN: Body
+  handle: body
+  type: RichTextArea
