@@ -16,13 +16,9 @@ While the aim for this tool is to be very high level, simplicity should never pr
 - Move FieldTypes to separate dependency
 - Deleting a field type should ony be possible if there are no installed fields with that type.
 - Field handles should not be created based on their name. At least. Maybe on creation when no handle is given, but an update should contain an explicit handle config to prevent application breaking changes just on updating a field name.
-- Move field database interactions from commands to generic services.
 - All commands that list something should check if there are entries.
-- Refactor commands so shared functions are in a BaseClass.
 - Unit tests for commands.
 - Unit tests for value objects.
-- Make it multilang from the core.
-- Make it multi app from the core.
 
 ## Config
 
@@ -85,6 +81,28 @@ A more complicated field like a relationship requires a bit more explanation.
 variant: There are many way's one might associate relationships. In this case the field is meanth for the `comment` section. Therefore the relationship is created without an explicit user input field and the variant hidden can generate a hidden field. Other variants might be: list, option select, multi select (in case of a one-to-many relationship)
 
 ## Commands
+
+#### Application commands
+
+`bin/console sf:create-application <path to config yml>`
+
+`bin/console sf:update-application <path to config yml>`
+
+`bin/console sf:delete-application (follow dialog)`
+
+`bin/console sf:list-application`
+
+
+#### Language commands
+
+`bin/console sf:create-language <path to config yml>`
+
+`bin/console sf:update-language <path to config yml>`
+
+`bin/console sf:delete-language (follow dialog)`
+
+`bin/conole sf:list-language`
+
 
 #### Field type commands
 
