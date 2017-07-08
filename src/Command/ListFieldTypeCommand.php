@@ -9,6 +9,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tardigrades\Entity\EntityInterface\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 
 class ListFieldTypeCommand extends Command
@@ -46,13 +47,14 @@ class ListFieldTypeCommand extends Command
         $table = new Table($output);
 
         $rows = [];
+        /** @var FieldType $fieldType */
         foreach ($fieldTypes as $fieldType) {
             $rows[] = [
                 $fieldType->getId(),
                 $fieldType->getType(),
-                $fieldType->getNamespace(),
-                (string) $fieldType->getCreated(),
-                (string) $fieldType->getUpdated()
+                $fieldType->getFullyQualifiedClassName(),
+                $fieldType->getCreated()->format('D-m-y'),
+                $fieldType->getUpdated()->format('D-m-y')
             ];
         }
 

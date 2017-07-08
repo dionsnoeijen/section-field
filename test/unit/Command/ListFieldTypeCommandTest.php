@@ -1,4 +1,5 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
@@ -9,7 +10,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 
-final class DeleteFieldTypeCommandTest extends TestCase
+final class ListFieldTypeCommandTest extends TestCase
 {
     /**
      * @var FieldTypeManager
@@ -17,9 +18,9 @@ final class DeleteFieldTypeCommandTest extends TestCase
     private $fieldTypeManager;
 
     /**
-     * @var DeleteFieldTypeCommand
+     * @var ListFieldTypeCommand
      */
-    private $deleteFieldTypeCommand;
+    private $listFieldTypeCommand;
 
     /**
      * @var Application
@@ -29,9 +30,9 @@ final class DeleteFieldTypeCommandTest extends TestCase
     public function setUp()
     {
         $this->fieldTypeManager = Mockery::mock(FieldTypeManager::class);
-        $this->deleteFieldTypeCommand = new DeleteFieldTypeCommand($this->fieldTypeManager);
+        $this->listFieldTypeCommand = new ListFieldTypeCommand($this->fieldTypeManager);
         $this->application = new Application();
-        $this->application->add($this->deleteFieldTypeCommand);
+        $this->application->add($this->listFieldTypeCommand);
     }
 
     private function givenAnArrayOfFieldTypes(): array
@@ -55,32 +56,22 @@ final class DeleteFieldTypeCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_should_delete_field_type_with_id_1()
+    public function it_should_list_field_types()
     {
-        $command = $this->application->find('sf:delete-field');
+        $command = $this->application->find('sf:list-field-type');
         $commandTester = new CommandTester($command);
 
-        $fields = $this->givenAnArrayOfFieldTypes();
+        $fieldTypes = $this->givenAnArrayOfFieldTypes();
 
         $this->fieldTypeManager
             ->shouldReceive('readAll')
             ->once()
-            ->andReturn($fields);
+            ->andReturn($fieldTypes);
 
-        $this->fieldTypeManager
-            ->shouldReceive('read')
-            ->once()
-            ->andReturn($fields[0]);
-
-        $this->fieldTypeManager
-            ->shouldReceive('delete')
-            ->once();
-
-        $commandTester->setInputs([1, 'y']);
         $commandTester->execute(['command' => $command->getName()]);
 
         $this->assertRegExp(
-            '/Removed!/',
+            '/All installed FieldTypes/',
             $commandTester->getDisplay()
         );
     }

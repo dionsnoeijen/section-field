@@ -81,7 +81,7 @@ class DeleteFieldTypeCommand extends Command
         $question = new Question('<question>What record do you want to delete?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->fieldTypeManager->read(Id::create($id));
+                return $this->fieldTypeManager->read(Id::create((int) $id));
             } catch (FieldTypeNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
@@ -96,11 +96,12 @@ class DeleteFieldTypeCommand extends Command
         $table = new Table($output);
 
         $rows = [];
+        /** @var FieldType $fieldType */
         foreach ($fieldTypes as $fieldType) {
             $rows[] = [
                 $fieldType->getId(),
                 $fieldType->getType(),
-                $fieldType->getNamespace(),
+                $fieldType->getFullyQualifiedClassName(),
                 $fieldType->getCreated()->format(\DateTime::ATOM),
                 $fieldType->getUpdated()->format(\DateTime::ATOM)
             ];
