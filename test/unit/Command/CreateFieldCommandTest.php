@@ -45,6 +45,8 @@ final class CreateFieldCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_create_a_field()
     {
@@ -71,6 +73,8 @@ final class CreateFieldCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_sould_fail_on_incorrect_config()
     {

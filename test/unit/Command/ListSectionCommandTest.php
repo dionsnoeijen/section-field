@@ -61,6 +61,8 @@ final class ListSectionCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_list_field_types()
     {

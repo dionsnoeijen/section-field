@@ -159,6 +159,8 @@ final class DeleteFieldCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_delete_field_with_id_1()
     {

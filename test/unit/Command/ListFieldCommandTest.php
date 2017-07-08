@@ -159,6 +159,8 @@ final class ListFieldCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_list_fields()
     {

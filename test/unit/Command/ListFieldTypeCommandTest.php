@@ -10,6 +10,11 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 
+/**
+ * @coversDefaultClass Tardigrades\Command\ListFieldTypeCommand
+ * @covers ::<private>
+ * @covers ::__construct
+ */
 final class ListFieldTypeCommandTest extends TestCase
 {
     /**
@@ -55,6 +60,8 @@ final class ListFieldTypeCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_list_field_types()
     {

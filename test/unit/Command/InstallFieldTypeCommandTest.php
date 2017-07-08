@@ -47,6 +47,8 @@ final class InstallFieldTypeCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_install_a_field_type()
     {

@@ -64,6 +64,8 @@ final class DeleteSectionCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_delete_section_with_id_1()
     {

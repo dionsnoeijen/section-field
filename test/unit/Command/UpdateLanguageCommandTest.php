@@ -76,6 +76,8 @@ final class UpdateLanguageCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_update_languages_based_on_config()
     {
@@ -106,6 +108,8 @@ final class UpdateLanguageCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_fail_with_invalid_config()
     {

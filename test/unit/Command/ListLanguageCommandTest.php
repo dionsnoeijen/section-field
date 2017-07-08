@@ -11,6 +11,11 @@ use Tardigrades\Entity\Language;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 use Tardigrades\Entity\Application as ApplicationEntity;
 
+/**
+ * @coversDefaultClass Tardigrades\Command\ListLanguageCommand
+ * @covers ::<private>
+ * @covers ::__construct
+ */
 final class ListLanguageCommandTest extends TestCase
 {
     /**
@@ -74,6 +79,8 @@ final class ListLanguageCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_list_field_types()
     {

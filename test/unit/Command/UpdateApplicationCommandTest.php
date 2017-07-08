@@ -67,6 +67,8 @@ final class UpdateApplicationCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_update_an_application_based_on_config()
     {
@@ -104,6 +106,8 @@ final class UpdateApplicationCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_fail_with_invalid_config()
     {

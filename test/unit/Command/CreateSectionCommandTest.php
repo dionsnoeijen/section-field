@@ -45,6 +45,8 @@ final class CreateSectionCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_create_a_section()
     {
@@ -71,6 +73,8 @@ final class CreateSectionCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_fail_on_incorrect_config()
     {

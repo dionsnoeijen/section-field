@@ -72,6 +72,8 @@ final class UpdateSectionCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_update_a_section()
     {
@@ -109,6 +111,8 @@ final class UpdateSectionCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_fail_on_incorrect_config()
     {

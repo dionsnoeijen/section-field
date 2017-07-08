@@ -159,6 +159,8 @@ final class UpdateFieldCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_update_a_field()
     {
@@ -196,6 +198,8 @@ final class UpdateFieldCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_fail_on_incorrect_config()
     {

@@ -63,6 +63,8 @@ final class UpdateFieldTypeCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_update_a_field_type()
     {

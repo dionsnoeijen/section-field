@@ -9,6 +9,11 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 
+/**
+ * @coversDefaultClass Tardigrades\Command\DeleteFieldTypeCommand
+ * @covers ::<private>
+ * @covers ::__construct
+ */
 final class DeleteFieldTypeCommandTest extends TestCase
 {
     /**
@@ -54,6 +59,8 @@ final class DeleteFieldTypeCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_delete_field_type_with_id_1()
     {

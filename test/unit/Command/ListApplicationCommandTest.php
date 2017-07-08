@@ -73,6 +73,8 @@ final class ListApplicationCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_show_a_list_of_two_applications()
     {

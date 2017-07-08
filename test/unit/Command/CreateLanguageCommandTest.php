@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 
 /**
- * @coversDefaultClass Tardigrades\Command\CreateFieldCommand
+ * @coversDefaultClass Tardigrades\Command\CreateLanguageCommand
  * @covers ::<private>
  * @covers ::__construct
  */
@@ -38,6 +38,8 @@ final class CreateLanguageCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_create_languages_based_on_config()
     {
@@ -63,6 +65,8 @@ final class CreateLanguageCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_fail_with_invalid_config()
     {

@@ -82,6 +82,8 @@ final class DeleteLanguageCommandTest extends TestCase
 
     /**
      * @test
+     * @covers ::configure
+     * @covers ::execute
      */
     public function it_should_delete_application_with_id_1()
     {
