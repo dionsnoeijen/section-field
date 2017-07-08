@@ -3,10 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Assert\Assertion;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -15,7 +12,7 @@ use Tardigrades\Entity\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
-class DeleteFieldTypeCommand extends Command
+class DeleteFieldTypeCommand extends FieldTypeCommand
 {
     /**
      * @var QuestionHelper
@@ -54,7 +51,7 @@ class DeleteFieldTypeCommand extends Command
     {
         $fieldTypes = $this->fieldTypeManager->readAll();
 
-        $this->renderTable($output, $fieldTypes);
+        $this->renderTable($output, $fieldTypes, 'Installed field types');
         $this->deleteWhatRecord($input, $output);
     }
 
@@ -89,28 +86,5 @@ class DeleteFieldTypeCommand extends Command
         });
 
         return $this->questionHelper->ask($input, $output, $question);
-    }
-
-    private function renderTable(OutputInterface $output, array $fieldTypes)
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        /** @var FieldType $fieldType */
-        foreach ($fieldTypes as $fieldType) {
-            $rows[] = [
-                $fieldType->getId(),
-                $fieldType->getType(),
-                $fieldType->getFullyQualifiedClassName(),
-                $fieldType->getCreated()->format(\DateTime::ATOM),
-                $fieldType->getUpdated()->format(\DateTime::ATOM)
-            ];
-        }
-
-        $table
-            ->setHeaders(['#id', 'type', 'namespace', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 }

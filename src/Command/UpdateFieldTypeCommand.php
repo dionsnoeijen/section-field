@@ -18,7 +18,7 @@ use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 
-class UpdateFieldTypeCommand extends Command
+class UpdateFieldTypeCommand extends FieldTypeCommand
 {
     /**
      * @var QuestionHelper
@@ -57,36 +57,8 @@ class UpdateFieldTypeCommand extends Command
     {
         $fieldTypes = $this->fieldTypeManager->readAll();
 
-        $this->renderTable($output, $fieldTypes);
+        $this->renderTable($output, $fieldTypes, 'The * column is what can be updated, type is updated automatically.');
         $this->updateWhatRecord($input, $output);
-    }
-
-    private function renderTable(OutputInterface $output, array $fieldTypes)
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        /** @var FieldType $fieldType */
-        foreach ($fieldTypes as $fieldType) {
-            $rows[] = [
-                $fieldType->getId(),
-                (string) $fieldType->getType(),
-                $fieldType->getFullyQualifiedClassName(),
-                $fieldType->getCreated()->format(\DateTime::ATOM),
-                $fieldType->getUpdated()->format(\DateTime::ATOM)
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>The * column is what can be updated, type is updated automatically.</info>', array('colspan' => 5))
-        ];
-
-        $table
-            ->setHeaders(['#id', 'type', '*namespace', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 
     private function getFieldType(InputInterface $input, OutputInterface $output): FieldType
@@ -140,7 +112,7 @@ class UpdateFieldTypeCommand extends Command
         $fieldType->setType($fullyQualifiedClassName->getClassName());
         $fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
         $this->fieldTypeManager->update();
-        $this->renderTable($output, [$fieldType]);
+        $this->renderTable($output, [$fieldType], 'The * column is what can be updated, type is updated automatically.');
 
         $output->writeln('<info>FieldType Updated!</info>');
     }
