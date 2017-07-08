@@ -9,11 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\Entity\Language;
-use Tardigrades\Entity\Application as ApplicationEntity;
 use Tardigrades\Entity\Section;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
-use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 /**
  * @coversDefaultClass Tardigrades\Command\DeleteSectionCommand
