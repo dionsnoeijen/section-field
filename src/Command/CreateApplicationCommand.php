@@ -11,7 +11,7 @@ use Symfony\Component\Yaml\Yaml;
 use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
 use Tardigrades\SectionField\ValueObject\ApplicationConfig;
 
-class CreateApplicationCommand extends Command
+class CreateApplicationCommand extends ApplicationCommand
 {
     /** @var ApplicationManager */
     private $applicationManager;

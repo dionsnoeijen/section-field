@@ -19,7 +19,7 @@ use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
 use Tardigrades\SectionField\Service\ApplicationNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
-class DeleteApplicationCommand extends Command
+class DeleteApplicationCommand extends ApplicationCommand
 {
     /**
      * @var ApplicationManager
@@ -57,7 +57,7 @@ class DeleteApplicationCommand extends Command
     {
         $appliactions = $this->applicationManager->readAll();
 
-        $this->renderTable($output, $appliactions);
+        $this->renderTable($output, $appliactions, 'All installed Applications');
         $this->deleteWhatRecord($input, $output);
     }
 
@@ -92,50 +92,5 @@ class DeleteApplicationCommand extends Command
         $this->applicationManager->delete($application);
 
         $output->writeln('<info>Removed!</info>');
-    }
-
-    private function renderTable(OutputInterface $output, array $applications): void
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        /** @var Application $application */
-        foreach ($applications as $application) {
-
-            $sections = $application->getSections();
-            $sectionsText = '';
-            /** @var Section $section */
-            foreach ($sections as $section) {
-                $sectionsText .= $section->getName() . "\n";
-            }
-
-            $languages = $application->getLanguages();
-            $languageText = '';
-            /** @var Language $language */
-            foreach ($languages as $language) {
-                $languageText .= (string) $language->getI18n() . "\n";
-            }
-
-            $rows[] = [
-                $application->getId(),
-                $application->getName(),
-                $application->getHandle(),
-                $sectionsText,
-                $languageText,
-                $application->getCreated()->format('D-m-y'),
-                $application->getUpdated()->format('D-m-y')
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>All installed Applications</info>', ['colspan' => 6])
-        ];
-
-        $table
-            ->setHeaders(['#id', 'name', 'handle', 'sections', 'languages', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 }
