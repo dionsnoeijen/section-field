@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tardigrades\Entity\EntityInterface\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 
@@ -31,7 +32,7 @@ class InstallFieldTypeCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Install a field type. Escape the backslash! Like so: This\\\Is\\\Namespace')
+            ->setDescription('Install a field type. Escape the backslash! Like so: This\\\Is\\\ClassName')
             ->setHelp('This command installs a field type, just give the namespace where to find the field.')
             ->addArgument('namespace', InputArgument::REQUIRED, 'Field type namespace')
         ;
@@ -52,19 +53,20 @@ class InstallFieldTypeCommand extends Command
         $table = new Table($output);
 
         $rows = [];
+        /** @var FieldType $fieldType */
         foreach ($fieldTypes as $fieldType) {
             $rows[] = [
                 $fieldType->getId(),
                 $fieldType->getType(),
-                $fieldType->getNamespace(),
-                (string) $fieldType->getCreated(),
-                (string) $fieldType->getUpdated()
+                $fieldType->getFullyQualifiedClassName(),
+                (string) $fieldType->getCreatedValueObject(),
+                (string) $fieldType->getUpdatedValueObject()
             ];
         }
 
         $rows[] = new TableSeparator();
         $rows[] = [
-            new TableCell('<info>FieldType installed</info>', array('colspan' => 5))
+            new TableCell('<info>FieldType installed!</info>', array('colspan' => 5))
         ];
 
         $table
