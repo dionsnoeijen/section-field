@@ -67,7 +67,7 @@ class UpdateSectionCommand extends Command
         $question = new Question('<question>What record do you want to update?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->sectionManager->read(Id::create($id));
+                return $this->sectionManager->read(Id::create((int) $id));
             } catch (SectionNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
@@ -87,7 +87,7 @@ class UpdateSectionCommand extends Command
                     file_get_contents($config)
                 )
             );
-            $this->sectionManager->updateFromConfig($sectionConfig, $section);
+            $this->sectionManager->updateByConfig($sectionConfig, $section);
         } catch (\Exception $exception) {
             $output->writeln("<error>Invalid configuration file.  {$exception->getMessage()}</error>");
             return;
@@ -101,14 +101,15 @@ class UpdateSectionCommand extends Command
         $table = new Table($output);
 
         $rows = [];
+        /** @var Section $section */
         foreach ($sections as $section) {
             $rows[] = [
                 $section->getId(),
                 $section->getName(),
                 $section->getHandle(),
                 (string) $section->getConfig(),
-                (string) $section->getCreated(),
-                (string) $section->getUpdated()
+                $section->getCreated()->format('Y-m-d'),
+                $section->getUpdated()->format('Y-m-d')
             ];
         }
 
