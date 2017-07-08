@@ -10,38 +10,32 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Language;
 use Tardigrades\Entity\Application as ApplicationEntity;
-use Tardigrades\SectionField\Service\LanguageManager;
+use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 
 /**
- * @coversDefaultClass Tardigrades\Command\DeleteLanguageCommand
+ * @coversDefaultClass Tardigrades\Command\UpdateLanguageCommand
  * @covers ::<private>
  * @covers ::__construct
  */
-final class DeleteLanguageCommandTest extends TestCase
+final class UpdateLanguageCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var LanguageManager|Mockery\MockInterface
-     */
+    /** @var LanguageManager */
     private $languageManager;
 
-    /**
-     * @var DeleteLanguageCommand
-     */
-    private $deleteLanguageCommand;
+    /** @var UpdateLanguageCommand */
+    private $updateLanguageCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
     public function setUp()
     {
         $this->languageManager = Mockery::mock(LanguageManager::class);
-        $this->deleteLanguageCommand = new DeleteLanguageCommand($this->languageManager);
+        $this->updateLanguageCommand = new UpdateLanguageCommand($this->languageManager);
         $this->application = new Application();
-        $this->application->add($this->deleteLanguageCommand);
+        $this->application->add($this->updateLanguageCommand);
     }
 
     private function givenAnArrayOfLanguages(): array
@@ -83,32 +77,50 @@ final class DeleteLanguageCommandTest extends TestCase
     /**
      * @test
      */
-    public function it_should_delete_application_with_id_1()
+    public function it_should_update_languages_based_on_config()
     {
-        $command = $this->application->find('sf:delete-language');
+        $command = $this->application->find('sf:update-language');
         $commandTester = new CommandTester($command);
-
-        $fields = $this->givenAnArrayOfLanguages();
 
         $this->languageManager
             ->shouldReceive('readAll')
             ->once()
-            ->andReturn($fields);
+            ->andReturn($this->givenAnArrayOfLanguages());
 
         $this->languageManager
-            ->shouldReceive('read')
-            ->once()
-            ->andReturn($fields[0]);
-
-        $this->languageManager
-            ->shouldReceive('delete')
+            ->shouldReceive('updateByConfig')
             ->once();
 
-        $commandTester->setInputs([1, 'y']);
-        $commandTester->execute(['command' => $command->getName()]);
+        $commandTester->execute(
+            [
+                'command' => $command->getName(),
+                'config' => 'some-language-config-file.yml'
+            ]
+        );
 
         $this->assertRegExp(
-            '/Removed!/',
+            '/Languages updated!/',
+            $commandTester->getDisplay()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_fail_with_invalid_config()
+    {
+        $command = $this->application->find('sf:update-language');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(
+            [
+                'command' => $command->getName(),
+                'config' => 'some-erroneous-language-config-file.yml'
+            ]
+        );
+
+        $this->assertRegExp(
+            '/Invalid configuration/',
             $commandTester->getDisplay()
         );
     }
