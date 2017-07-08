@@ -69,17 +69,21 @@ final class LanguageTest extends TestCase
 
     /**
      * @test
-     * @covers ::setApplication
-     * @covers ::getApplication
+     * @covers ::addApplication
+     * @covers ::getApplications
      * @covers ::removeApplication
      */
     public function it_should_add_get_and_remove_and_application()
     {
         $application = (new Application())->addLanguage($this->language);
 
-        $this->language->setApplication($application);
+        $this->language->addApplication($application);
 
-        $this->assertSame($this->language->getApplication(), $application);
+        $this->assertEquals($this->language->getApplications()->get(0), $application);
+
+        $this->language->removeApplication($application);
+
+        $this->assertEquals($this->language->getApplications()->count(), 0);
     }
 
     /**

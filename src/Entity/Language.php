@@ -3,6 +3,8 @@ declare (strict_types=1);
 
 namespace Tardigrades\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Tardigrades\Entity\EntityInterface\Application;
 use Tardigrades\Entity\EntityInterface\Language as LanguageInterface;
 use Tardigrades\SectionField\ValueObject\Created;
@@ -18,14 +20,20 @@ class Language implements LanguageInterface
     /** @var string */
     protected $i18n;
 
-    /** @var Application */
-    protected $application;
+    /** @var ArrayCollection */
+    protected $applications;
 
     /** @var \DateTime */
     protected $created;
 
     /** @var \DateTime */
     protected $updated;
+
+    public function __construct(
+        Collection $applications = null
+    ) {
+        $this->applications = is_null($applications) ? new ArrayCollection() : $applications;
+    }
 
     public function setId(int $id): LanguageInterface
     {
@@ -56,24 +64,28 @@ class Language implements LanguageInterface
         return I18n::create($this->i18n);
     }
 
-    public function setApplication(Application $application): LanguageInterface
+    public function addApplication(Application $application): LanguageInterface
     {
-        $this->application = $application;
+        if ($this->applications->contains($application)) {
+            return $this;
+        }
+        $this->applications->add($application);
 
         return $this;
     }
 
-    public function getApplication(): Application
+    public function getApplications(): ArrayCollection
     {
-        return $this->application;
+        return $this->applications;
     }
 
     public function removeApplication(Application $application): LanguageInterface
     {
-        if ($this->application === $application) {
-            $this->application = null;
-            $application->removeLanguage($this);
+        if (!$this->applications->contains($application)) {
+            return $this;
         }
+        $this->applications->removeElement($application);
+
         return $this;
     }
 

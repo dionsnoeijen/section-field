@@ -18,11 +18,23 @@
         <field name="handle" type="string" unique="true" />
         <field name="created" type="datetime" />
         <field name="updated" type="datetime" />
-        <one-to-many
-            target-entity="Tardigrades\Entity\Language"
-            field="languages"
-            mapped-by="application"
-        />
+        <many-to-many field="languages" target-entity="Tardigrades\Entity\Language">
+            <join-table name="language_application">
+                <join-columns>
+                    <join-column
+                        name="application_id"
+                        referenced-column-name="id"
+                    />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column
+                        name="language_id"
+                        referenced-column-name="id"
+                        unique="false"
+                    />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
         <many-to-many field="sections" target-entity="Tardigrades\Entity\Section">
             <join-table name="section_application">
                 <join-columns>
