@@ -2,7 +2,7 @@
 
 namespace Tardigrades\FieldType\TextInput;
 
-use Tardigrades\SectionField\SectionFieldInterface\FieldType;
+use Tardigrades\FieldTYpe\FieldTYpeInterface\FieldType;
 use Tardigrades\SectionField\ValueObject\Text;
 
 interface TextInputFieldType extends FieldType
