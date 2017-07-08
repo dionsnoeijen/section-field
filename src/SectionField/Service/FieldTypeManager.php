@@ -9,6 +9,7 @@ use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldType
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
+use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
 
 class FieldTypeManager implements FieldTypeManagerInterface
 {
@@ -22,14 +23,15 @@ class FieldTypeManager implements FieldTypeManagerInterface
         $this->entityManager = $entityManager;
     }
 
-    public function create(FieldType $entity): FieldType
+    public function create(FieldTypeInterface $entity): FieldTypeInterface
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
+
         return $entity;
     }
 
-    public function read(Id $id): FieldType
+    public function read(Id $id): FieldTypeInterface
     {
         $fieldTypeRepo = $this->entityManager->getRepository(FieldType::class);
         /** @var $fieldType FieldType */
@@ -50,30 +52,29 @@ class FieldTypeManager implements FieldTypeManagerInterface
         return $fieldTypes;
     }
 
-    public function update(FieldType $entity): FieldType
+    public function update(): void
     {
-        $this->entityManager->persist($entity);
         $this->entityManager->flush();
-        return $entity;
     }
 
-    public function delete(FieldType $entity): void
+    public function delete(FieldTypeInterface $entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
 
-    public function createWithFullyQualifiedClassName(FullyQualifiedClassName $fullyQualifiedClassName): FieldType
+    public function createWithFullyQualifiedClassName(FullyQualifiedClassName $fullyQualifiedClassName): FieldTypeInterface
     {
         $fieldType = new FieldType();
         $fieldType->setType($fullyQualifiedClassName->getClassName());
         $fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
+
         /** @var $fieldType FieldType */
         $fieldType = $this->create($fieldType);
         return $fieldType;
     }
 
-    public function readByType(Type $type): FieldType
+    public function readByType(Type $type): FieldTypeInterface
     {
         $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
         /** @var $fieldType FieldType */

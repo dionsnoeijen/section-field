@@ -164,23 +164,18 @@ final class FieldTypeManagerTest extends TestCase
      * @test
      * @covers ::update
      */
-    public function it_should_update_a_field()
+    public function it_should_update_a_field_type()
     {
-        $fieldType = new FieldType();
-
-        $this->entityManager->shouldReceive('persist')->once()->with($fieldType);
         $this->entityManager->shouldReceive('flush')->once();
 
-        $receive = $this->fieldTypeManager->update($fieldType);
-
-        $this->assertSame($receive, $fieldType);
+        $this->fieldTypeManager->update();
     }
 
     /**
      * @test
      * @covers ::delete
      */
-    public function it_should_delete_a_field()
+    public function it_should_delete_a_field_type()
     {
         $field = new FieldType();
         $this->entityManager->shouldReceive('remove')->once()->with($field);

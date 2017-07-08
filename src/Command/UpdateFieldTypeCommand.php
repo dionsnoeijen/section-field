@@ -41,8 +41,8 @@ class UpdateFieldTypeCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Creates a new section.')
-            ->setHelp('This command allows you to create a section...')
+            ->setDescription('Updates a field type.')
+            ->setHelp('Update a field type based on new fully qualified class name.')
         ;
     }
 
@@ -53,16 +53,25 @@ class UpdateFieldTypeCommand extends Command
         $this->showInstalledFieldTypes($input, $output);
     }
 
+    private function showInstalledFieldTypes(InputInterface $input, OutputInterface $output)
+    {
+        $fieldTypes = $this->fieldTypeManager->readAll();
+
+        $this->renderTable($output, $fieldTypes);
+        $this->updateWhatRecord($input, $output);
+    }
+
     private function renderTable(OutputInterface $output, array $fieldTypes)
     {
         $table = new Table($output);
 
         $rows = [];
+        /** @var FieldType $fieldType */
         foreach ($fieldTypes as $fieldType) {
             $rows[] = [
                 $fieldType->getId(),
-                $fieldType->getType(),
-                $fieldType->getNamespace(),
+                (string) $fieldType->getType(),
+                $fieldType->getFullyQualifiedClassName(),
                 $fieldType->getCreated()->format(\DateTime::ATOM),
                 $fieldType->getUpdated()->format(\DateTime::ATOM)
             ];
@@ -80,25 +89,12 @@ class UpdateFieldTypeCommand extends Command
         $table->render();
     }
 
-    private function showInstalledFieldTypes(InputInterface $input, OutputInterface $output)
-    {
-        $fieldTypes = $this->fieldTypeManager->readAll();
-
-        $this->renderTable($output, $fieldTypes);
-        $this->updateWhatRecord($input, $output);
-    }
-
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return FieldType|null
-     */
     private function getFieldType(InputInterface $input, OutputInterface $output): FieldType
     {
         $question = new Question('<question>What record do you want to update?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->fieldTypeManager->read(Id::create($id));
+                return $this->fieldTypeManager->read(Id::create((int) $id));
             } catch (FieldTypeNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
@@ -110,10 +106,10 @@ class UpdateFieldTypeCommand extends Command
 
     private function getNamespace(InputInterface $input, OutputInterface $output, FieldType $fieldType): FullyQualifiedClassName
     {
-        $updateQuestion = new Question('<question>Give a new namespace</question> (old: ' . $fieldType->getNamespace() . '): ');
-        $updateQuestion->setValidator(function ($namespace) use ($output) {
+        $updateQuestion = new Question('<question>Give a new fully qualified class name</question> (old: ' . $fieldType->getFullyQualifiedClassName() . '): ');
+        $updateQuestion->setValidator(function ($fullyQualifiedClassName) use ($output) {
             try {
-                return FullyQualifiedClassName::create($namespace);
+                return FullyQualifiedClassName::create($fullyQualifiedClassName);
             } catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
@@ -139,14 +135,14 @@ class UpdateFieldTypeCommand extends Command
         $this->updateRecord($input, $output, $fieldType, $namespace);
     }
 
-    private function updateRecord(InputInterface $input, OutputInterface $output, FieldType $fieldType, FullyQualifiedClassName $namespace)
+    private function updateRecord(InputInterface $input, OutputInterface $output, FieldType $fieldType, FullyQualifiedClassName $fullyQualifiedClassName)
     {
-        $fieldType->setType($namespace->getClassName());
-        $fieldType->setNamespace((string) $namespace);
-        $fieldType = $this->fieldTypeManager->update($fieldType);
+        $fieldType->setType($fullyQualifiedClassName->getClassName());
+        $fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
+        $this->fieldTypeManager->update();
         $this->renderTable($output, [$fieldType]);
 
-        $output->writeln('<info>Done!</info>');
+        $output->writeln('<info>FieldType Updated!</info>');
     }
 
 }
