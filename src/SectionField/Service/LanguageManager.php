@@ -124,7 +124,11 @@ class LanguageManager implements LanguageManagerInterface
     {
         $languageConfig = $languageConfig->toArray();
 
-        $existing = $this->readByI18ns($languageConfig['language']);
+        try {
+            $existing = $this->readByI18ns($languageConfig['language']);
+        } catch (LanguageNotFoundException $exception) {
+            $existing = [];
+        }
         $existingCheck = [];
         /** @var Language $language */
         foreach ($existing as $language) {
@@ -132,7 +136,7 @@ class LanguageManager implements LanguageManagerInterface
         }
 
         foreach ($languageConfig['language'] as $configLanguage) {
-            if (!in_array($language, $existingCheck)) {
+            if (!in_array($configLanguage, $existingCheck)) {
                 $this->entityManager->persist(
                     (new Language())->setI18n($configLanguage)
                 );
