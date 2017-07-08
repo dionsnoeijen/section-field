@@ -67,7 +67,7 @@ class DeleteSectionCommand extends Command
 
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->sectionManager->read(Id::create($id));
+                return $this->sectionManager->read(Id::create((int) $id));
             } catch (SectionNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
