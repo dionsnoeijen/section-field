@@ -3,22 +3,17 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Tardigrades\Entity\EntityInterface\FieldTranslation;
 use Tardigrades\Entity\Field;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\Service\FieldNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
-class DeleteFieldCommand extends Command
+class DeleteFieldCommand extends FieldCommand
 {
     /**
      * @var QuestionHelper
@@ -42,8 +37,7 @@ class DeleteFieldCommand extends Command
     {
         $this
             ->setDescription('Delete field.')
-            ->setHelp('Shows a list of installed fields, choose the field you would like to delete.')
-        ;
+            ->setHelp('Shows a list of installed fields, choose the field you would like to delete.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): void
@@ -57,7 +51,7 @@ class DeleteFieldCommand extends Command
     {
         $fields = $this->fieldManager->readAll();
 
-        $this->renderTable($output, $fields);
+        $this->renderTable($output, $fields, 'All installed Fields');
         $this->deleteWhatRecord($input, $output);
     }
 
@@ -92,45 +86,5 @@ class DeleteFieldCommand extends Command
         });
 
         return $this->questionHelper->ask($input, $output, $question);
-    }
-
-    private function renderTable(OutputInterface $output, array $fields): void
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        /** @var Field $field */
-        foreach ($fields as $field) {
-
-            $translations = $field->getFieldTranslations();
-            /** @var FieldTranslation $translation */
-            $names = '';
-            foreach ($translations as $translation) {
-                $names .=
-                    $translation->getLanguage()->getI18n() . ' ' .
-                    $translation->getName() . "\n";
-            }
-
-            $rows[] = [
-                $field->getId(),
-                $names,
-                $field->getHandle(),
-                $field->getFieldType()->getType(),
-                (string) $field->getConfig(),
-                $field->getCreated()->format('D-m-y'),
-                $field->getUpdated()->format('D-m-y')
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>All installed Fields</info>', array('colspan' => 6))
-        ];
-
-        $table
-            ->setHeaders(['#id', 'name', 'handle', 'type', 'config', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 }

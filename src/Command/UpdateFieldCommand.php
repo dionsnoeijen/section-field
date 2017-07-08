@@ -4,14 +4,9 @@ declare (strict_types=1);
 namespace Tardigrades\Command;
 
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\Entity\EntityInterface\FieldTranslation;
 use Tardigrades\Entity\Field;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +15,7 @@ use Tardigrades\SectionField\Service\FieldNotFoundException;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Id;
 
-class UpdateFieldCommand extends Command
+class UpdateFieldCommand extends FieldCommand
 {
     /**
      * @var QuestionHelper
@@ -60,7 +55,7 @@ class UpdateFieldCommand extends Command
     {
         $fields = $this->fieldManager->readAll();
 
-        $this->renderTable($output, $fields);
+        $this->renderTable($output, $fields, 'All installed Fields');
         $this->updateWhatRecord($input, $output);
     }
 
@@ -97,43 +92,5 @@ class UpdateFieldCommand extends Command
         }
 
         $output->writeln('<info>Field updated!</info>');
-    }
-
-    private function renderTable(OutputInterface $output, array $fields): void
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        foreach ($fields as $field) {
-            $translations = $field->getFieldTranslations();
-            /** @var FieldTranslation $translation */
-            $names = '';
-            foreach ($translations as $translation) {
-                $names .=
-                    $translation->getLanguage()->getI18n() . ' ' .
-                    $translation->getName() . "\n";
-            }
-
-            $rows[] = [
-                $field->getId(),
-                $names,
-                $field->getHandle(),
-                $field->getFieldType()->getType(),
-                (string) $field->getConfig(),
-                $field->getCreated()->format('D-m-y'),
-                $field->getUpdated()->format('D-m-y')
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>All installed Fields</info>', ['colspan' => 6])
-        ];
-
-        $table
-            ->setHeaders(['#id', 'name', 'handle', 'type', 'config', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 }
