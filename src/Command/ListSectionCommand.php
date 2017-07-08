@@ -52,8 +52,8 @@ class ListSectionCommand extends Command
                 $section->getName(),
                 $section->getHandle(),
                 (string) $section->getConfig(),
-                (string) $section->getCreated(),
-                (string) $section->getUpdated()
+                $section->getCreated()->format('Y-m-d'),
+                $section->getUpdated()->format('Y-m-d')
             ];
         }
 
