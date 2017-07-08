@@ -61,7 +61,6 @@ class DeleteFieldCommand extends FieldCommand
 
         $output->writeln('<info>Record with id #' . $field->getId() . ' will be deleted</info>');
 
-
         $sure = new ConfirmationQuestion('<comment>Are you sure?</comment> (y/n) ', false);
 
         if (!$this->questionHelper->ask($input, $output, $sure)) {
