@@ -3,15 +3,11 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
-class ListSectionCommand extends Command
+class ListSectionCommand extends SectionCommand
 {
     /**
      * @var SectionManager
@@ -38,35 +34,7 @@ class ListSectionCommand extends Command
     {
         $sections = $this->sectionManager->readAll();
 
-        $this->renderTable($output, $sections);
-    }
-
-    private function renderTable(OutputInterface $output, array $sections): void
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        foreach ($sections as $section) {
-            $rows[] = [
-                $section->getId(),
-                $section->getName(),
-                $section->getHandle(),
-                (string) $section->getConfig(),
-                $section->getCreated()->format('Y-m-d'),
-                $section->getUpdated()->format('Y-m-d')
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>All installed Sections</info>', ['colspan' => 6])
-        ];
-
-        $table
-            ->setHeaders(['#id', 'name', 'handle', 'config', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
+        $this->renderTable($output, $sections, 'All installed Sections');
     }
 }
 

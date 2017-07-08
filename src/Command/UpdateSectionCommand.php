@@ -3,11 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,7 +15,7 @@ use Tardigrades\SectionField\Service\SectionNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class UpdateSectionCommand extends Command
+class UpdateSectionCommand extends SectionCommand
 {
     /**
      * @var QuestionHelper
@@ -58,7 +54,7 @@ class UpdateSectionCommand extends Command
     {
         $sections = $this->sectionManager->readAll();
 
-        $this->renderTable($output, $sections);
+        $this->renderTable($output, $sections, 'All installed Sections');
         $this->updateWhatRecord($input, $output);
     }
 
@@ -94,35 +90,6 @@ class UpdateSectionCommand extends Command
         }
 
         $output->writeln('<info>Section updated!</info>');
-    }
-
-    private function renderTable(OutputInterface $output, array $sections): void
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        /** @var Section $section */
-        foreach ($sections as $section) {
-            $rows[] = [
-                $section->getId(),
-                $section->getName(),
-                $section->getHandle(),
-                (string) $section->getConfig(),
-                $section->getCreated()->format('Y-m-d'),
-                $section->getUpdated()->format('Y-m-d')
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>All installed Sections</info>', ['colspan' => 6])
-        ];
-
-        $table
-            ->setHeaders(['#id', 'name', 'handle', 'config', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 }
 

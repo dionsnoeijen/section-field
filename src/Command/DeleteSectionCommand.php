@@ -18,7 +18,7 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\Service\SectionNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
-class DeleteSectionCommand extends Command
+class DeleteSectionCommand extends SectionCommand
 {
     /**
      * @var QuestionHelper
@@ -57,7 +57,7 @@ class DeleteSectionCommand extends Command
     {
         $sections = $this->sectionManager->readAll();
 
-        $this->renderTable($output, $sections);
+        $this->renderTable($output, $sections, 'All installed Sections');
         $this->deleteWhatRecord($input, $output);
     }
 
@@ -93,33 +93,5 @@ class DeleteSectionCommand extends Command
         $this->sectionManager->delete($section);
 
         $output->writeln('<info>Removed!</info>');
-    }
-
-    private function renderTable(OutputInterface $output, array $sections)
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        foreach ($sections as $section) {
-            $rows[] = [
-                $section->getId(),
-                $section->getName(),
-                $section->getHandle(),
-                (string) $section->getConfig(),
-                $section->getCreated()->format(\DateTime::ATOM),
-                $section->getUpdated()->format(\DateTime::ATOM)
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>All installed Sections</info>', array('colspan' => 6))
-        ];
-
-        $table
-            ->setHeaders(['#id', 'name', 'handle', 'config', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 }
