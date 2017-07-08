@@ -3,22 +3,17 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Tardigrades\Entity\EntityInterface\Application;
 use Tardigrades\Entity\EntityInterface\Language;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 use Tardigrades\SectionField\Service\LanguageNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
-class DeleteLanguageCommand extends Command
+class DeleteLanguageCommand extends LanguageCommand
 {
     /**
      * @var LanguageManager
@@ -56,7 +51,7 @@ class DeleteLanguageCommand extends Command
     {
         $languages = $this->languageManager->readAll();
 
-        $this->renderTable($output, $languages);
+        $this->renderTable($output, $languages, 'All installed languages');
         $this->deleteWhatRecord($input, $output);
     }
 
@@ -91,41 +86,5 @@ class DeleteLanguageCommand extends Command
         $this->languageManager->delete($language);
 
         $output->writeln('<info>Removed!</info>');
-    }
-
-    private function renderTable(OutputInterface $output, array $languages): void
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        /** @var Language $language */
-        foreach ($languages as $language) {
-
-            $applications = $language->getApplications();
-            $applicationText = '';
-            /** @var Application $application */
-            foreach ($applications as $application) {
-                $applicationText .= $application->getName() . "\n";
-            }
-
-            $rows[] = [
-                $language->getId(),
-                (string) $language->getI18n(),
-                $applicationText,
-                $language->getCreated()->format('D-m-y'),
-                $language->getUpdated()->format('D-m-y')
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>All installed languages</info>', ['colspan' => 6])
-        ];
-
-        $table
-            ->setHeaders(['#id', 'i18n', 'application', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
     }
 }

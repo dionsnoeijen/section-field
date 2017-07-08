@@ -3,21 +3,15 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\Entity\EntityInterface\Application;
-use Tardigrades\Entity\Language;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 use Tardigrades\SectionField\ValueObject\LanguageConfig;
 
-class UpdateLanguageCommand extends Command
+class UpdateLanguageCommand extends LanguageCommand
 {
     /**
      * @var QuestionHelper
@@ -62,43 +56,7 @@ class UpdateLanguageCommand extends Command
             return;
         }
 
-        $this->renderTable($output, $this->languageManager->readAll());
-    }
-
-    private function renderTable(OutputInterface $output, array $languages): void
-    {
-        $table = new Table($output);
-
-        $rows = [];
-        /** @var Language $language */
-        foreach ($languages as $language) {
-
-            $applications = $language->getApplications();
-            $applicationText = '';
-            /** @var Application $application */
-            foreach ($applications as $application) {
-                $applicationText .= $application->getName() . "\n";
-            }
-
-            $rows[] = [
-                $language->getId(),
-                (string) $language->getI18n(),
-                $applicationText,
-                $language->getCreated()->format('D-m-y'),
-                $language->getUpdated()->format('D-m-y')
-            ];
-        }
-
-        $rows[] = new TableSeparator();
-        $rows[] = [
-            new TableCell('<info>Languages updated!</info>', ['colspan' => 6])
-        ];
-
-        $table
-            ->setHeaders(['#id', 'i18n', 'application', 'created', 'updated'])
-            ->setRows($rows)
-        ;
-        $table->render();
+        $this->renderTable($output, $this->languageManager->readAll(), 'Languages updated!');
     }
 }
 
