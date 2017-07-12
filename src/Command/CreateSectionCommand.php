@@ -39,11 +39,16 @@ class CreateSectionCommand extends SectionCommand
         $config = $input->getArgument('config');
 
         try {
-            $sectionConfig = SectionConfig::create(
-                Yaml::parse(file_get_contents($config))
-            );
-            $this->sectionManager->createByConfig($sectionConfig);
-            $output->writeln('<info>Section created!</info>');
+            if (file_exists($config)) {
+                $parsed = Yaml::parse(file_get_contents($config));
+                if (is_array($parsed)) {
+                    $sectionConfig = SectionConfig::create($parsed);
+                    $this->sectionManager->createByConfig($sectionConfig);
+                    $output->writeln('<info>Section created!</info>');
+                    return;
+                }
+            }
+            throw new \Exception('No valid config found.');
         } catch (\Exception $exception) {
             $output->writeln("<error>Invalid configuration file.  {$exception->getMessage()}</error>");
         }
