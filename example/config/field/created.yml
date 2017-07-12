@@ -3,4 +3,7 @@ field:
     - nl_NL: Aangemaakt
     - en_EN: Created
   handle: created
+  label:
+    - nl_NL: Bericht aanmaak datum
+    - en_EN: Record creation date
   type: DateTime

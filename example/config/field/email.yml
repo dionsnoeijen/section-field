@@ -3,6 +3,9 @@ field:
     - nl_NL: Email
     - en_EN: Email
   handle: email
+  label:
+    - nl_NL: Email adres
+    - en_EN: Email address
   type: TextInput
   length: 255
   validate: email

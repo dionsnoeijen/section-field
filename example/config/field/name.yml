@@ -3,5 +3,8 @@ field:
     - nl_NL: Naam
     - en_EN: Name
   handle: name
+  label:
+    - nl_NL: Voornaam en achternaam
+    - en_EN: First name and last name
   type: TextInput
   lenght: 255

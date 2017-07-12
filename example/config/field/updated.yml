@@ -3,4 +3,7 @@ field:
     - nl_NL: Geupdated
     - en_EN: Updated
   handle: updated
+  label:
+    - nl_NL: Update datum
+    - en_EN: Date record is updated
   type: DateTime

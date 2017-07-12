@@ -3,5 +3,8 @@ field:
     - nl_NL: Onderkopje
     - en_EN: Subtitle
   handle: subtitle
+  label:
+    - nl_NL: Onderkopje
+    - en_EN: Subtitle
   type: TextInput
   length: 255

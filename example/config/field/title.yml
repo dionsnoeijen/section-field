@@ -3,5 +3,8 @@ field:
     - nl_NL: Titel
     - en_EN: Title
   handle: title
+  label:
+    - nl_NL: Titel
+    - en_EN: Title
   type: TextInput
   length: 255

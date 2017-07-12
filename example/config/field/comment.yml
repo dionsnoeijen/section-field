@@ -1,6 +1,9 @@
 field:
   name:
-    - nl_NL: Commentaar
+    - nl_NL: Opmerkingen
     - en_EN: Comment
   handle: comment
+  label:
+    - nl_NL: Opmerkingen
+    - en_EN: Opmerkingen
   type: TextArea

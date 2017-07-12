@@ -3,4 +3,7 @@ field:
     - nl_NL: Body
     - en_EN: Body
   handle: body
+  label:
+    - nl_NL: Body tekst
+    - en_EN: Body
   type: RichTextArea
