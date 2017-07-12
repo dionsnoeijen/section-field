@@ -19,6 +19,7 @@ While the aim for this tool is to be very high level, simplicity should never pr
 - All commands that list something should check if there are entries.
 - Unit tests for commands.
 - Unit tests for value objects.
+- The symfony bundle will need a loader that adds classes to compile: https://symfony.com/doc/current/bundles/extension.html 
 
 ## Config
 

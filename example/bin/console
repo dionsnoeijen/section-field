@@ -40,10 +40,14 @@ $container
 // Now load other services by a service yml
 $loader = new YamlFileLoader(
     $container,
-    new FileLocator(__DIR__.'/../../src/config/service/')
+    new FileLocator([
+        __DIR__.'/../../src/config/service',
+        __DIR__.'/../config'
+    ])
 );
 $loader->load('services.yml');
 $loader->load('commands.yml');
+//$loader->load('config.yml');
 
 $application = new Application();
 
@@ -63,6 +67,7 @@ $application->add($container->get('section_field.create.section.command'));
 $application->add($container->get('section_field.update.section.command'));
 $application->add($container->get('section_field.delete.section.command'));
 $application->add($container->get('section_field.list.section.command'));
+$application->add($container->get('section_field.generate.section.command'));
 $application->add($container->get('section_field.create.field.command'));
 $application->add($container->get('section_field.update.field.command'));
 $application->add($container->get('section_field.delete.field.command'));

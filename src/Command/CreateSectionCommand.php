@@ -12,17 +12,10 @@ use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class CreateSectionCommand extends SectionCommand
 {
-    /**
-     * @var SectionManager
-     */
-    private $sectionManager;
-
     public function __construct(
         SectionManager $sectionManager
     ) {
-        $this->sectionManager = $sectionManager;
-
-        parent::__construct('sf:create-section');
+        parent::__construct($sectionManager, 'sf:create-section');
     }
 
     protected function configure(): void

@@ -29,6 +29,11 @@ final class SectionConfig
         return $this->sectionConfig;
     }
 
+    public function getFields(): array
+    {
+        return $this->sectionConfig['section']['fields'];
+    }
+
     public function __toString(): string
     {
         $configText = '';

@@ -9,17 +9,10 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
 class ListSectionCommand extends SectionCommand
 {
-    /**
-     * @var SectionManager
-     */
-    private $sectionManager;
-
     public function __construct(
         SectionManager $sectionManager
     ) {
-        $this->sectionManager = $sectionManager;
-
-        parent::__construct('sf:list-section');
+        parent::__construct($sectionManager, 'sf:list-section');
     }
 
     protected function configure(): void

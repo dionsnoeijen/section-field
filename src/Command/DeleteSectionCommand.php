@@ -20,22 +20,10 @@ use Tardigrades\SectionField\ValueObject\Id;
 
 class DeleteSectionCommand extends SectionCommand
 {
-    /**
-     * @var QuestionHelper
-     */
-    private $questionHelper;
-
-    /**
-     * @var SectionManager
-     */
-    private $sectionManager;
-
     public function __construct(
         SectionManager $sectionManager
     ) {
-        $this->sectionManager = $sectionManager;
-
-        parent::__construct('sf:delete-section');
+        parent::__construct($sectionManager, 'sf:delete-section');
     }
 
     protected function configure()
@@ -48,33 +36,9 @@ class DeleteSectionCommand extends SectionCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->questionHelper = $this->getHelper('question');
-
-        $this->showInstalledSections($input, $output);
-    }
-
-    private function showInstalledSections(InputInterface $input, OutputInterface $output)
-    {
         $sections = $this->sectionManager->readAll();
-
         $this->renderTable($output, $sections, 'All installed Sections');
         $this->deleteWhatRecord($input, $output);
-    }
-
-    private function getSection(InputInterface $input, OutputInterface $output): Section
-    {
-        $question = new Question('<question>What record do you want to delete?</question> (#id): ');
-
-        $question->setValidator(function ($id) use ($output) {
-            try {
-                return $this->sectionManager->read(Id::create((int) $id));
-            } catch (SectionNotFoundException $exception) {
-                $output->writeln('<error>' . $exception->getMessage() . '</error>');
-            }
-            return null;
-        });
-
-        return $this->questionHelper->ask($input, $output, $question);
     }
 
     private function deleteWhatRecord(InputInterface $input, OutputInterface $output): void
@@ -85,7 +49,7 @@ class DeleteSectionCommand extends SectionCommand
 
         $sure = new ConfirmationQuestion('<comment>Are you sure?</comment> (y/n) ', false);
 
-        if (!$this->questionHelper->ask($input, $output, $sure)) {
+        if (!$this->getHelper('question')->ask($input, $output, $sure)) {
             $output->writeln('<comment>Cancelled, nothing deleted.</comment>');
             return;
         }

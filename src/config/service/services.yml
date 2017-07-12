@@ -32,3 +32,8 @@ services:
       - '@section_field.manager.doctrine.field_type_manager'
       - '@section_field.manager.doctrine.language_manager'
     tags: [sf.manager]
+
+  section_field.generator.entity_generator:
+    class: Tardigrades\SectionField\Generator\EntityGenerator
+    arguments:
+      - '@section_field.manager.doctrine.field_manager'
