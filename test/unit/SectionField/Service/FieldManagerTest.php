@@ -19,7 +19,7 @@ use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Id;
 
 /**
- * @coversDefaultClass Tardigrades\SectionField\Service\FieldManager
+ * @coversDefaultClass Tardigrades\SectionField\Service\DoctrineFieldManager
  * @covers ::<private>
  * @covers ::__construct
  */
@@ -28,7 +28,7 @@ final class FieldManagerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var FieldManager
+     * @var DoctrineFieldManager
      */
     private $fieldManager;
 
@@ -52,7 +52,7 @@ final class FieldManagerTest extends TestCase
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
         $this->fieldTypeManager = Mockery::mock(FieldTypeManagerInterface::class);
         $this->languageManager = Mockery::mock(LanguageManagerInterface::class);
-        $this->fieldManager = new FieldManager(
+        $this->fieldManager = new DoctrineFieldManager(
             $this->entityManager,
             $this->fieldTypeManager,
             $this->languageManager

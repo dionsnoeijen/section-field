@@ -14,7 +14,7 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 /**
- * @coversDefaultClass Tardigrades\SectionField\Service\SectionManager
+ * @coversDefaultClass Tardigrades\SectionField\Service\DoctrineSectionManager
  * @covers ::<private>
  * @covers ::__construct
  */
@@ -23,7 +23,7 @@ final class SectionManagerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var SectionManager
+     * @var DoctrineSectionManager
      */
     private $sectionManager;
 
@@ -33,7 +33,7 @@ final class SectionManagerTest extends TestCase
     private $entityManager;
 
     /**
-     * @var FieldManager
+     * @var DoctrineFieldManager
      */
     private $fieldManager;
 
@@ -41,7 +41,7 @@ final class SectionManagerTest extends TestCase
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
         $this->fieldManager = Mockery::mock(FieldManager::class);
-        $this->sectionManager = new SectionManager(
+        $this->sectionManager = new DoctrineSectionManager(
             $this->entityManager,
             $this->fieldManager
         );

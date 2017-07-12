@@ -10,7 +10,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Language;
 use Tardigrades\Entity\Application as ApplicationEntity;
-use Tardigrades\SectionField\Service\LanguageManager;
+use Tardigrades\SectionField\Service\DoctrineLanguageManager;
 
 /**
  * @coversDefaultClass Tardigrades\Command\DeleteLanguageCommand
@@ -22,7 +22,7 @@ final class DeleteLanguageCommandTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var LanguageManager|Mockery\MockInterface
+     * @var DoctrineLanguageManager|Mockery\MockInterface
      */
     private $languageManager;
 
@@ -38,7 +38,7 @@ final class DeleteLanguageCommandTest extends TestCase
 
     public function setUp()
     {
-        $this->languageManager = Mockery::mock(LanguageManager::class);
+        $this->languageManager = Mockery::mock(DoctrineLanguageManager::class);
         $this->deleteLanguageCommand = new DeleteLanguageCommand($this->languageManager);
         $this->application = new Application();
         $this->application->add($this->deleteLanguageCommand);

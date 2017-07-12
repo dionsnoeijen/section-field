@@ -2,99 +2,99 @@ services:
   section_field.create.application.command:
     class: Tardigrades\Command\CreateApplicationCommand
     arguments:
-      - '@section_field.manager.application_manager'
+      - '@section_field.manager.doctrine.application_manager'
 
   section_field.update.application.command:
     class: Tardigrades\Command\UpdateApplicationCommand
     arguments:
-      - '@section_field.manager.application_manager'
+      - '@section_field.manager.doctrine.application_manager'
 
   section_field.delete.application.command:
     class: Tardigrades\Command\DeleteApplicationCommand
     arguments:
-      - '@section_field.manager.application_manager'
+      - '@section_field.manager.doctrine.application_manager'
 
   section_field.list.application.command:
     class: Tardigrades\Command\ListApplicationCommand
     arguments:
-      - '@section_field.manager.application_manager'
+      - '@section_field.manager.doctrine.application_manager'
 
   section_field.create.language.command:
     class: Tardigrades\Command\CreateLanguageCommand
     arguments:
-      - '@section_field.manager.language_manager'
+      - '@section_field.manager.doctrine.language_manager'
 
   section_field.update.language.command:
     class: Tardigrades\Command\UpdateLanguageCommand
     arguments:
-      - '@section_field.manager.language_manager'
+      - '@section_field.manager.doctrine.language_manager'
 
   section_field.delete.language.command:
     class: Tardigrades\Command\DeleteLanguageCommand
     arguments:
-      - '@section_field.manager.language_manager'
+      - '@section_field.manager.doctrine.language_manager'
 
   section_field.list.language.command:
     class: Tardigrades\Command\ListLanguageCommand
     arguments:
-      - '@section_field.manager.language_manager'
+      - '@section_field.manager.doctrine.language_manager'
 
   section_field.install.field.type.command:
     class: Tardigrades\Command\InstallFieldTypeCommand
     arguments:
-      - '@section_field.manager.field_type_manager'
+      - '@section_field.manager.doctrine.field_type_manager'
 
   section_field.update.field.type.command:
     class: Tardigrades\Command\UpdateFieldTypeCommand
     arguments:
-      - '@section_field.manager.field_type_manager'
+      - '@section_field.manager.doctrine.field_type_manager'
 
   section_field.delete.field.type.command:
     class: Tardigrades\Command\DeleteFieldTypeCommand
     arguments:
-      - '@section_field.manager.field_type_manager'
+      - '@section_field.manager.doctrine.field_type_manager'
 
   section_field.list.field.type.command:
     class: Tardigrades\Command\ListFieldTypeCommand
     arguments:
-      - '@section_field.manager.field_type_manager'
+      - '@section_field.manager.doctrine.field_type_manager'
 
   section_field.create.section.command:
     class: Tardigrades\Command\CreateSectionCommand
     arguments:
-      - '@section_field.manager.section_manager'
+      - '@section_field.manager.doctrine.section_manager'
 
   section_field.update.section.command:
     class: Tardigrades\Command\UpdateSectionCommand
     arguments:
-      - '@section_field.manager.section_manager'
+      - '@section_field.manager.doctrine.section_manager'
 
   section_field.delete.section.command:
     class: Tardigrades\Command\DeleteSectionCommand
     arguments:
-      - '@section_field.manager.section_manager'
+      - '@section_field.manager.doctrine.section_manager'
 
   section_field.list.section.command:
     class: Tardigrades\Command\ListSectionCommand
     arguments:
-      - '@section_field.manager.section_manager'
+      - '@section_field.manager.doctrine.section_manager'
 
   section_field.create.field.command:
     class: Tardigrades\Command\CreateFieldCommand
     arguments:
-      - '@section_field.manager.field_manager'
+      - '@section_field.manager.doctrine.field_manager'
 
   section_field.update.field.command:
     class: Tardigrades\Command\UpdateFieldCommand
     arguments:
-      - '@section_field.manager.field_manager'
+      - '@section_field.manager.doctrine.field_manager'
 
   section_field.delete.field.command:
     class: Tardigrades\Command\DeleteFieldCommand
     arguments:
-      - '@section_field.manager.field_manager'
+      - '@section_field.manager.doctrine.field_manager'
 
   section_field.list.field.command:
     class: Tardigrades\Command\ListFieldCommand
     arguments:
-      - '@section_field.manager.field_manager'
+      - '@section_field.manager.doctrine.field_manager'

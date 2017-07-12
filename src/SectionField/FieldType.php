@@ -3,32 +3,20 @@
 namespace Tardigrades\SectionField;
 
 use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
+use Tardigrades\SectionField\ValueObject\FieldConfig;
 
-abstract class FieldType implements FieldTypeInterface {
+abstract class FieldType implements FieldTypeInterface
+{
+    /** @var FieldConfig $fieldConfig */
+    private $fieldConfig;
 
-    /** @var string */
-    protected $name;
-
-    /** @var \stdClass */
-    protected $config;
-
-    public function setName(string $name): void
+    public function setConfig(FieldConfig $fieldConfig)
     {
-        $this->name = $name;
+        $this->fieldConfig = $fieldConfig;
     }
 
-    public function getName(): string
+    public function getConfig(): FieldConfig
     {
-        return $this->name;
-    }
-
-    public function setConfig(array $config): void
-    {
-        $this->config = $config;
-    }
-
-    public function getConfig(): \stdClass
-    {
-        return $this->config;
+        return $this->fieldConfig;
     }
 }

@@ -13,7 +13,7 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
 
 /**
- * @coversDefaultClass Tardigrades\SectionField\Service\ApplicationManager
+ * @coversDefaultClass Tardigrades\SectionField\Service\DoctrineApplicationManager
  * @covers ::<private>
  * @covers ::__construct
  */
@@ -22,7 +22,7 @@ final class ApplicationManagerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var ApplicationManager
+     * @var DoctrineApplicationManager
      */
     private $applicationManager;
 
@@ -40,7 +40,7 @@ final class ApplicationManagerTest extends TestCase
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
         $this->languageManager = Mockery::mock(LanguageManagerInterface::class);
-        $this->applicationManager = new ApplicationManager(
+        $this->applicationManager = new DoctrineApplicationManager(
             $this->entityManager,
             $this->languageManager
         );

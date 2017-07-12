@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 use Tardigrades\Entity\EntityInterface\Language as LanguageInterface;
 use Tardigrades\Entity\Language;
 use Tardigrades\SectionField\ValueObject\I18n;
@@ -11,7 +11,7 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\SectionField\ValueObject\LanguageConfig;
 
-class LanguageManager implements LanguageManagerInterface
+class DoctrineLanguageManager implements LanguageManager
 {
     /**
      * @var EntityManagerInterface
@@ -110,7 +110,7 @@ class LanguageManager implements LanguageManagerInterface
         return $finalResults;
     }
 
-    public function createByConfig(LanguageConfig $languageConfig): LanguageManagerInterface
+    public function createByConfig(LanguageConfig $languageConfig): LanguageManager
     {
         $this->setUpByConfig($languageConfig);
         $this->entityManager->flush();
@@ -118,7 +118,7 @@ class LanguageManager implements LanguageManagerInterface
         return $this;
     }
 
-    public function updateByConfig(LanguageConfig $languageConfig): LanguageManagerInterface
+    public function updateByConfig(LanguageConfig $languageConfig): LanguageManager
     {
         $this->setUpByConfig($languageConfig);
         $this->entityManager->flush();

@@ -6,16 +6,14 @@ namespace Tardigrades\SectionField\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldTranslation;
-use Tardigrades\Helper\StringConverter;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager as FieldManagerInterface;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldTypeManagerInterface;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
-use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 
-class FieldManager implements FieldManagerInterface
+class DoctrineFieldManager implements FieldManager
 {
     /**
      * @var EntityManagerInterface
@@ -23,19 +21,19 @@ class FieldManager implements FieldManagerInterface
     private $entityManager;
 
     /**
-     * @var FieldTypeManagerInterface
+     * @var FieldTypeManager
      */
     private $fieldTypeManager;
 
     /**
-     * @var LanguageManagerInterface
+     * @var LanguageManager
      */
     private $languageManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        FieldTypeManagerInterface $fieldTypeManager,
-        LanguageManagerInterface $languageManager
+        FieldTypeManager $fieldTypeManager,
+        LanguageManager $languageManager
     ) {
         $this->entityManager = $entityManager;
         $this->fieldTypeManager = $fieldTypeManager;

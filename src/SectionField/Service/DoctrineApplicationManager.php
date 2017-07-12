@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager as ApplicationManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
 use Tardigrades\Entity\Application;
 use Tardigrades\Entity\EntityInterface\Application as ApplicationInterface;
 use Tardigrades\SectionField\ValueObject\ApplicationConfig;
@@ -11,7 +11,7 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 
-class ApplicationManager implements ApplicationManagerInterface
+class DoctrineApplicationManager implements ApplicationManager
 {
     /**
      * @var EntityManagerInterface

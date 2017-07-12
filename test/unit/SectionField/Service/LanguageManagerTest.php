@@ -13,7 +13,7 @@ use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
 
 /**
- * @coversDefaultClass Tardigrades\SectionField\Service\LanguageManager
+ * @coversDefaultClass Tardigrades\SectionField\Service\DoctrineLanguageManager
  * @covers ::<private>
  * @covers ::__construct
  */
@@ -22,7 +22,7 @@ final class LanguageManagerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var LanguageManager
+     * @var DoctrineLanguageManager
      */
     private $languageManager;
 
@@ -34,7 +34,7 @@ final class LanguageManagerTest extends TestCase
     public function setUp()
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
-        $this->languageManager = new LanguageManager(
+        $this->languageManager = new DoctrineLanguageManager(
             $this->entityManager
         );
     }

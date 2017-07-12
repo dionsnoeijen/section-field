@@ -14,7 +14,7 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 
 /**
- * @coversDefaultClass Tardigrades\SectionField\Service\FieldTypeManager
+ * @coversDefaultClass Tardigrades\SectionField\Service\DoctrineFieldTypeManager
  * @covers ::<private>
  * @covers ::__construct
  */
@@ -23,7 +23,7 @@ final class FieldTypeManagerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var FieldTypeManager
+     * @var DoctrineFieldTypeManager
      */
     private $fieldTypeManager;
 
@@ -35,7 +35,7 @@ final class FieldTypeManagerTest extends TestCase
     public function setUp()
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
-        $this->fieldTypeManager = new FieldTypeManager($this->entityManager);
+        $this->fieldTypeManager = new DoctrineFieldTypeManager($this->entityManager);
     }
 
     /**

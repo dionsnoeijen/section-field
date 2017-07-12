@@ -3,16 +3,16 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager as FieldManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Section as SectionEntity;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\Helper\StringConverter;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager as SectionManagerInterface;
+use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class SectionManager implements SectionManagerInterface
+class DoctrineSectionManager implements SectionManager
 {
     /**
      * @var EntityManagerInterface
@@ -20,13 +20,13 @@ class SectionManager implements SectionManagerInterface
     private $entityManager;
 
     /**
-     * @var FieldManager
+     * @var DoctrineFieldManager
      */
     private $fieldManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        FieldManagerInterface $fieldManager
+        FieldManager $fieldManager
     ) {
         $this->entityManager = $entityManager;
         $this->fieldManager = $fieldManager;

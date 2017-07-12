@@ -1,0 +1,13 @@
+/** @var {{ typeHint }} ${{ propertyName }} */
+private ${{ propertyName }};
+
+public function get{{ methodName }}(): {{ typeHint }}
+{
+    return $this->{{ propertyName }};
+}
+
+public function set{{ methodName }}({{ typeHint }} ${{ propertyName }}): {{ section }}
+{
+    $this->{{ propertyName }} = ${{ propertyName }};
+    return $this;
+}
