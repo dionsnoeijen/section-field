@@ -85,6 +85,6 @@ class DeleteLanguageCommand extends LanguageCommand
         }
         $this->languageManager->delete($language);
 
-        $output->writeln('<info>Removed!</info>');
+        $this->renderTable($output, $this->languageManager->readAll(), 'Removed!');
     }
 }

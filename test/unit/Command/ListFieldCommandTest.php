@@ -8,6 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldTranslation;
 use Tardigrades\Entity\FieldType;
@@ -56,9 +57,11 @@ final class ListFieldCommandTest extends TestCase
                     (new FieldType())
                         ->setName('TextInput')
                 )
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some field name')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -69,6 +72,7 @@ final class ListFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Een veldnaam')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -76,12 +80,6 @@ final class ListFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'Some name',
-                        'handle' => 'someName',
-                    ]
-                ])
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -91,9 +89,11 @@ final class ListFieldCommandTest extends TestCase
                     (new FieldType())
                         ->setName('TextArea')
                 )
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some other field name')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -104,6 +104,7 @@ final class ListFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Een andere veldnaam')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -111,12 +112,6 @@ final class ListFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'Some other name',
-                        'handle' => 'someOtherName',
-                    ]
-                ])
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -126,9 +121,11 @@ final class ListFieldCommandTest extends TestCase
                     (new FieldType())
                         ->setName('TextArea')
                 )
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('And another field name')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -139,6 +136,7 @@ final class ListFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('En nog een veldnaam')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -146,12 +144,6 @@ final class ListFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'And another name',
-                        'handle' => 'andAnotherName',
-                    ]
-                ])
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
         ];

@@ -24,30 +24,35 @@ abstract class FieldCommand extends Command
             $translations = $field->getFieldTranslations();
             /** @var FieldTranslation $translation */
             $names = '';
+            $labels = '';
             foreach ($translations as $translation) {
                 $names .=
                     $translation->getLanguage()->getI18n() . ' ' .
                     $translation->getName() . "\n";
+
+                $labels .=
+                    $translation->getLanguage()->getI18n() . ' ' .
+                    $translation->getLabel() . "\n";
             }
 
             $rows[] = [
                 $field->getId(),
                 $names,
+                $labels,
                 $field->getHandle(),
                 $field->getFieldType()->getType(),
                 (string) $field->getConfig(),
-                $field->getCreated()->format('D-m-y'),
-                $field->getUpdated()->format('D-m-y')
+                $field->getUpdated()->format('d-m-y h:i')
             ];
         }
 
         $rows[] = new TableSeparator();
         $rows[] = [
-            new TableCell('<info>' . $info . '</info>', ['colspan' => 6])
+            new TableCell('<info>' . $info . '</info>', ['colspan' => 7])
         ];
 
         $table
-            ->setHeaders(['#id', 'name', 'handle', 'type', 'config', 'created', 'updated'])
+            ->setHeaders(['#id', 'name', 'label', 'handle', 'type', 'config', 'updated'])
             ->setRows($rows)
         ;
         $table->render();

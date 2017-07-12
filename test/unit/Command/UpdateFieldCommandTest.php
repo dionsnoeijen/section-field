@@ -8,6 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldTranslation;
 use Tardigrades\Entity\FieldType;
@@ -59,6 +60,7 @@ final class UpdateFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some field name')
+                        ->setLabel('A field label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -69,6 +71,7 @@ final class UpdateFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Een veldnaam')
+                        ->setLabel('A field label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -76,12 +79,7 @@ final class UpdateFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'Some name',
-                        'handle' => 'someName',
-                    ]
-                ])
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -94,6 +92,7 @@ final class UpdateFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some other field name')
+                        ->setLabel('A field label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -104,6 +103,7 @@ final class UpdateFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Een andere veldnaam')
+                        ->setLabel('A field label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -111,12 +111,7 @@ final class UpdateFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'Some other name',
-                        'handle' => 'someOtherName',
-                    ]
-                ])
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -129,6 +124,7 @@ final class UpdateFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('And another field name')
+                        ->setLabel('A field label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -139,6 +135,7 @@ final class UpdateFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('En nog een veldnaam')
+                        ->setLabel('A field label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -146,12 +143,7 @@ final class UpdateFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'And another name',
-                        'handle' => 'andAnotherName',
-                    ]
-                ])
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
         ];
@@ -169,7 +161,7 @@ final class UpdateFieldCommandTest extends TestCase
 
         $this->fieldManager
             ->shouldReceive('readAll')
-            ->once()
+            ->twice()
             ->andReturn($this->givenAnArrayOfFields());
 
         $this->fieldManager

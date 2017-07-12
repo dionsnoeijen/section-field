@@ -8,6 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldTranslation;
 use Tardigrades\Entity\FieldType;
@@ -59,6 +60,7 @@ final class DeleteFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some field name')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -69,6 +71,7 @@ final class DeleteFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Een veldnaam')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -76,12 +79,7 @@ final class DeleteFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'Some name',
-                        'handle' => 'someName',
-                    ]
-                ])
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -94,6 +92,7 @@ final class DeleteFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some other field name')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -104,6 +103,7 @@ final class DeleteFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Een andere veldnaam')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -117,6 +117,7 @@ final class DeleteFieldCommandTest extends TestCase
                         'handle' => 'someOtherName',
                     ]
                 ])
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -129,6 +130,7 @@ final class DeleteFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('And another field name')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('en_EN')
@@ -139,6 +141,7 @@ final class DeleteFieldCommandTest extends TestCase
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('En nog een veldnaam')
+                        ->setLabel('Dit is een label')
                         ->setLanguage(
                             (new Language())
                                 ->setI18n('nl_NL')
@@ -146,12 +149,7 @@ final class DeleteFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig([
-                    'field' => [
-                        'name' => 'And another name',
-                        'handle' => 'andAnotherName',
-                    ]
-                ])
+                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
         ];
@@ -184,7 +182,9 @@ final class DeleteFieldCommandTest extends TestCase
             ->once();
 
         $commandTester->setInputs([1, 'y']);
-        $commandTester->execute(['command' => $command->getName()]);
+        $commandTester->execute([
+            'command' => $command->getName()
+        ]);
 
         $this->assertRegExp(
             '/Removed!/',

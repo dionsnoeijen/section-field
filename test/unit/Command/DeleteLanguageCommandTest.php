@@ -85,7 +85,7 @@ final class DeleteLanguageCommandTest extends TestCase
      * @covers ::configure
      * @covers ::execute
      */
-    public function it_should_delete_application_with_id_1()
+    public function it_should_delete_lang_with_id_1()
     {
         $command = $this->application->find('sf:delete-language');
         $commandTester = new CommandTester($command);
@@ -94,7 +94,7 @@ final class DeleteLanguageCommandTest extends TestCase
 
         $this->languageManager
             ->shouldReceive('readAll')
-            ->once()
+            ->twice()
             ->andReturn($fields);
 
         $this->languageManager
@@ -107,7 +107,9 @@ final class DeleteLanguageCommandTest extends TestCase
             ->once();
 
         $commandTester->setInputs([1, 'y']);
-        $commandTester->execute(['command' => $command->getName()]);
+        $commandTester->execute([
+            'command' => $command->getName()
+        ]);
 
         $this->assertRegExp(
             '/Removed!/',

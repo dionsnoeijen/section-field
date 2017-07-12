@@ -76,12 +76,9 @@ class FieldManager implements FieldManagerInterface
         return $fields;
     }
 
-    public function update(Field $entity): Field
+    public function update(): void
     {
-        $this->entityManager->persist($entity);
         $this->entityManager->flush();
-
-        return $entity;
     }
 
     public function delete(Field $entity): void
@@ -109,30 +106,65 @@ class FieldManager implements FieldManagerInterface
         return $field;
     }
 
+    private function getTranslations(FieldConfig $fieldConfig, Field $field): array
+    {
+        $fieldConfig = $fieldConfig->toArray();
+
+        $translations = [];
+        foreach ($fieldConfig['field']['name'] as $name) {
+            $translations[key($name)] = [
+                'name' => array_shift($name)
+            ];
+        }
+        foreach ($fieldConfig['field']['label'] as $label) {
+            $lang = key($label);
+            if (is_array($translations[$lang])) {
+                $translations[$lang]['label'] = array_shift($label);
+            } else {
+                $translations[$lang] = [
+                    'label' => array_shift($label)
+                ];
+            }
+        }
+
+        $languages = $this->languageManager->readByI18ns(array_keys($translations));
+        $fieldTranslations = [];
+        $existingFieldTranslations = $field->getFieldTranslations();
+        /** @var FieldTranslation $existingFieldTranslation */
+        foreach ($existingFieldTranslations as $existingFieldTranslation) {
+            $existing[(string) $existingFieldTranslation->getLanguage()->getI18n()] = $existingFieldTranslation;
+        }
+
+        foreach ($translations as $lang=>$translation) {
+            if (isset($languages[$lang])) {
+                if (isset($existing[$lang])) {
+                    $fieldTranslation = $existing[$lang];
+                } else {
+                    $fieldTranslation = new FieldTranslation();
+                }
+                $fieldTranslation->setName($translation['name']);
+                $fieldTranslation->setLabel($translation['label']);
+                $fieldTranslation->setLanguage($languages[$lang]);
+                $fieldTranslations[] = $fieldTranslation;
+            }
+        }
+
+        return $fieldTranslations;
+    }
+
     private function setUpFieldByConfig(FieldConfig $fieldConfig, Field $field): Field
     {
+        $translations = $this->getTranslations($fieldConfig, $field);
+
         $fieldConfig = $fieldConfig->toArray();
         $fieldType = $this->fieldTypeManager->readByType(Type::create($fieldConfig['field']['type']));
 
-        if (!is_array($fieldConfig['field']['name'])) {
-            throw new NoFieldNameDefinedException();
+        foreach ($translations as $translation) {
+            $field->removeFieldTranslation($translation);
+            $field->addFieldTranslation($translation);
         }
 
-        $handle = null;
-        foreach ($fieldConfig['field']['name'] as $i18n => $name) {
-            $language = $this->languageManager->readByI18n(I18n::create($i18n));
-            $fieldTranslation = new FieldTranslation();
-            $fieldTranslation->setName($name);
-            $fieldTranslation->setLanguage($language);
-
-            if (is_null($handle)) {
-                $handle = StringConverter::toCamelCase($name);
-            }
-
-            $field->addFieldTranslation($fieldTranslation);
-        }
-
-        $field->setHandle($handle);
+        $field->setHandle($fieldConfig['field']['handle']);
         $field->setFieldType($fieldType);
         $field->setConfig($fieldConfig);
 

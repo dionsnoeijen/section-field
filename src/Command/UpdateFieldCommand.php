@@ -91,6 +91,6 @@ class UpdateFieldCommand extends FieldCommand
             return;
         }
 
-        $output->writeln('<info>Field updated!</info>');
+        $this->renderTable($output, $this->fieldManager->readAll(), 'Field updated!');
     }
 }

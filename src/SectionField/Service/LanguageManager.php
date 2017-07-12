@@ -95,13 +95,19 @@ class LanguageManager implements LanguageManagerInterface
         $query = $this->entityManager->createQuery(
             "SELECT language FROM Tardigrades\Entity\Language language WHERE language.i18n IN ({$whereIn})"
         );
-        $results =  $query->getResult();
+        $results = $query->getResult();
 
         if (empty($results)) {
             throw new LanguageNotFoundException();
         }
 
-        return $results;
+        $finalResults = [];
+        /** @var Language $result */
+        foreach ($results as $result) {
+            $finalResults[(string) $result->getI18n()] = $result;
+        }
+
+        return $finalResults;
     }
 
     public function createByConfig(LanguageConfig $languageConfig): LanguageManagerInterface

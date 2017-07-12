@@ -9,7 +9,7 @@ interface FieldManager
     public function create(Field $entity): Field;
     public function read(Id $id): Field;
     public function readAll(): array;
-    public function update(Field $entity): Field;
+    public function update(): void;
     public function delete(Field $entity): void;
     public function createByConfig(FieldConfig $fieldConfig): Field;
     public function updateByConfig(FieldConfig $fieldConfig, Field $field): Field;

@@ -233,7 +233,13 @@ final class FieldTest extends TestCase
     {
         $config = [
             'field' => [
-                'name' => 'I have a field name'
+                'name' => [
+                    ['en_EN' => 'I have a field name']
+                ],
+                'handle' => 'someHandle',
+                'label' => [
+                    ['en_EN' => 'A label']
+                ]
             ]
         ];
 

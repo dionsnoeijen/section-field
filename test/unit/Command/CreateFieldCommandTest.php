@@ -76,7 +76,7 @@ final class CreateFieldCommandTest extends TestCase
      * @covers ::configure
      * @covers ::execute
      */
-    public function it_sould_fail_on_incorrect_config()
+    public function it_should_fail_on_incorrect_config()
     {
         $command = $this->application->find('sf:create-field');
         $commandTester = new CommandTester($command);
@@ -109,7 +109,13 @@ function file_get_contents($filename)
         case 'some-field-config-file.yml':
             return <<<EOT
 field:
-    name: Body
+    name:
+        - nl_NL: Body
+        - en_EN: Body
+    handle: body
+    label:
+        - nl_NL: Geef lichaam
+        - en_EN: Give body
     type: RichTextArea
 EOT;
         case 'some-erroneous-field-config-file.yml':

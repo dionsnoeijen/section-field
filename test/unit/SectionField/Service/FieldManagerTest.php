@@ -187,14 +187,9 @@ final class FieldManagerTest extends TestCase
      */
     public function it_should_update_a_field()
     {
-        $field = new Field();
-
-        $this->entityManager->shouldReceive('persist')->once()->with($field);
         $this->entityManager->shouldReceive('flush')->once();
 
-        $receive = $this->fieldManager->update($field);
-
-        $this->assertSame($receive, $field);
+        $this->fieldManager->update();
     }
 
     /**
@@ -219,10 +214,15 @@ final class FieldManagerTest extends TestCase
         $fieldConfig = FieldConfig::create([
             'field' => [
                 'name' => [
-                    'en_EN' => 'This is my name',
-                    'nl_NL' => 'Dit is mijn naam'
+                    ['en_EN' => 'This is my name'],
+                    ['nl_NL' => 'Dit is mijn naam']
                 ],
-                'type' => 'TextField'
+                'handle' => 'thisIsMyName',
+                'label' => [
+                    ['en_EN' => 'I also have a label'],
+                    ['nl_NL' => 'Ik heb ook een label']
+                ],
+                'type' => 'TextArea'
             ]
         ]);
 
@@ -233,12 +233,8 @@ final class FieldManagerTest extends TestCase
             ->once();
 
         $this->languageManager
-            ->shouldReceive('readByI18n')
-            ->twice()
-            ->andReturn(
-                (new Language())->setI18n('nl_NL'),
-                (new Language())->setI18n('en_EN')
-            );
+            ->shouldReceive('readByI18ns')
+            ->once();
 
         $this->entityManager
             ->shouldReceive('persist')
@@ -266,8 +262,13 @@ final class FieldManagerTest extends TestCase
         $fieldConfig = FieldConfig::create([
             'field' => [
                 'name' => [
-                    'en_EN' => 'This is my other name',
-                    'nl_NL' => 'Dit is mijn andere naam'
+                    ['en_EN' => 'This is my other name'],
+                    ['nl_NL' => 'Dit is mijn andere naam']
+                ],
+                'handle' => 'thisIsMyOtherName',
+                'label' => [
+                    ['en_EN' => 'I also have al label'],
+                    ['nl_NL' => 'Ik heb ook een label']
                 ],
                 'type' => 'TextArea'
             ]
@@ -280,12 +281,8 @@ final class FieldManagerTest extends TestCase
             ->once();
 
         $this->languageManager
-            ->shouldReceive('readByI18n')
-            ->twice()
-            ->andReturn(
-                (new Language())->setI18n('nl_NL'),
-                (new Language())->setI18n('en_EN')
-            );
+            ->shouldReceive('readByI18ns')
+            ->once();
 
         $this->entityManager
             ->shouldReceive('flush')
@@ -295,29 +292,6 @@ final class FieldManagerTest extends TestCase
 
         $this->assertSame($field, $returnedField);
         $this->assertEquals($returnedField->getHandle(), $field->getHandle());
-    }
-
-    /**
-     * @test
-     * @covers ::createByConfig
-     */
-    public function it_should_receive_a_no_field_name_defined_exception()
-    {
-        $fieldConfig = FieldConfig::create([
-            'field' => [
-                'name' => 'This should be an array',
-                'type' => 'TextArea'
-            ]
-        ]);
-
-        $field = $this->givenAField();
-        $this->fieldTypeManager
-            ->shouldReceive('readByType')
-            ->once();
-
-        $this->expectException(NoFieldNameDefinedException::class);
-
-        $returnedField = $this->fieldManager->createByConfig($fieldConfig, $field);
     }
 
     /**

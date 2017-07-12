@@ -25,7 +25,12 @@
             target-entity="Tardigrades\Entity\FieldTranslation"
             field="fieldTranslations"
             mapped-by="field"
-        />
+        >
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
         <many-to-many field="sections" target-entity="Tardigrades\Entity\Section">
             <join-table name="section_field">
                 <join-columns>

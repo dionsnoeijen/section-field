@@ -23,8 +23,8 @@ abstract class FieldTypeCommand extends Command
                 $fieldType->getId(),
                 $fieldType->getType(),
                 $fieldType->getFullyQualifiedClassName(),
-                (string) $fieldType->getCreatedValueObject(),
-                (string) $fieldType->getUpdatedValueObject()
+                $fieldType->getCreated()->format('D-m-y'),
+                $fieldType->getUpdated()->format('D-m-y'),
             ];
         }
 
