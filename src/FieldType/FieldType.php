@@ -1,8 +1,9 @@
 <?php
 
-namespace Tardigrades\SectionField;
+namespace Tardigrades\FieldType;
 
 use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
+use Tardigrades\FieldType\ValueObject\EntityMethodsTemplate;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 abstract class FieldType implements FieldTypeInterface
@@ -21,4 +22,6 @@ abstract class FieldType implements FieldTypeInterface
     {
         return $this->fieldConfig;
     }
+
+    abstract public function getEntityMethodsTemplate(): EntityMethodsTemplate;
 }

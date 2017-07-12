@@ -1,5 +1,6 @@
 section:
   name: Blog
+  handle: blog
   fields: [title, subTitle, body, created, updated]
   slug: [title]
   required: [title, body]

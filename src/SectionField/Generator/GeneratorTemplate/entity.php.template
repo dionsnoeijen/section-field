@@ -1,0 +1,22 @@
+<?php
+declare (strict_types=1);
+
+namespace Tardigrades\Entity;
+
+class {{ section }}
+{
+    {{ properties }}
+
+    {{ methods }}
+
+    public function onPrePersist(): void
+    {
+        {{ prePersist }}
+    }
+
+    public function onPreUpdate(): void
+    {
+        {{ preUpdate }}
+    }
+}
+

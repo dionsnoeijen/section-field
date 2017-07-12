@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
+use Tardigrades\Helper\StringConverter;
 
 final class FieldConfig
 {
@@ -28,6 +29,28 @@ final class FieldConfig
     public function toArray(): array
     {
         return $this->fieldConfig;
+    }
+
+    public function getName(): string
+    {
+        return $this->fieldConfig['field']['name'];
+    }
+
+    public function getHandle(): string
+    {
+        return $this->fieldConfig['field']['handle'];
+    }
+
+    public function getMethodName(): string
+    {
+        $methodName = StringConverter::toCamelCase($this->fieldConfig['field']['handle']);
+
+        return ucfirst($methodName);
+    }
+
+    public function getPropertyName(): string
+    {
+        return StringConverter::toCamelCase($this->fieldConfig['field']['handle']);
     }
 
     public function __toString(): string

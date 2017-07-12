@@ -4,11 +4,13 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Generator;
 
 use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\Entity\EntityInterface\FieldType;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\TextInput\TextInputFieldType;
+use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\SectionFieldInterface\EntityGenerator as EntityGeneratorInterface;
+use Tardigrades\SectionField\ValueObject\EntityTemplate;
+use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class EntityGenerator implements EntityGeneratorInterface
 {
@@ -23,7 +25,8 @@ class EntityGenerator implements EntityGeneratorInterface
     public function generateBySection(Section $section): void
     {
         $sectionConfig = $section->getConfig();
-        $this->generateMethods($sectionConfig->getFields());
+
+        $this->generateSectionBase($sectionConfig);
     }
 
     private function generateMethods(array $fields): string
@@ -41,10 +44,29 @@ class EntityGenerator implements EntityGeneratorInterface
                 $fieldType = new $fieldTypeFullyQualifiedClassName();
                 $fieldType->setConfig($field->getConfig());
 
-                print_r($fieldType->getConfig()->toArray());
+                $methods .= (string) $fieldType->renderEntityMethods();
             }
         }
 
         return $methods;
+    }
+
+    private function generateSectionBase(SectionConfig $sectionConfig): string
+    {
+        $template = EntityTemplate::create(
+            TemplateLoader::load(__DIR__ . '/GeneratorTemplate/entity.php.template')
+        );
+
+        $asString = (string) $template;
+        $asString = str_replace('{{ section }}', $sectionConfig->getClassName(), $asString);
+        $asString = str_replace(
+            '{{ methods }}',
+            $this->generateMethods($sectionConfig->getFields()),
+            $asString
+        );
+
+        print_r($asString);
+
+        return $asString;
     }
 }

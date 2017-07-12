@@ -1,0 +1,13 @@
+/** @var string ${{ propertyName }} */
+private ${{ propertyName }};
+
+public function get{{ methodName }}(): string
+{
+    return $this->{{ propertyName }};
+}
+
+public function set{{ methodName }}(string ${{ propertyName }}): {{ section }}
+{
+    $this->{{ propertyName }} = ${{ propertyName }};
+    return $this;
+}

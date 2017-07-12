@@ -66,12 +66,9 @@ class DoctrineSectionManager implements SectionManager
         return $sections;
     }
 
-    public function update(Section $entity): Section
+    public function update(): void
     {
-        $this->entityManager->persist($entity);
         $this->entityManager->flush();
-
-        return $entity;
     }
 
     public function delete(Section $entity): void
@@ -90,16 +87,14 @@ class DoctrineSectionManager implements SectionManager
 
     public function updateByConfig(SectionConfig $sectionConfig, Section $section): Section
     {
-        $sectionConfig = $sectionConfig->toArray();
+        $fields = $this->fieldManager->readFieldsByHandles($sectionConfig->getFields());
 
-        $fields = $this->fieldManager->readFieldsByHandles($sectionConfig['section']['fields']);
-
-        $section->setName($sectionConfig['section']['name']);
-        $section->setHandle(StringConverter::toCamelCase($sectionConfig['section']['name']));
+        $section->setName($sectionConfig->getName());
+        $section->setHandle($sectionConfig->getHandle());
         foreach ($fields as $field) {
             $section->addField($field);
         }
-        $section->setConfig($sectionConfig);
+        $section->setConfig($sectionConfig->toArray());
 
         $this->entityManager->persist($section);
         $this->entityManager->flush();
