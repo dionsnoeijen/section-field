@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
+use Mockery\Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,11 +40,16 @@ class CreateFieldCommand extends FieldCommand
         $config = $input->getArgument('config');
 
         try {
-            $fieldConfig = FieldConfig::create(
-                Yaml::parse(file_get_contents($config))
-            );
-            $this->fieldManager->createByConfig($fieldConfig);
-            $output->writeln('<info>Field created!</info>');
+            if (file_exists($config)) {
+                $parsed = Yaml::parse(file_get_contents($config));
+                if (is_array($parsed)) {
+                    $fieldConfig = FieldConfig::create($parsed);
+                    $this->fieldManager->createByConfig($fieldConfig);
+                    $output->writeln('<info>Field created!</info>');
+                    return;
+                }
+            }
+            throw new Exception('No valid config found.');
         } catch (\Exception $exception) {
             $output->writeln("<error>Invalid field config. {$exception->getMessage()}</error>");
         }
