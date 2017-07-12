@@ -96,7 +96,7 @@ final class CreateFieldCommandTest extends TestCase
 }
 
 /**
- * Stubbed php method
+ * Stubbed php methods
  * @todo I have a problem with overriding file_get_contents
  * multiple times. Therefore I have to add the section config
  * cases here... weird
@@ -166,4 +166,8 @@ application:
 EOT;
     }
     return 'no';
+}
+
+function file_exists($filename) {
+    return true;
 }
