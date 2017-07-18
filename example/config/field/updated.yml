@@ -6,4 +6,7 @@ field:
   label:
     - nl_NL: Update datum
     - en_EN: Date record is updated
-  type: DateTime
+  type: DateTimeField
+  entityEvents:
+    - prePersist
+    - preUpdate

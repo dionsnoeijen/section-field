@@ -1,0 +1,2 @@
+/** @var string ${{ propertyName }} */
+private ${{ propertyName }};

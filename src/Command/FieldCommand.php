@@ -13,8 +13,11 @@ use Tardigrades\Entity\FieldTranslation;
 
 abstract class FieldCommand extends Command
 {
-    protected function renderTable(OutputInterface $output, array $fields, string $info): void
-    {
+    protected function renderTable(
+        OutputInterface $output,
+        array $fields,
+        string $info
+    ): void {
         $table = new Table($output);
 
         $rows = [];
@@ -52,7 +55,11 @@ abstract class FieldCommand extends Command
         ];
 
         $table
-            ->setHeaders(['#id', 'name', 'label', 'handle', 'type', 'config', 'updated'])
+            ->setHeaders([
+                '#id', 'name', 'label',
+                'handle', 'type', 'config',
+                'updated'
+            ])
             ->setRows($rows)
         ;
         $table->render();

@@ -60,7 +60,11 @@ final class FieldConfig
             if (is_array($value)) {
                 $config .= $key . ":\n";
                 foreach ($value as $langValue) {
-                    $config .= ' -' . key($langValue) . ':' . array_shift($langValue) . "\n";
+                    if (is_array($langValue)) {
+                        $config .= ' -' . key($langValue) . ':' . array_shift($langValue) . "\n";
+                    } else {
+                        $config .= ' -' . $langValue . "\n";
+                    }
                 }
             } else {
                 $config .= $key . ':' . $value . "\n";

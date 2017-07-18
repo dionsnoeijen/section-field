@@ -6,4 +6,6 @@ field:
   label:
     - nl_NL: Bericht aanmaak datum
     - en_EN: Record creation date
-  type: DateTime
+  type: DateTimeField
+  entityEvents:
+    - prePersist

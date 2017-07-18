@@ -1,14 +1,17 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\FieldType;
 
 use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
 use Tardigrades\FieldType\ValueObject\EntityMethodsTemplate;
+use Tardigrades\FieldType\ValueObject\EntityPropertiesTemplate;
+use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 abstract class FieldType implements FieldTypeInterface
 {
-    /** @var FieldConfig $fieldConfig */
+    /** @var FieldConfig */
     private $fieldConfig;
 
     public function setConfig(FieldConfig $fieldConfig): FieldTypeInterface
@@ -22,6 +25,4 @@ abstract class FieldType implements FieldTypeInterface
     {
         return $this->fieldConfig;
     }
-
-    abstract public function getEntityMethodsTemplate(): EntityMethodsTemplate;
 }
