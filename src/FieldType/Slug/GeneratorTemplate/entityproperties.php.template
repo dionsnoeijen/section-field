@@ -1,0 +1,2 @@
+/** @var Tardigrades\FieldType\Slug\ValueObject\Slug */
+protected ${{ propertyName }};

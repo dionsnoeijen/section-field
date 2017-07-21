@@ -1,0 +1,4 @@
+public function get{{ methodName }}(): Tardigrades\FieldType\Slug\ValueObject\Slug
+{
+    return $this->{{ propertyName }};
+}

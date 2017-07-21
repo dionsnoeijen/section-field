@@ -1,2 +1,2 @@
-/** @var string ${{ propertyName }} */
-private ${{ propertyName }};
+/** @var \DateTime */
+protected ${{ propertyName }};

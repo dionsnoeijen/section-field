@@ -31,26 +31,33 @@ final class FieldConfig
         return $this->fieldConfig;
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
-        return $this->fieldConfig['field']['name'];
+        return Name::create($this->fieldConfig['field']['name']);
     }
 
-    public function getHandle(): string
+    public function getHandle(): Handle
     {
-        return $this->fieldConfig['field']['handle'];
+        return Handle::create($this->fieldConfig['field']['handle']);
     }
 
-    public function getMethodName(): string
+    public function getMethodName(): MethodName
     {
-        $methodName = StringConverter::toCamelCase($this->fieldConfig['field']['handle']);
-
-        return ucfirst($methodName);
+        return MethodName::create($this->fieldConfig['field']['handle']);
     }
 
-    public function getPropertyName(): string
+    public function getTypeConfig(): array
     {
-        return StringConverter::toCamelCase($this->fieldConfig['field']['handle']);
+        Assertion::keyIsset($this->fieldConfig['field'], 'typeConfig', 'No typeConfig defined');
+        Assertion::notEmpty($this->fieldConfig['field']['typeConfig'], 'Type config is empty');
+        Assertion::isArray($this->fieldConfig['field']['typeConfig'], 'Type config is not an array');
+
+        return $this->fieldConfig['field']['typeConfig'];
+    }
+
+    public function getPropertyName(): PropertyName
+    {
+        return PropertyName::create($this->fieldConfig['field']['handle']);
     }
 
     public function __toString(): string
@@ -58,16 +65,16 @@ final class FieldConfig
         $config = '';
         foreach ($this->fieldConfig['field'] as $key=>$value) {
             if (is_array($value)) {
-                $config .= $key . ":\n";
+                $config .= $key . ':' . PHP_EOL;
                 foreach ($value as $langValue) {
                     if (is_array($langValue)) {
                         $config .= ' -' . key($langValue) . ':' . array_shift($langValue) . "\n";
                     } else {
-                        $config .= ' -' . $langValue . "\n";
+                        $config .= ' -' . $langValue . PHP_EOL;
                     }
                 }
             } else {
-                $config .= $key . ':' . $value . "\n";
+                $config .= $key . ':' . $value . PHP_EOL;
             }
         }
 

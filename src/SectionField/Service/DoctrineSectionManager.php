@@ -89,8 +89,8 @@ class DoctrineSectionManager implements SectionManager
     {
         $fields = $this->fieldManager->readFieldsByHandles($sectionConfig->getFields());
 
-        $section->setName($sectionConfig->getName());
-        $section->setHandle($sectionConfig->getHandle());
+        $section->setName((string) $sectionConfig->getName());
+        $section->setHandle((string) $sectionConfig->getHandle());
         foreach ($fields as $field) {
             $section->addField($field);
         }

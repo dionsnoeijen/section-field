@@ -1,0 +1,11 @@
+field:
+  name:
+    - nl_NL: Blog slug
+    - en_EN: Blog slug
+  handle: blogSlug
+  label:
+    - nl_NL: Onderdeel voor url segment
+    - en_EN: Composit for url segment
+  type: Slug
+  lenght: 255
+  typeConfig: [ title, created|DateTime|Y-m-d ]

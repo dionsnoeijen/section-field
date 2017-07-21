@@ -6,8 +6,8 @@ namespace Tardigrades\Entity;
 class {{ section }}
 {
     {{ properties }}
-
     {{ methods }}
+    {{ getSlug }}
 
     public function onPrePersist(): void
     {

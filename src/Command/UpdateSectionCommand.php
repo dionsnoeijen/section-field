@@ -52,7 +52,8 @@ class UpdateSectionCommand extends SectionCommand
             return;
         }
 
-        $output->writeln('<info>Section updated!</info>');
+        $sections = $this->sectionManager->readAll();
+        $this->renderTable($output, $sections, 'Section updated!');
     }
 }
 

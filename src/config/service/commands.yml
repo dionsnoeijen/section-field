@@ -83,7 +83,7 @@ services:
     class: Tardigrades\Command\GenerateSectionCommand
     arguments:
       - '@section_field.manager.doctrine.section_manager'
-      - '@section_field.generator.entity_generator'
+      - '@section_field.generator'
 
   section_field.create.field.command:
     class: Tardigrades\Command\CreateFieldCommand

@@ -1,0 +1,16 @@
+section:
+  name: Blog
+  handle: blog
+  fields:
+    - title
+    - subTitle
+    - body
+    - blogSlug
+    - created
+    - updated
+  slug: blogSlug #assign the field that will function as slug
+  required:
+    - title
+    - body
+  default: title
+  namespace: SectionFieldExample

@@ -6,6 +6,6 @@ section:
     - email
     - comment
     - blog
-  slug: [name]
   required: [name, email, comment, blog]
   default: name
+  namespace: SectionFieldExample

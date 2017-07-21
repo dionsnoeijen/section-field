@@ -5,7 +5,8 @@ namespace Tardigrades\SectionField\SectionFieldInterface;
 
 use Tardigrades\Entity\EntityInterface\Section;
 
-interface EntityGenerator
+interface Generator
 {
     public function generateBySection(Section $section): void;
+    public function getBuildMessages(): array;
 }

@@ -18,6 +18,6 @@ class TemplateLoader
                 return \file_get_contents($location);
             }
         }
-        throw new TemplateNotFoundException();
+        throw new TemplateNotFoundException($location . ': template not found');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\SectionField\ValueObject;
 
@@ -22,7 +23,6 @@ final class SectionConfig
         Assertion::string($sectionConfig['section']['handle'], 'The handle must be a string');
         Assertion::keyExists($sectionConfig['section'], 'fields', 'The config contains no fields');
         Assertion::isArray($sectionConfig['section']['fields'], 'Fields have to be defined as an arrauy');
-        Assertion::keyExists($sectionConfig['section'], 'slug', 'You have to define what field(s) compose the slug');
         Assertion::keyExists($sectionConfig['section'], 'default', 'Assign a default field');
 
         $this->sectionConfig = $sectionConfig;
@@ -38,19 +38,27 @@ final class SectionConfig
         return $this->sectionConfig['section']['fields'];
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
-        return $this->sectionConfig['section']['name'];
+        return Name::create($this->sectionConfig['section']['name']);
     }
 
-    public function getHandle(): string
+    public function getHandle(): Handle
     {
-        return $this->sectionConfig['section']['handle'];
+        return Handle::create($this->sectionConfig['section']['handle']);
     }
 
-    public function getClassName(): string
+    public function getClassName(): ClassName
     {
-        return ucfirst($this->sectionConfig['section']['handle']);
+        return ClassName::fromString($this->sectionConfig['section']['handle']);
+    }
+
+    public function getSlugField(): SlugField
+    {
+        Assertion::notEmpty($this->sectionConfig['section']['slug'], 'The slug field must have a value');
+        Assertion::string($this->sectionConfig['section']['slug'], 'The slug field must be a string');
+
+        return SlugField::fromString($this->sectionConfig['section']['slug']);
     }
 
     public function __toString(): string
@@ -59,13 +67,13 @@ final class SectionConfig
         foreach ($this->sectionConfig['section'] as $key=>$value) {
             $configText .= $key . ':';
             if (is_array($value)) {
-                $configText .= "\n";
+                $configText .= PHP_EOL;
                 foreach ($value as $subKey=>$subValue) {
-                    $configText .= " - {$subValue}\n";
+                    $configText .= " - {$subValue}" . PHP_EOL;
                 }
                 continue;
             }
-            $configText .= $value . "\n";
+            $configText .= $value . PHP_EOL;
         }
 
         return $configText;

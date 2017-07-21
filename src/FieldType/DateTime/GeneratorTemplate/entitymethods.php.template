@@ -1,9 +1,9 @@
-public function get{{ methodName }}(): string
+public function get{{ methodName }}(): \DateTime
 {
     return $this->{{ propertyName }};
 }
 
-public function set{{ methodName }}(string ${{ propertyName }}): {{ section }}
+public function set{{ methodName }}(\DateTime ${{ propertyName }}): {{ section }}
 {
     $this->{{ propertyName }} = ${{ propertyName }};
     return $this;
