@@ -13,4 +13,4 @@ section:
     - title
     - body
   default: title
-  namespace: SectionFieldExample
+  namespace: Example\Blog

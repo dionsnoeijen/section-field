@@ -8,4 +8,4 @@ section:
     - blog
   required: [name, email, comment, blog]
   default: name
-  namespace: SectionFieldExample
+  namespace: Example\Blog

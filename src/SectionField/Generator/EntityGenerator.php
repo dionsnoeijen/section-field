@@ -39,8 +39,9 @@ class EntityGenerator implements Generator
         $this->fieldManager = $fieldManager;
     }
 
-    public function generateBySection(Section $section): void
-    {
+    public function generateBySection(
+        Section $section
+    ): void {
         $sectionConfig = $section->getConfig();
 
         $fields = $this->fieldManager->readFieldsByHandles($sectionConfig->getFields());
@@ -191,13 +192,13 @@ public function getSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
 EOT;
     }
 
-    protected function generateSectionBase(SectionConfig $sectionConfig, array $fields): string
-    {
-        $template = EntityTemplate::create(
-            TemplateLoader::load(__DIR__ . '/GeneratorTemplate/entity.php.template')
-        );
+    protected function generateSectionBase(
+        SectionConfig $sectionConfig,
+        array $fields
+    ): EntityTemplate {
 
-        $asString = (string) $template;
+        $asString = TemplateLoader::load(__DIR__ . '/GeneratorTemplate/entity.php.template');
+
         $asString = str_replace(
             '{{ properties }}',
             $this->generateProperties($fields),
@@ -239,12 +240,17 @@ EOT;
             $sectionConfig->getClassName(),
             $asString
         );
+        $asString = str_replace(
+            '{{ namespace }}',
+            (string) $sectionConfig->getNamespace() . '\\Entity',
+            $asString
+        );
 
         $asString = PhpFormatter::format($asString);
 
         print_r($asString);
 
-        return $asString;
+        return EntityTemplate::create($asString);
     }
 
     private function renderEntityMethods(

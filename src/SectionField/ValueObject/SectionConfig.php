@@ -24,6 +24,9 @@ final class SectionConfig
         Assertion::keyExists($sectionConfig['section'], 'fields', 'The config contains no fields');
         Assertion::isArray($sectionConfig['section']['fields'], 'Fields have to be defined as an arrauy');
         Assertion::keyExists($sectionConfig['section'], 'default', 'Assign a default field');
+        Assertion::keyExists($sectionConfig['section'], 'namespace', 'We do need a namespace');
+        Assertion::string($sectionConfig['section']['namespace'], 'namespace', 'Namespace is not a string');
+        Assertion::notEmpty($sectionConfig['section']['namespace'], 'The namespace value should not be empty');
 
         $this->sectionConfig = $sectionConfig;
     }
@@ -59,6 +62,11 @@ final class SectionConfig
         Assertion::string($this->sectionConfig['section']['slug'], 'The slug field must be a string');
 
         return SlugField::fromString($this->sectionConfig['section']['slug']);
+    }
+
+    public function getNamespace(): SectionNamespace
+    {
+        return SectionNamespace::fromString($this->sectionConfig['section']['namespace']);
     }
 
     public function __toString(): string

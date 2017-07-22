@@ -4,8 +4,8 @@
                     http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
     <entity
-        name="{{ entityNamespace }}"
-        table="{{ sectionHandle }}"
+        name="{{ fullyQualifiedClassName }}"
+        table="{{ handle }}"
     >
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="onPrePersist" />
@@ -16,7 +16,7 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="name" type="string" />
+        {{ fields }}
 
     </entity>
 </doctrine-mapping>

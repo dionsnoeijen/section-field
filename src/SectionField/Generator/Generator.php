@@ -17,8 +17,6 @@ class Generator implements GeneratorInterface
     public function __construct(array $generators)
     {
         $this->generators = $generators;
-
-        print_r($this->generators);
     }
 
     public function generateBySection(Section $section): void
