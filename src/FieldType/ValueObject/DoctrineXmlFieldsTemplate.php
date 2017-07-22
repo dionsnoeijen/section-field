@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\ValueObject;
 
-final class PrePersistTemplate
+final class DoctrineXmlFieldsTemplate
 {
     /** @var string */
     private $template;

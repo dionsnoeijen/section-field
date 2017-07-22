@@ -5,11 +5,17 @@ namespace Tardigrades\SectionField\Generator;
 
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
+use Tardigrades\FieldType\NoCustomGeneratorDefinedException;
+use Tardigrades\FieldType\NoCustomMethodsMethodDefinedException;
 use Tardigrades\FieldType\NoCustomPrePersistMethodDefinedException;
+use Tardigrades\FieldType\NoCustomPreUpdateMethodDefinedException;
+use Tardigrades\FieldType\NoCustomPropertiesMethodDefinedException;
 use Tardigrades\FieldType\ValueObject\EntityMethodsTemplate;
 use Tardigrades\FieldType\ValueObject\EntityPropertiesTemplate;
 use Tardigrades\FieldType\ValueObject\PrePersistTemplate;
 use Tardigrades\FieldType\ValueObject\PreUpdateTemplate;
+use Tardigrades\Helper\FullyQualifiedClassNameConverter;
+use Tardigrades\SectionField\Generator\Loader\CustomGeneratorLoader;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\SectionFieldInterface\Generator;
@@ -53,37 +59,30 @@ class EntityGenerator implements Generator
         /** @var Field $field */
         foreach ($fields as $field) {
             try {
-                $properties .= (string) $this->renderEntityProperties(
-                    $field->getConfig(),
-                    $field
-                        ->getFieldType()
-                        ->getFullyQualifiedClassName()
-                ). PHP_EOL;
+                $customGenerator = CustomGeneratorLoader::load($field);
+                if (!method_exists($customGenerator, 'renderEntityProperties')) {
+                    throw new NoCustomPropertiesMethodDefinedException();
+                }
+                $properties .= (string) $customGenerator->renderEntityProperties($field->getConfig());
             } catch (\Exception $exception) {
-                $this->buildMessages[] = $field->getHandle() . ': ' . $exception->getMessage();
+                if ($exception instanceof NoCustomGeneratorDefinedException ||
+                    $exception instanceof NoCustomPropertiesMethodDefinedException
+                ) {
+                    try {
+                        $properties .= (string)$this->renderEntityProperties(
+                            $field->getConfig(),
+                            $field
+                                ->getFieldType()
+                                ->getFullyQualifiedClassName()
+                        );
+                    } catch (\Exception $exception) {
+                        $this->buildMessages[] = $field->getHandle() . ': ' . $exception->getMessage();
+                    }
+                }
             }
         }
 
         return $properties;
-    }
-
-    protected function renderEntityProperties(
-        FieldConfig $config,
-        FullyQualifiedClassName $fullyQualifiedClassName
-    ): EntityPropertiesTemplate {
-
-        $template = $this->getEntityPropertiesTemplate(
-            $this->fullyQualifiedNameToDir($fullyQualifiedClassName)
-        );
-
-        $asString = (string) $template;
-        $asString = str_replace(
-            '{{ propertyName }}',
-            $config->getPropertyName(),
-            $asString
-        );
-
-        return EntityPropertiesTemplate::create($asString);
     }
 
     protected function generateMethods(array $fields): string
@@ -92,43 +91,30 @@ class EntityGenerator implements Generator
         /** @var Field $field */
         foreach ($fields as $field) {
             try {
-                $methods .= (string) $this->renderEntityMethods(
-                    $field->getConfig(),
-                    $field
-                        ->getFieldType()
-                        ->getFullyQualifiedClassName()
-                ) . PHP_EOL;
+                $customGenerator = CustomGeneratorLoader::load($field);
+                if (!method_exists($customGenerator, 'renderEntityMethods')) {
+                    throw new NoCustomMethodsMethodDefinedException();
+                }
+                $methods .= (string) $customGenerator->renderEntityMethods($field->getConfig());
             } catch (\Exception $exception) {
-                $this->buildMessages[] = $field->getHandle() . ': ' . $exception->getMessage();
+                if ($exception instanceof NoCustomGeneratorDefinedException ||
+                    $exception instanceof NoCustomMethodsMethodDefinedException
+                ) {
+                    try {
+                        $methods .= (string)$this->renderEntityMethods(
+                            $field->getConfig(),
+                            $field
+                                ->getFieldType()
+                                ->getFullyQualifiedClassName()
+                        );
+                    } catch (\Exception $exception) {
+                        $this->buildMessages[] = $field->getHandle() . ': ' . $exception->getMessage();
+                    }
+                }
             }
         }
 
         return $methods;
-    }
-
-    protected function renderEntityMethods(
-        FieldConfig $config,
-        FullyQualifiedClassName $fullyQualifiedClassName
-    ): EntityMethodsTemplate {
-
-        $template = $this->getEntityMethodsTemplate(
-            $this->fullyQualifiedNameToDir($fullyQualifiedClassName),
-            $config
-        );
-
-        $asString = (string) $template;
-        $asString = str_replace(
-            '{{ methodName }}',
-            $config->getMethodName(),
-            $asString
-        );
-        $asString = str_replace(
-            '{{ propertyName }}',
-            $config->getPropertyName(),
-            $asString
-        );
-
-        return EntityMethodsTemplate::create($asString);
     }
 
     protected function generatePrePersist(array $fields): string
@@ -137,20 +123,13 @@ class EntityGenerator implements Generator
         /** @var Field $field */
         foreach ($fields as $field) {
             try {
-                $fullyQualifiedClassName = (string) $field->getFieldType()->getFullyQualifiedClassName();
-
-                if (!class_exists($fullyQualifiedClassName)) {
-                    throw new FieldTypeDoesNotExistException();
+                $customGenerator = CustomGeneratorLoader::load($field);
+                if (!method_exists($customGenerator, 'renderPrePersist')) {
+                    throw new NoCustomPrePersistMethodDefinedException();
                 }
-
-                $fieldInstance = new $fullyQualifiedClassName();
-                $fieldInstance->setConfig($field->getConfig());
-
-                $prePersist .= (string) $fieldInstance->renderPrePersist();
-
+                $prePersist .= (string) $customGenerator->renderPrePersist($field->getConfig());
             } catch (\Exception $exception) {
-
-                if ($exception instanceof FieldTypeDoesNotExistException ||
+                if ($exception instanceof NoCustomGeneratorDefinedException ||
                     $exception instanceof NoCustomPrePersistMethodDefinedException
                 ) {
                     try {
@@ -170,60 +149,36 @@ class EntityGenerator implements Generator
         return $prePersist;
     }
 
-    protected function renderPrePersist(FieldConfig $config, FullyQualifiedClassName $fullyQualifiedClassName): PrePersistTemplate
-    {
-        $template = $this->getPrePersistTemplate(
-            $this->fullyQualifiedNameToDir($fullyQualifiedClassName)
-        );
-
-        $asString = (string) $template;
-        $asString = str_replace(
-            '{{ propertyName }}',
-            $config->getPropertyName(),
-            $asString
-        );
-
-        return PrePersistTemplate::create(
-            $asString
-        );
-    }
-
     protected function generatePreUpdate(array $fields): string
     {
         $preUpdate = '';
         /** @var Field $field */
         foreach ($fields as $field) {
             try {
-                $preUpdate .= (string) $this->renderPreUpdate(
-                    $field->getConfig(),
-                    $field
-                        ->getFieldType()
-                        ->getFullyQualifiedClassName()
-                );
+                $customGenerator = CustomGeneratorLoader::load($field);
+                if (!method_exists($customGenerator, 'renderPreUpdate')) {
+                    throw new NoCustomPreUpdateMethodDefinedException();
+                }
+                $preUpdate .= (string) $customGenerator->renderPreUpdate($field->getConfig());
             } catch (\Exception $exception) {
-                $this->buildMessages[] = $field->getHandle() . ': ' . $exception->getMessage();
+                if ($exception instanceof NoCustomGeneratorDefinedException ||
+                    $exception instanceof NoCustomPreUpdateMethodDefinedException
+                ) {
+                    try {
+                        $preUpdate .= (string)$this->renderPreUpdate(
+                            $field->getConfig(),
+                            $field
+                                ->getFieldType()
+                                ->getFullyQualifiedClassName()
+                        );
+                    } catch (\Exception $exception) {
+                        $this->buildMessages[] = $field->getHandle() . ': ' . $exception->getMessage();
+                    }
+                }
             }
         }
 
         return $preUpdate;
-    }
-
-    protected function renderPreUpdate(FieldConfig $config, FullyQualifiedClassName $fullyQualifiedClassName): PreUpdateTemplate
-    {
-        $template = $this->getPreUpdateTemplate(
-            $this->fullyQualifiedNameToDir($fullyQualifiedClassName)
-        );
-
-        $asString = (string) $template;
-        $asString = str_replace(
-            '{{ propertyName }}',
-            $config->getPropertyName(),
-            $asString
-        );
-
-        return PreUpdateTemplate::create(
-            $asString
-        );
     }
 
     protected function generateSlugFieldGetMethod(SlugField $slugField)
@@ -292,57 +247,78 @@ EOT;
         return $asString;
     }
 
-    protected function fullyQualifiedNameToDir(
+    private function renderEntityMethods(
+        FieldConfig $config,
         FullyQualifiedClassName $fullyQualifiedClassName
-    ): string {
-        $segments = explode('\\',
-            explode(
-                '/src',
-                __DIR__
-            )[0] . '/src/' .
-            str_replace(
-                'Tardigrades\\', // @todo: The vendor name must be configurable, not hardcoded.
-                '',
-                (string) $fullyQualifiedClassName
-            )
+    ): EntityMethodsTemplate {
+
+        $asString = (string) EntityMethodsTemplate::create(
+            TemplateLoader::load( FullyQualifiedClassNameConverter::toDir($fullyQualifiedClassName) . '/GeneratorTemplate/entitymethods.php.template', $config)
         );
 
-        array_pop($segments);
-
-        $dir = str_replace(
-            '\\',
-            '/',
-            implode('\\', $segments)
+        $asString = str_replace(
+            '{{ methodName }}',
+            $config->getMethodName(),
+            $asString
+        );
+        $asString = str_replace(
+            '{{ propertyName }}',
+            $config->getPropertyName(),
+            $asString
         );
 
-        return $dir;
+        return EntityMethodsTemplate::create($asString);
     }
 
-    protected function getEntityMethodsTemplate(string $dir, FieldConfig $config): EntityMethodsTemplate
+    private function renderPrePersist(FieldConfig $config, FullyQualifiedClassName $fullyQualifiedClassName): PrePersistTemplate
     {
-        return EntityMethodsTemplate::create(
-            TemplateLoader::load($dir . '/GeneratorTemplate/entitymethods.php.template', $config)
+        $asString = (string) PrePersistTemplate::create(
+            TemplateLoader::load(FullyQualifiedClassNameConverter::toDir($fullyQualifiedClassName) . '/GeneratorTemplate/prepersist.php.template')
         );
-    }
 
-    protected function getEntityPropertiesTemplate(string $dir): EntityPropertiesTemplate
-    {
-        return EntityPropertiesTemplate::create(
-            TemplateLoader::load($dir . '/GeneratorTemplate/entityproperties.php.template')
+        $asString = str_replace(
+            '{{ propertyName }}',
+            $config->getPropertyName(),
+            $asString
         );
-    }
 
-    protected function getPrePersistTemplate(string $dir): PrePersistTemplate
-    {
         return PrePersistTemplate::create(
-            TemplateLoader::load($dir . '/GeneratorTemplate/prepersist.php.template')
+            $asString
         );
     }
 
-    protected function getPreUpdateTemplate(string $dir): PreUpdateTemplate
+    private function renderPreUpdate(FieldConfig $config, FullyQualifiedClassName $fullyQualifiedClassName): PreUpdateTemplate
     {
-        return PreUpdateTemplate::create(
-            TemplateLoader::load($dir . '/GeneratorTemplate/preupdate.php.template')
+        $asString = (string) PreUpdateTemplate::create(
+            TemplateLoader::load(FullyQualifiedClassNameConverter::toDir($fullyQualifiedClassName) . '/GeneratorTemplate/preupdate.php.template')
         );
+
+        $asString = str_replace(
+            '{{ propertyName }}',
+            $config->getPropertyName(),
+            $asString
+        );
+
+        return PreUpdateTemplate::create(
+            $asString
+        );
+    }
+
+    private function renderEntityProperties(
+        FieldConfig $config,
+        FullyQualifiedClassName $fullyQualifiedClassName
+    ): EntityPropertiesTemplate {
+
+        $asString = (string) EntityPropertiesTemplate::create(
+            TemplateLoader::load(FullyQualifiedClassNameConverter::toDir($fullyQualifiedClassName) . '/GeneratorTemplate/entityproperties.php.template')
+        );
+
+        $asString = str_replace(
+            '{{ propertyName }}',
+            $config->getPropertyName(),
+            $asString
+        );
+
+        return EntityPropertiesTemplate::create($asString);
     }
 }

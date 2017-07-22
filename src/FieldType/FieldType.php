@@ -4,10 +4,6 @@ declare (strict_types=1);
 namespace Tardigrades\FieldType;
 
 use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
-use Tardigrades\FieldType\ValueObject\EntityMethodsTemplate;
-use Tardigrades\FieldType\ValueObject\EntityPropertiesTemplate;
-use Tardigrades\FieldType\ValueObject\PrePersistTemplate;
-use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 abstract class FieldType implements FieldTypeInterface
@@ -27,8 +23,8 @@ abstract class FieldType implements FieldTypeInterface
         return $this->fieldConfig;
     }
 
-    public function renderPrePersist(): PrePersistTemplate
+    public function getGenerator()
     {
-        throw new NoCustomPrePersistMethodDefinedException();
+        throw new NoCustomGeneratorDefinedException();
     }
 }

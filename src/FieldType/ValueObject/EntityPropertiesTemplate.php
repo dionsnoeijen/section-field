@@ -5,6 +5,9 @@ namespace Tardigrades\FieldType\ValueObject;
 
 final class EntityPropertiesTemplate
 {
+    /** @var string */
+    private $template;
+
     private function __construct(string $template)
     {
         $this->template = $template;
