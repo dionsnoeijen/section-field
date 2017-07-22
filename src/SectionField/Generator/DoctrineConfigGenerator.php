@@ -54,6 +54,8 @@ class DoctrineConfigGenerator implements Generator
                 $this->buildMessages[] = $exception->getMessage();
             }
         }
+
+        return DoctrineXmlFieldsTemplate::create($xmlFields);
     }
 
     protected function generateXmlBase(SectionConfig $sectionConfig, array $fields): string
