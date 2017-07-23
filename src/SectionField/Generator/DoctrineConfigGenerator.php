@@ -12,6 +12,7 @@ use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\Generator\Loader\CustomGeneratorLoader;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
+use Tardigrades\SectionField\Generator\Writer\Writable;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\SectionFieldInterface\Generator;
 use Tardigrades\SectionField\ValueObject\DoctrineXmlConfigTemplate;
@@ -33,13 +34,19 @@ class DoctrineConfigGenerator implements Generator
         $this->fieldManager = $fieldManager;
     }
 
-    public function generateBySection(Section $section): void
-    {
+    public function generateBySection(
+        Section $section
+    ): Writable {
         $sectionConfig = $section->getConfig();
 
         $fields = $this->fieldManager->readFieldsByHandles($sectionConfig->getFields());
 
-        $this->generateXmlBase($sectionConfig, $fields);
+        return Writable::create(
+            (string) $this->generateXmlBase($sectionConfig, $fields),
+            $sectionConfig->getNamespace() . '\\config\\xml\\',
+            str_replace('\\', '.', $sectionConfig->getNamespace()) .
+            '.Entity.' . ucfirst((string) $sectionConfig->getHandle()) . '.dcm.xml'
+        );
     }
 
     public function getBuildMessages(): array
@@ -102,8 +109,6 @@ class DoctrineConfigGenerator implements Generator
             (string) $sectionConfig->getHandle(),
             $asString
         );
-
-        print_r($asString);
 
         return $asString;
     }

@@ -58,6 +58,7 @@ final class SectionConfig
 
     public function getSlugField(): SlugField
     {
+        Assertion::keyExists($this->sectionConfig['section'], 'slug', 'Slug is not defined');
         Assertion::notEmpty($this->sectionConfig['section']['slug'], 'The slug field must have a value');
         Assertion::string($this->sectionConfig['section']['slug'], 'The slug field must be a string');
 

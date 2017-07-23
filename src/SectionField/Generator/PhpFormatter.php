@@ -28,7 +28,8 @@ class PhpFormatter
                 }
                 if (substr($line,0,6 ) === 'public' ||
                     substr($line, 0, 9) === 'namespace' ||
-                    substr($line, 0, 5) === 'class'
+                    substr($line, 0, 5) === 'class' ||
+                    substr($line, 0, 3) === 'use'
                 ) {
                     $result .= PHP_EOL;
                 }

@@ -3,9 +3,20 @@ declare (strict_types=1);
 
 namespace {{ namespace }};
 
+use Tardigrades;
+
 class {{ section }}
 {
     {{ properties }}
+
+    /** @var int */
+    private $id;
+
+    public function getId(): int
+    {
+        return $this-id;
+    }
+
     {{ methods }}
     {{ getSlug }}
 

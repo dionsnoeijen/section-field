@@ -5,17 +5,18 @@ namespace Tardigrades\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\SectionFieldInterface\Generator;
+use Tardigrades\SectionField\Generator\Writer\GeneratorFileWriter;
+use Tardigrades\SectionField\SectionFieldInterface\Generators;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
 class GenerateSectionCommand extends SectionCommand
 {
-    /** @var Generator */
+    /** @var Generators */
     private $entityGenerator;
 
     public function __construct(
         SectionManager $sectionManager,
-        Generator $entityGenerator
+        Generators $entityGenerator
     ) {
         $this->entityGenerator = $entityGenerator;
 
@@ -41,7 +42,11 @@ class GenerateSectionCommand extends SectionCommand
     {
         $section = $this->getSection($input, $output);
 
-        $this->entityGenerator->generateBySection($section);
+        $writables = $this->entityGenerator->generateBySection($section);
+
+        foreach ($writables as $writable) {
+            GeneratorFileWriter::write($writable);
+        }
 
         $output->writeln($this->entityGenerator->getBuildMessages());
     }

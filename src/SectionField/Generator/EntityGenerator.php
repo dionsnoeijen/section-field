@@ -17,6 +17,7 @@ use Tardigrades\FieldType\ValueObject\PreUpdateTemplate;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\CustomGeneratorLoader;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
+use Tardigrades\SectionField\Generator\Writer\Writable;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\SectionFieldInterface\Generator;
 use Tardigrades\SectionField\ValueObject\EntityTemplate;
@@ -41,12 +42,16 @@ class EntityGenerator implements Generator
 
     public function generateBySection(
         Section $section
-    ): void {
+    ): Writable {
         $sectionConfig = $section->getConfig();
 
         $fields = $this->fieldManager->readFieldsByHandles($sectionConfig->getFields());
 
-        $this->generateSectionBase($sectionConfig, $fields);
+        return Writable::create(
+            (string) $this->generateSectionBase($sectionConfig, $fields),
+            $sectionConfig->getNamespace() . '\\Entity\\',
+            ucfirst((string) $sectionConfig->getHandle()) . '.php'
+        );
     }
 
     public function getBuildMessages(): array
@@ -187,7 +192,7 @@ class EntityGenerator implements Generator
         return <<<EOT
 public function getSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
 {
-    return \$this->{$slugField};
+    return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString(\$this->{$slugField});
 }
 EOT;
     }
@@ -247,8 +252,6 @@ EOT;
         );
 
         $asString = PhpFormatter::format($asString);
-
-        print_r($asString);
 
         return EntityTemplate::create($asString);
     }
@@ -318,7 +321,6 @@ EOT;
         $asString = (string) EntityPropertiesTemplate::create(
             TemplateLoader::load(FullyQualifiedClassNameConverter::toDir($fullyQualifiedClassName) . '/GeneratorTemplate/entityproperties.php.template')
         );
-
         $asString = str_replace(
             '{{ propertyName }}',
             $config->getPropertyName(),

@@ -37,5 +37,10 @@ final class Slug
     {
         return new self($slug);
     }
+
+    public static function fromString(string $slug): self
+    {
+        return new self([$slug]);
+    }
 }
 
