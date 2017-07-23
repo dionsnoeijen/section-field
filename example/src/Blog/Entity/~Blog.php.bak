@@ -38,6 +38,12 @@ class Blog
         return $this->body;
     }
 
+    public function setBody(string $body): Blog
+    {
+        $this->body = $body;
+        return $this;
+    }
+
     public function getCreated(): \DateTime
     {
         return $this->created;

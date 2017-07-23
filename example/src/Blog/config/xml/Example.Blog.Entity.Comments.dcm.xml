@@ -16,7 +16,7 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="comment" type="text" unique="true" />
+        <field name="comment" type="text" />
 <field name="email" type="string" />
 <field name="name" type="string" />
 

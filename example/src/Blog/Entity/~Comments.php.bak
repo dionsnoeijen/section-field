@@ -29,6 +29,12 @@ class Comments
         return $this->comment;
     }
 
+    public function setComment(string $comment): Comments
+    {
+        $this->comment = $comment;
+        return $this;
+    }
+
     public function getEmail(): string
     {
         return $this->email;
