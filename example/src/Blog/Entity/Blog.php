@@ -7,6 +7,9 @@ use Tardigrades;
 
 class Blog
 {
+    /** @var string */
+    protected $body;
+
     /** @var \DateTime */
     protected $created;
 
@@ -28,6 +31,17 @@ class Blog
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getBody(): string
+    {
+        return $this->body;
+    }
+
+    public function setBody(string $body): Blog
+    {
+        $this->body = $body;
+        return $this;
     }
 
     public function getCreated(): \DateTime

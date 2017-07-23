@@ -8,10 +8,26 @@ use Tardigrades;
 class Comments
 {
     /** @var string */
+    protected $comment;
+
+    /** @var string */
     protected $email;
 
     /** @var string */
     protected $name;
+
+    /** @var int */
+    private $id;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
 
     public function getEmail(): string
     {
