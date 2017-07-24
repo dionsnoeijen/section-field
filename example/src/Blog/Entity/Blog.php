@@ -28,6 +28,10 @@ class Blog
     /** @var int */
     private $id;
 
+    public function __construct()
+    {
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -107,7 +111,6 @@ class Blog
 
     public function onPreUpdate(): void
     {
-        $this->created = new \DateTime('now');
         $this->updated = new \DateTime('now');
     }
 }

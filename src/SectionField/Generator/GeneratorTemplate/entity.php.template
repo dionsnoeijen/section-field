@@ -12,6 +12,11 @@ class {{ section }}
     /** @var int */
     private $id;
 
+    public function __construct()
+    {
+        {{ constructor }}
+    }
+
     public function getId(): int
     {
         return $this->id;

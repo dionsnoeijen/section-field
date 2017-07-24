@@ -1,0 +1,8 @@
+generator:
+  entity:
+    properties: Tardigrades\FieldType\Generator\EntityPropertiesGenerator
+    methods: Tardigrades\FieldType\Generator\EntityMethodsGenerator
+    prePersist: Tardigrades\FieldType\Generator\EntityPrePersistGenerator
+    preUpdate: Tardigrades\FieldType\Generator\EntityPreUpdateGenerator
+  doctrine:
+    fields: Tardigrades\FieldType\Generator\DoctrineFieldGenerator

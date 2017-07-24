@@ -3,21 +3,17 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Generator;
 
+use Assert\Assertion;
+use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\FieldType\NoCustomDoctrineConfigFieldMethodDefinedException;
-use Tardigrades\FieldType\NoCustomGeneratorDefinedException;
-use Tardigrades\FieldType\ValueObject\DoctrineXmlFieldsTemplate;
+use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\Helper\StringConverter;
-use Tardigrades\SectionField\Generator\Loader\CustomGeneratorLoader;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\Generator\Writer\Writable;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\SectionFieldInterface\Generator;
-use Tardigrades\SectionField\ValueObject\DoctrineXmlConfigTemplate;
-use Tardigrades\SectionField\ValueObject\FieldConfig;
-use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class DoctrineConfigGenerator implements Generator
@@ -28,6 +24,16 @@ class DoctrineConfigGenerator implements Generator
     /** @var array */
     private $buildMessages = [];
 
+    /** @var array */
+    private $templates = [
+        'fields' => []
+    ];
+
+    /** @var SectionConfig */
+    private $sectionConfig;
+
+    const GENERATE_FOR = 'doctrine';
+
     public function __construct(
         FieldManager $fieldManager
     ) {
@@ -37,16 +43,65 @@ class DoctrineConfigGenerator implements Generator
     public function generateBySection(
         Section $section
     ): Writable {
-        $sectionConfig = $section->getConfig();
+        $this->sectionConfig = $section->getConfig();
 
-        $fields = $this->fieldManager->readFieldsByHandles($sectionConfig->getFields());
+        $fields = $this->fieldManager->readFieldsByHandles($this->sectionConfig->getFields());
+
+        $this->generateElements($fields);
 
         return Writable::create(
-            (string) $this->generateXmlBase($sectionConfig, $fields),
-            $sectionConfig->getNamespace() . '\\config\\xml\\',
-            str_replace('\\', '.', $sectionConfig->getNamespace()) .
-            '.Entity.' . ucfirst((string) $sectionConfig->getHandle()) . '.dcm.xml'
+            (string) $this->generateXml(),
+            $this->sectionConfig->getNamespace() . '\\config\\xml\\',
+            str_replace('\\', '.', $this->sectionConfig->getNamespace()) .
+            '.Entity.' . ucfirst((string) $this->sectionConfig->getHandle()) . '.dcm.xml'
         );
+    }
+
+    private function generateElements(array $fields): void
+    {
+        /** @var Field $field */
+        foreach ($fields as $field) {
+
+            $yml = FullyQualifiedClassNameConverter::toDir(
+                $field->getFieldType()->getFullyQualifiedClassName()
+            ) . '/config/config.yml';
+
+            $parsed = Yaml::parse(\file_get_contents($yml));
+
+            Assertion::keyExists(
+                $parsed,
+                'generator',
+                'No generator defined for ' .
+                $field->getFieldTranslations()[0]->getLabel() .
+                'type: ' . $field->getFieldType()->getFullyQualifiedClassName()
+            );
+
+            Assertion::keyExists(
+                $parsed['generator'],
+                self::GENERATE_FOR,
+                'Nothing to do for this generator: ' . self::GENERATE_FOR
+            );
+
+            /**
+             * @var string $item
+             * @var \Tardigrades\FieldType\FieldTypeInterface\Generator $generator
+             */
+            foreach ($parsed['generator'][self::GENERATE_FOR] as $item=>$generator) {
+                if (!key_exists($item, $this->templates)) {
+                    $this->templates[$item] = [];
+                }
+
+                $interfaces = class_implements($generator);
+                if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class)
+                {
+                    try {
+                        $this->templates[$item][] = $generator::generate($field);
+                    } catch (\Exception $exception) {
+                        $this->buildMessages[] = $exception->getMessage();
+                    }
+                }
+            }
+        }
     }
 
     public function getBuildMessages(): array
@@ -54,80 +109,40 @@ class DoctrineConfigGenerator implements Generator
         return $this->buildMessages;
     }
 
-    protected function generateFields(array $fields): string
+    private function combine(array $templates): string
     {
-        $xmlFields = '';
-        /** @var Field $field */
-        foreach ($fields as $field) {
-            try {
-                $customGenerator = CustomGeneratorLoader::load($field);
-                if (!method_exists($customGenerator, 'renderField')) {
-                    throw new NoCustomDoctrineConfigFieldMethodDefinedException();
-                }
-                $customGenerator->renderField($field->getConfig());
-            } catch (\Exception $exception) {
-                if ($exception instanceof NoCustomGeneratorDefinedException ||
-                    $exception instanceof NoCustomDoctrineConfigFieldMethodDefinedException
-                ) {
-                    try {
-                        $xmlFields .= (string) $this->renderXmlFields(
-                            $field->getConfig(),
-                            $field
-                                ->getFieldType()
-                                ->getFullyQualifiedClassName()
-                        );
-                    } catch (\Exception $exception) {
-                        $this->buildMessages[] = $exception->getMessage();
-                    }
-                }
-            }
+        $combined = '';
+        foreach ($templates as $template) {
+            $combined .= $template;
         }
-
-        return $xmlFields;
+        return $combined;
     }
 
-    protected function generateXmlBase(SectionConfig $sectionConfig, array $fields): string
+    private function generateXml(): Template
     {
-        $asString = (string) DoctrineXmlConfigTemplate::create(
-            TemplateLoader::load(__DIR__ . '/GeneratorTemplate/doctrine.config.xml.template')
-        );
+        $asString = (string) TemplateLoader::load(__DIR__ . '/GeneratorTemplate/doctrine.config.xml.template');
+
+        foreach ($this->templates as $templateVariable=>$templates) {
+            $asString = str_replace(
+                '{{ ' . $templateVariable . ' }}',
+                $this->combine($templates),
+                $asString
+            );
+        }
 
         $asString = str_replace(
-            '{{ fields }}',
-            $this->generateFields($fields),
-            $asString
-        );
-        $asString = str_replace(
             '{{ fullyQualifiedClassName }}',
-            (string) $sectionConfig->getNamespace() . '\\Entity\\' . ucfirst(
-                StringConverter::toCamelCase((string) $sectionConfig->getName())
+            (string) $this->sectionConfig->getNamespace() . '\\Entity\\' . ucfirst(
+                StringConverter::toCamelCase((string) $this->sectionConfig->getName())
             ),
             $asString
         );
         $asString = str_replace(
             '{{ handle }}',
-            (string) $sectionConfig->getHandle(),
+            (string) $this->sectionConfig->getHandle(),
             $asString
         );
 
-        return $asString;
-    }
-
-    private function renderXmlFields(
-        FieldConfig $config,
-        FullyQualifiedClassName $fullyQualifiedClassName
-    ): DoctrineXmlFieldsTemplate {
-
-        $asString = (string) DoctrineXmlFieldsTemplate::create(
-            TemplateLoader::load(FullyQualifiedClassNameConverter::toDir($fullyQualifiedClassName) . '/GeneratorTemplate/doctrine.config.xml.template')
-        );
-
-        $asString = str_replace(
-            '{{ handle }}',
-            $config->getHandle(),
-            $asString
-        );
-
-        return DoctrineXmlFieldsTemplate::create($asString);
+        return Template::create($asString);
     }
 }

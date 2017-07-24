@@ -60,6 +60,14 @@ final class FieldConfig
         return PropertyName::create($this->fieldConfig['field']['handle']);
     }
 
+    public function getEntityEvents(): array
+    {
+        Assertion::keyExists($this->fieldConfig['field'], 'entityEvents', 'Entity events not defined');
+        Assertion::isArray($this->fieldConfig['field']['entityEvents'], 'Entity events should be an array of events you want a generator to run for.');
+
+        return $this->fieldConfig['field']['entityEvents'];
+    }
+
     public function __toString(): string
     {
         $config = '';

@@ -3,10 +3,10 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\FieldTypeInterface;
 
-use Tardigrades\SectionField\ValueObject\FieldConfig;
+use Tardigrades\Entity\EntityInterface\Field;
+use Tardigrades\FieldType\ValueObject\Template;
 
 interface Generator
 {
-    public function setConfig(FieldConfig $fieldConfig): Generator;
-    public function getConfig(): FieldConfig;
+    public static function generate(Field $field): Template;
 }

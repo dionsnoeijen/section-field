@@ -3,37 +3,44 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\Slug\Generator;
 
-use Tardigrades\FieldType\FieldTypeInterface\EntityPrePersistGenerator;
+use Tardigrades\Entity\EntityInterface\Field;
+use Tardigrades\FieldType\FieldTypeInterface\Generator;
 use Tardigrades\FieldType\ValueObject\PrePersistTemplate;
+use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
-use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\FieldType\Slug\ValueObject\Slug as SlugValueObject;
 
-class SlugGenerator implements EntityPrePersistGenerator
+class EntityPrePersistGenerator implements Generator
 {
-    public function renderPrePersist(FieldConfig $fieldConfig): PrePersistTemplate
+    public static function generate(Field $field): Template
     {
         $template = PrePersistTemplate::create(
-            TemplateLoader::load(__DIR__ . '/../GeneratorTemplate/prepersist.php.template')
+            TemplateLoader::load(
+                __DIR__ . '/../GeneratorTemplate/prepersist.php.template'
+            )
         );
 
         $asString = (string) $template;
         $asString = str_replace(
             '{{ propertyName }}',
-            $fieldConfig->getPropertyName(),
+            $field->getConfig()->getPropertyName(),
             $asString
         );
         $asString = str_replace(
             '{{ assignment }}',
-            $this->makeSlugAssignment($this->getTypeConfig($fieldConfig->getTypeConfig())),
+            self::makeSlugAssignment(
+                SlugValueObject::create(
+                    $field->getConfig()->getTypeConfig()
+                )
+            ),
             $asString
         );
 
-        return PrePersistTemplate::create($asString);
+        return Template::create($asString);
     }
 
-    protected function makeSlugAssignment(SlugValueObject $slug): string
+    private static function makeSlugAssignment(SlugValueObject $slug): string
     {
         $assignment = [];
         foreach ($slug->toArray() as $element) {
@@ -49,10 +56,5 @@ class SlugGenerator implements EntityPrePersistGenerator
             $assignment[] = '$this->get' . ucfirst(StringConverter::toCamelCase($element[0])) . '()' . $attach;
         }
         return 'Tardigrades\Helper\StringConverter::toSlug(' . implode(' . \'-\' . ', $assignment) . ');';
-    }
-
-    public function getTypeConfig(array $typeConfig): SlugValueObject
-    {
-        return SlugValueObject::create($typeConfig);
     }
 }

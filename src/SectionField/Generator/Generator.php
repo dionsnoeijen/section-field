@@ -29,7 +29,11 @@ class Generator implements Generators
 
         /** @var GeneratorInterface $generator */
         foreach ($this->generators as $generator) {
-            $writables[] = $generator->generateBySection($section);
+            try {
+                $writables[] = $generator->generateBySection($section);
+            } catch (\Exception $exception) {
+                $this->buildMessages[] = $exception->getMessage();
+            }
             $this->buildMessages = array_merge($this->buildMessages, $generator->getBuildMessages());
         }
 
