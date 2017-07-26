@@ -12,7 +12,7 @@ use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 class EntityPreUpdateGenerator implements Generator
 {
 
-    public static function generate(Field $field): Template
+    public static function generate(Field $field, ...$managers): Template
     {
         if (in_array('preUpdate', $field->getConfig()->getEntityEvents())) {
 

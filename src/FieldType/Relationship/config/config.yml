@@ -1,9 +1,10 @@
 generator:
   entity:
-    - properties: Tardigrades\FieldType\Generator\EntityPropertiesGenerator
-      methods: Tardigrades\FieldType\Generator\EntityMethodsGenerator
+    properties: Tardigrades\FieldType\Relationship\Generator\EntityPropertiesGenerator
+    methods: Tardigrades\FieldType\Relationship\Generator\EntityMethodsGenerator
+    constructor: Tardigrades\FieldType\Relationship\Generator\EntityConstructorGenerator
   doctrine:
-    - manyToOne: Tardigrades\FieldType\Relationship\Generator\DoctrineManyToOneGenerator
-      oneToMany: Tardigrades\FieldType\Relationship\Generator\DoctrineOneToManyGenerator
-      oneToOne: Tardigrades\FieldType\Relationship\Generator\DoctrineOneToOneGenerator
-      manyToMany: Tardigrades\FieldType\Relationship\Generator\DoctrineManyToManyGenerator
+    manyToOne: Tardigrades\FieldType\Relationship\Generator\DoctrineManyToOneGenerator
+    oneToMany: Tardigrades\FieldType\Relationship\Generator\DoctrineOneToManyGenerator
+    oneToOne: Tardigrades\FieldType\Relationship\Generator\DoctrineOneToOneGenerator
+    manyToMany: Tardigrades\FieldType\Relationship\Generator\DoctrineManyToManyGenerator

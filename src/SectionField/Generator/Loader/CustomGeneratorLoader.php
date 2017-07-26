@@ -16,7 +16,7 @@ class CustomGeneratorLoader
 
         $fullyQualifiedClassName =
             (string) $segments .
-            '\\Generator\\' .
+            '\\Generators\\' .
             (string) $field->getFieldType()->getType() . 'Generator';
 
         if (!class_exists($fullyQualifiedClassName)) {

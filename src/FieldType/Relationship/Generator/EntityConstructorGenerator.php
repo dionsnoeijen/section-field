@@ -7,7 +7,7 @@ use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\FieldType\FieldTypeInterface\Generator;
 use Tardigrades\FieldType\ValueObject\Template;
 
-class DoctrineOneToManyGenerator implements Generator
+class EntityConstructorGenerator implements Generator
 {
     public static function generate(Field $field, ...$managers): Template
     {

@@ -13,7 +13,7 @@ use Tardigrades\FieldType\Slug\ValueObject\Slug as SlugValueObject;
 
 class EntityPrePersistGenerator implements Generator
 {
-    public static function generate(Field $field): Template
+    public static function generate(Field $field, ...$managers): Template
     {
         $template = PrePersistTemplate::create(
             TemplateLoader::load(

@@ -17,4 +17,5 @@ interface FieldTypeManager
     public function delete(FieldType $entity): void;
     public function createWithFullyQualifiedClassName(FullyQualifiedClassName $fullyQualifiedClassName): FieldType;
     public function readByType(Type $type): FieldType;
+    public function readByFullyQualifiedClassName(FullyQualifiedClassName $fullyQualifiedClassName): FieldType;
 }

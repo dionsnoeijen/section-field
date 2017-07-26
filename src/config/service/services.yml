@@ -4,26 +4,22 @@ services:
     arguments:
       - '@doctrine.orm.entity_manager'
       - '@section_field.manager.doctrine.language_manager'
-    tags: [sf.manager]
 
   section_field.manager.doctrine.language_manager:
     class: Tardigrades\SectionField\Service\DoctrineLanguageManager
     arguments:
       - '@doctrine.orm.entity_manager'
-    tags: [sf.manager]
 
   section_field.manager.doctrine.section_manager:
     class: Tardigrades\SectionField\Service\DoctrineSectionManager
     arguments:
       - '@doctrine.orm.entity_manager'
       - '@section_field.manager.doctrine.field_manager'
-    tags: [sf.manager]
 
   section_field.manager.doctrine.field_type_manager:
     class: Tardigrades\SectionField\Service\DoctrineFieldTypeManager
     arguments:
       - '@doctrine.orm.entity_manager'
-    tags: [sf.manager]
 
   section_field.manager.doctrine.field_manager:
     class: Tardigrades\SectionField\Service\DoctrineFieldManager
@@ -31,18 +27,21 @@ services:
       - '@doctrine.orm.entity_manager'
       - '@section_field.manager.doctrine.field_type_manager'
       - '@section_field.manager.doctrine.language_manager'
-    tags: [sf.manager]
 
   section_field.generator.entity_generator:
     class: Tardigrades\SectionField\Generator\EntityGenerator
     arguments:
       - '@section_field.manager.doctrine.field_manager'
+      - '@section_field.manager.doctrine.field_type_manager'
+      - '@section_field.manager.doctrine.section_manager'
 
   section_field.generator.doctrine_config_generator:
     class: Tardigrades\SectionField\Generator\DoctrineConfigGenerator
     arguments:
       - '@section_field.manager.doctrine.field_manager'
+      - '@section_field.manager.doctrine.field_type_manager'
+      - '@section_field.manager.doctrine.section_manager'
 
   section_field.generator:
-    class: Tardigrades\SectionField\Generator\Generator
+    class: Tardigrades\SectionField\Generator\Generators
     arguments: [['@section_field.generator.entity_generator', '@section_field.generator.doctrine_config_generator']]

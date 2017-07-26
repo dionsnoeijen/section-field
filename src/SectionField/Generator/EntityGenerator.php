@@ -11,18 +11,17 @@ use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\Generator\Writer\Writable;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
-use Tardigrades\SectionField\SectionFieldInterface\Generator;
+use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SlugField;
 
-class EntityGenerator implements Generator
+class EntityGenerator extends Generator implements GeneratorInterface
 {
-    /** @var FieldManager */
-    private $fieldManager;
-
     /** @var array */
     private $buildMessages = [];
+
+    /** @var SectionConfig */
+    private $sectionConfig;
 
     /** @var array */
     private $templates = [
@@ -33,16 +32,7 @@ class EntityGenerator implements Generator
         'preUpdate' => []
     ];
 
-    /** @var SectionConfig */
-    private $sectionConfig;
-
     const GENERATE_FOR = 'entity';
-
-    public function __construct(
-        FieldManager $fieldManager
-    ) {
-        $this->fieldManager = $fieldManager;
-    }
 
     public function generateBySection(
         Section $section
@@ -50,6 +40,7 @@ class EntityGenerator implements Generator
         $this->sectionConfig = $section->getConfig();
 
         $fields = $this->fieldManager->readFieldsByHandles($this->sectionConfig->getFields());
+        $fields = $this->addOpposingRelationships($section, $fields);
 
         $this->generateElements($fields);
 
@@ -71,19 +62,25 @@ class EntityGenerator implements Generator
 
             $parsed = Yaml::parse(\file_get_contents($yml));
 
-            Assertion::keyExists(
-                $parsed,
-                'generator',
-                'No generator defined for ' .
-                    $field->getFieldTranslations()[0]->getLabel() .
+            try {
+                $label = !empty($field->getFieldTranslations()[0]) ?
+                    $field->getFieldTranslations()[0]->getLabel() :
+                    'Opposing field';
+                Assertion::keyExists(
+                    $parsed,
+                    'generator',
+                    'No generator defined for ' .
+                    $label .
                     'type: ' . $field->getFieldType()->getFullyQualifiedClassName()
-            );
-
-            Assertion::keyExists(
-                $parsed['generator'],
-                self::GENERATE_FOR,
-                'Nothing to do for this generator: ' . self::GENERATE_FOR
-            );
+                );
+                Assertion::keyExists(
+                    $parsed['generator'],
+                    self::GENERATE_FOR,
+                    'Nothing to do for this generator: ' . self::GENERATE_FOR
+                );
+            } catch (\Exception $exception) {
+                $this->buildMessages[] = $exception->getMessage();
+            }
 
             /**
              * @var string $item
@@ -93,8 +90,12 @@ class EntityGenerator implements Generator
                 if (!key_exists($item, $this->templates)) {
                     $this->templates[$item] = [];
                 }
-
-                $interfaces = class_implements($generator);
+                if (class_exists($generator)) {
+                    $interfaces = class_implements($generator);
+                } else {
+                    $this->buildMessages[] = 'Generators ' . $generator . ': Generators not found.';
+                    break;
+                }
                 if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class)
                 {
                     try {
@@ -105,11 +106,6 @@ class EntityGenerator implements Generator
                 }
             }
         }
-    }
-
-    public function getBuildMessages(): array
-    {
-        return $this->buildMessages;
     }
 
     protected function generateSlugFieldGetMethod(SlugField $slugField)

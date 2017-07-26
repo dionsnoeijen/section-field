@@ -46,6 +46,24 @@ final class FieldConfig
         return MethodName::create($this->fieldConfig['field']['handle']);
     }
 
+    public function getRelationshipKind(): string
+    {
+        Assertion::keyIsset($this->fieldConfig['field'], 'kind', 'No relationship kind defined');
+        Assertion::notEmpty($this->fieldConfig['field']['kind'], 'Relationship kind is empty');
+        Assertion::string($this->fieldConfig['field']['kind'], 'Relationship kind must be defined as string');
+
+        return $this->fieldConfig['field']['kind'];
+    }
+
+    public function getRelationshipTo(): string
+    {
+        Assertion::keyIsset($this->fieldConfig['field'], 'to', 'No relationship to defined');
+        Assertion::notEmpty($this->fieldConfig['field']['to'], 'Relationship to is empty');
+        Assertion::string($this->fieldConfig['field']['to'], 'Relationship to must be defined as string');
+
+        return $this->fieldConfig['field']['to'];
+    }
+
     public function getTypeConfig(): array
     {
         Assertion::keyIsset($this->fieldConfig['field'], 'typeConfig', 'No typeConfig defined');

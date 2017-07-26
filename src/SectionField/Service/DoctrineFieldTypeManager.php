@@ -86,4 +86,17 @@ class DoctrineFieldTypeManager implements FieldTypeManager
         }
         return $fieldType;
     }
+
+    public function readByFullyQualifiedClassName(FullyQualifiedClassName $fullyQualifiedClassName): FieldTypeInterface
+    {
+        $fieldTypeRepository = $this->entityManager->getRepository(FieldType::class);
+        /** @var $fieldType FieldType */
+        $fieldType = $fieldTypeRepository->findOneBy([
+            'fullyQualifiedClassName' => (string) $fullyQualifiedClassName
+        ]);
+        if (empty($fieldType)) {
+            throw new FieldTypeNotFoundException();
+        }
+        return $fieldType;
+    }
 }

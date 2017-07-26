@@ -12,15 +12,11 @@ use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\Generator\Writer\Writable;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
-use Tardigrades\SectionField\SectionFieldInterface\Generator;
+use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class DoctrineConfigGenerator implements Generator
+class DoctrineConfigGenerator extends Generator implements GeneratorInterface
 {
-    /** @var FieldManager */
-    private $fieldManager;
-
     /** @var array */
     private $buildMessages = [];
 
@@ -33,12 +29,6 @@ class DoctrineConfigGenerator implements Generator
     private $sectionConfig;
 
     const GENERATE_FOR = 'doctrine';
-
-    public function __construct(
-        FieldManager $fieldManager
-    ) {
-        $this->fieldManager = $fieldManager;
-    }
 
     public function generateBySection(
         Section $section
@@ -68,19 +58,23 @@ class DoctrineConfigGenerator implements Generator
 
             $parsed = Yaml::parse(\file_get_contents($yml));
 
-            Assertion::keyExists(
-                $parsed,
-                'generator',
-                'No generator defined for ' .
-                $field->getFieldTranslations()[0]->getLabel() .
-                'type: ' . $field->getFieldType()->getFullyQualifiedClassName()
-            );
+            try {
+                Assertion::keyExists(
+                    $parsed,
+                    'generator',
+                    'No generator defined for ' .
+                    $field->getFieldTranslations()[0]->getLabel() .
+                    'type: ' . $field->getFieldType()->getFullyQualifiedClassName()
+                );
 
-            Assertion::keyExists(
-                $parsed['generator'],
-                self::GENERATE_FOR,
-                'Nothing to do for this generator: ' . self::GENERATE_FOR
-            );
+                Assertion::keyExists(
+                    $parsed['generator'],
+                    self::GENERATE_FOR,
+                    'Nothing to do for this generator: ' . self::GENERATE_FOR
+                );
+            } catch (\Exception $exception) {
+                $this->buildMessages[] = $exception->getMessage();
+            }
 
             /**
              * @var string $item
@@ -90,12 +84,17 @@ class DoctrineConfigGenerator implements Generator
                 if (!key_exists($item, $this->templates)) {
                     $this->templates[$item] = [];
                 }
-
-                $interfaces = class_implements($generator);
-                if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class)
-                {
+                if (class_exists($generator)) {
+                    $interfaces = class_implements($generator);
+                } else {
+                    $this->buildMessages[] = 'Generators ' . $generator . ': Generators not found.';
+                    break;
+                }
+                if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class) {
                     try {
-                        $this->templates[$item][] = $generator::generate($field);
+                        // @todo, the passing of manager will not be sufficient or efficient
+                        // Much better would be to define generators as services.
+                        $this->templates[$item][] = $generator::generate($field, $this->sectionManager);
                     } catch (\Exception $exception) {
                         $this->buildMessages[] = $exception->getMessage();
                     }

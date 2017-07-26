@@ -4,49 +4,76 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Generator;
 
 use Tardigrades\Entity\EntityInterface\Section;
+use Tardigrades\Entity\Field as FieldEntity;
+use Tardigrades\SectionField\Generator\Writer\Writable;
+use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
-use Tardigrades\SectionField\SectionFieldInterface\Generators;
 
-class Generator implements Generators
+abstract class Generator implements GeneratorInterface
 {
-    /** @var array */
-    private $generators;
+    /** @var FieldManager */
+    protected $fieldManager;
+
+    /** @var FieldTypeManager */
+    protected $fieldTypeManager;
+
+    /** @var SectionManager */
+    protected $sectionManager;
 
     /** @var array */
-    private $buildMessages = [];
+    protected $relationships;
 
     /** @var array */
-    private $writables = [];
+    private $buildMessages;
 
-    public function __construct(array $generators)
-    {
-        $this->generators = $generators;
+    public function __construct(
+        FieldManager $fieldManager,
+        FieldTypeManager $fieldTypeManager,
+        SectionManager $sectionManager
+    ) {
+        $this->fieldManager = $fieldManager;
+        $this->fieldTypeManager = $fieldTypeManager;
+        $this->sectionManager = $sectionManager;
+
+        $this->relationships = $this->sectionManager->getRelationshipsOfAll();
     }
 
-    public function generateBySection(Section $section): array
+    protected function addOpposingRelationships(Section $section, array $fields): array
     {
-        $writables = [];
-
-        /** @var GeneratorInterface $generator */
-        foreach ($this->generators as $generator) {
-            try {
-                $writables[] = $generator->generateBySection($section);
-            } catch (\Exception $exception) {
-                $this->buildMessages[] = $exception->getMessage();
+        foreach ($this->relationships[(string) $section->getHandle()] as $fieldHandle=>$relationship) {
+            if (false !== strpos($fieldHandle, '-opposite')) {
+                $oppositeRelationshipField = new FieldEntity();
+                // @todo: I sense the field labels are going to be a problem.
+                // I propbably need a config value for the default language and use it here
+                // Also, the relationship opposite side might require more configuration
+                // make that available in the field config and use it here
+                $oppositeRelationshipField->setConfig([
+                    'field' => [
+                        'name' => $fieldHandle,
+                        'handle' => $fieldHandle,
+                        'label' => ['en_EN' => $fieldHandle],
+                        'kind' => $relationship['kind'],
+                        'to' => $relationship['to']
+                    ]
+                ]);
+                $oppositeRelationshipFieldType = $this->fieldTypeManager
+                    ->readByFullyQualifiedClassName(
+                        $relationship['fullyQualifiedClassName']
+                    );
+                $oppositeRelationshipField->setFieldType($oppositeRelationshipFieldType);
+                $fields[] = $oppositeRelationshipField;
             }
-            $this->buildMessages = array_merge($this->buildMessages, $generator->getBuildMessages());
         }
 
-        return $writables;
-    }
-
-    public function getWritables(): array
-    {
-        return $this->writables;
+        return $fields;
     }
 
     public function getBuildMessages(): array
     {
         return $this->buildMessages;
     }
+
+    abstract public function generateBySection(Section $section): Writable;
 }

@@ -12,7 +12,7 @@ use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 class DoctrineFieldGenerator implements Generator
 {
 
-    public static function generate(Field $field): Template
+    public static function generate(Field $field, ...$managers): Template
     {
         $asString = (string) TemplateLoader::load(
             FullyQualifiedClassNameConverter::toDir(
