@@ -18,9 +18,6 @@ use Tardigrades\SectionField\ValueObject\SectionConfig;
 class DoctrineConfigGenerator extends Generator implements GeneratorInterface
 {
     /** @var array */
-    private $buildMessages = [];
-
-    /** @var array */
     private $templates = [
         'fields' => []
     ];

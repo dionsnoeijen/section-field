@@ -26,7 +26,7 @@ abstract class Generator implements GeneratorInterface
     protected $relationships;
 
     /** @var array */
-    private $buildMessages;
+    protected $buildMessages;
 
     public function __construct(
         FieldManager $fieldManager,

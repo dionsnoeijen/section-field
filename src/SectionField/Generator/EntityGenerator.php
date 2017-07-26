@@ -17,9 +17,6 @@ use Tardigrades\SectionField\ValueObject\SlugField;
 
 class EntityGenerator extends Generator implements GeneratorInterface
 {
-    /** @var array */
-    private $buildMessages = [];
-
     /** @var SectionConfig */
     private $sectionConfig;
 
