@@ -36,6 +36,7 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
         $this->sectionConfig = $section->getConfig();
 
         $fields = $this->fieldManager->readFieldsByHandles($this->sectionConfig->getFields());
+        $fields = $this->addOpposingRelationships($section, $fields);
 
         $this->generateElements($fields);
 
@@ -59,12 +60,14 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
             $parsed = Yaml::parse(\file_get_contents($yml));
 
             try {
+                $label = !empty($field->getFieldTranslations()[0]) ?
+                    $field->getFieldTranslations()[0]->getLabel() :
+                    'Opposing field';
                 Assertion::keyExists(
                     $parsed,
                     'generator',
                     'No generator defined for ' .
-                    $field->getFieldTranslations()[0]->getLabel() .
-                    'type: ' . $field->getFieldType()->getFullyQualifiedClassName()
+                    $label . 'type: ' . $field->getFieldType()->getFullyQualifiedClassName()
                 );
 
                 Assertion::keyExists(
@@ -101,11 +104,6 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
                 }
             }
         }
-    }
-
-    public function getBuildMessages(): array
-    {
-        return $this->buildMessages;
     }
 
     private function combine(array $templates): string
