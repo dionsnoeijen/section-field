@@ -8,5 +8,5 @@ use Tardigrades\FieldType\ValueObject\Template;
 
 interface Generator
 {
-    public static function generate(Field $field, ...$managers): Template;
+    public static function generate(Field $field): Template;
 }

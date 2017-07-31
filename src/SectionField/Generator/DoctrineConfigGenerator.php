@@ -92,9 +92,7 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
                 }
                 if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class) {
                     try {
-                        // @todo, the passing of manager will not be sufficient or efficient
-                        // Much better would be to define generators as services.
-                        $this->templates[$item][] = $generator::generate($field, $this->sectionManager);
+                        $this->templates[$item][] = $generator::generate($field);
                     } catch (\Exception $exception) {
                         $this->buildMessages[] = $exception->getMessage();
                     }

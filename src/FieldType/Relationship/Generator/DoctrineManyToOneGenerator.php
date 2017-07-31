@@ -12,14 +12,13 @@ class DoctrineManyToOneGenerator implements Generator
 {
     const KIND = 'many-to-one';
 
-    public static function generate(Field $field, ...$managers): Template
+    public static function generate(Field $field): Template
     {
         $fieldConfig = $field->getConfig()->toArray();
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
             /** @var SectionManager $sectionManager */
-            $sectionManager = $managers[0];
 
             print_r($fieldConfig['field']['to']);
             echo PHP_EOL;

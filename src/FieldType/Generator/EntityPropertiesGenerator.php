@@ -12,7 +12,7 @@ use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 class EntityPropertiesGenerator implements Generator
 {
 
-    public static function generate(Field $field, ...$managers): Template
+    public static function generate(Field $field): Template
     {
         $asString = (string) TemplateLoader::load(
             FullyQualifiedClassNameConverter::toDir(

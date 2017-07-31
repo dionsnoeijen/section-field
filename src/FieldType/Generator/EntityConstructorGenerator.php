@@ -10,7 +10,7 @@ use Tardigrades\FieldType\ValueObject\Template;
 class EntityConstructorGenerator implements Generator
 {
 
-    public static function generate(Field $field, ...$managers): Template
+    public static function generate(Field $field): Template
     {
 
     }

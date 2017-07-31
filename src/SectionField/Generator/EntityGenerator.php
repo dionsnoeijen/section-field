@@ -22,6 +22,7 @@ class EntityGenerator extends Generator implements GeneratorInterface
 
     /** @var array */
     private $templates = [
+        'use' => [],
         'properties' => [],
         'constructor' => [],
         'methods' => [],

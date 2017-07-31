@@ -7,11 +7,12 @@ use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 class TemplateLoader
 {
-    public static function load(string $location, FieldConfig $config = null): string
+    public static function load(string $location, array $variables = []): string
     {
         if (\file_exists($location)) {
             if (pathinfo($location, PATHINFO_EXTENSION) === 'php') {
                 ob_start();
+                extract($variables);
                 include $location;
                 return ob_get_clean();
             } else {

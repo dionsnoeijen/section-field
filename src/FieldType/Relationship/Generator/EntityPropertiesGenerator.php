@@ -9,11 +9,10 @@ use Tardigrades\FieldType\ValueObject\Template;
 
 class EntityPropertiesGenerator implements Generator
 {
-    public static function generate(Field $field, ...$managers): Template
+    public static function generate(Field $field): Template
     {
         $fieldConfig = $field->getConfig()->toArray();
 
-        print_r($fieldConfig);
-        exit;
+        return Template::create('');
     }
 }

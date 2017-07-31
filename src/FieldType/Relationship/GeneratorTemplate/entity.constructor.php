@@ -1,0 +1,1 @@
+$this->{{ propertyName }} = new ArrayCollection();
