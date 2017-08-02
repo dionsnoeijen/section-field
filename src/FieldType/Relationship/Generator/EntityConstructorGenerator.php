@@ -9,7 +9,6 @@ use Tardigrades\FieldType\FieldTypeInterface\Generator;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
-use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class EntityConstructorGenerator implements Generator
 {
@@ -17,20 +16,12 @@ class EntityConstructorGenerator implements Generator
     {
         $fieldConfig = $field->getConfig()->toArray();
 
-        /** @var SectionConfig $sectionConfig */
-        $sectionConfig = $options[0]['sectionConfig'];
-
         return Template::create((string) TemplateLoader::load(
             FullyQualifiedClassNameConverter::toDir(
                 $field->getFieldType()->getFullyQualifiedClassName()
             ) . '/GeneratorTemplate/entity.constructor.php', [
                 'kind' => $fieldConfig['field']['kind'],
-                'pluralMethodName' => ucfirst(Inflector::pluralize($fieldConfig['field']['to'])),
-                'pluralPropertyName' => Inflector::pluralize($fieldConfig['field']['to']),
-                'methodName' => ucfirst($fieldConfig['field']['to']),
-                'entity' => ucfirst($fieldConfig['field']['to']),
-                'propertyName' => $fieldConfig['field']['to'],
-                'thatMethodName' => $sectionConfig->getClassName()
+                'pluralPropertyName' => Inflector::pluralize($fieldConfig['field']['to'])
             ]
         ));
     }

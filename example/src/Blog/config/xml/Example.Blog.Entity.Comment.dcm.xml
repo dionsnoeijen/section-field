@@ -21,7 +21,7 @@
 <field name="name" type="string" />
 
 
-        <many-to-one field="blog" target-entity="Example\Blog\Blog">
+        <many-to-one field="blog" target-entity="Example\Blog\Entity\Blog">
     <join-column name="blog_id" referenced-column-name="id" />
 </many-to-one>
 

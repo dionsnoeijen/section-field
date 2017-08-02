@@ -26,7 +26,8 @@
 
         
 
-        
+        <one-to-many field="comments" target-entity="Example\Blog\Comment" mapped-by="blog-opposite" />
+
 
         
 

@@ -13,7 +13,7 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
 class DoctrineOneToManyGenerator implements Generator
 {
-    const KIND = 'ony-to-many';
+    const KIND = 'one-to-many';
 
     public static function generate(Field $field, ...$options): Template
     {
@@ -30,7 +30,6 @@ class DoctrineOneToManyGenerator implements Generator
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.onetomany.xml.php', [
-                        'type' => $fieldConfig['field']['type'],
                         'thatPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']),
                         'thatFullyQualifiedClassName' => $target->getConfig()->getFullyQualifiedClassName(),
                         'thisHandle' => $fieldConfig['field']['handle'],

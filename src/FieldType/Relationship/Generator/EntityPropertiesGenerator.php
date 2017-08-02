@@ -25,12 +25,9 @@ class EntityPropertiesGenerator implements Generator
                 $field->getFieldType()->getFullyQualifiedClassName()
             ) . '/GeneratorTemplate/entity.properties.php', [
                 'kind' => $fieldConfig['field']['kind'],
-                'pluralMethodName' => ucfirst(Inflector::pluralize($fieldConfig['field']['to'])),
                 'pluralPropertyName' => Inflector::pluralize($fieldConfig['field']['to']),
-                'methodName' => ucfirst($fieldConfig['field']['to']),
                 'entity' => ucfirst($fieldConfig['field']['to']),
-                'propertyName' => $fieldConfig['field']['to'],
-                'thatMethodName' => $sectionConfig->getClassName()
+                'propertyName' => $fieldConfig['field']['to']
             ]
         ));
     }

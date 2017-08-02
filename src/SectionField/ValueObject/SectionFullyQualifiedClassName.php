@@ -26,7 +26,7 @@ final class SectionFullyQualifiedClassName
 
     public static function fromNamespaceAndClassName(SectionNamespace $namespace, ClassName $className)
     {
-        return new self((string) $namespace . '\\' . (string) $className);
+        return new self((string) $namespace . '\\Entity\\' . (string) $className);
     }
 
     public static function fromString(string $fullyQualifiedClassName): self
