@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ed5f1dbbf2dfac866c1f77c39921177",
+    "content-hash": "a589c2a82102da2b5f0fea46500d6789",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1253,7 +1253,7 @@
         },
         {
             "name": "symfony/inflector",
-            "version": "v3.3.2",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",

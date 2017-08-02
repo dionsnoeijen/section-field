@@ -14,4 +14,6 @@ interface SectionManager
     public function createByConfig(SectionConfig $sectionConfig): Section;
     public function updateByConfig(SectionConfig $sectionConfig, Section $section): Section;
     public function getRelationshipsOfAll(): array;
+    public function readByHandle(string $handle): Section;
+    public function readByHandles(array $handles): array;
 }

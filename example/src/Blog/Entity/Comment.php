@@ -9,8 +9,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Doctrine\Common\Collections\Collection;
 
-class Comments
+class Comment
 {
+    /** @var Blog */
+    protected $blog;
+
     /** @var string */
     protected $comment;
 
@@ -32,17 +35,17 @@ class Comments
         return $this->id;
     }
 
-    public function getBlog(): Comments
+    public function getBlog(): Blog
     {
         return $this->blog;
     }
 
-    public function setBlog(Comments $blog): Comments
+    public function setBlog(Blog $blog): Comment
     {
-        $this->blog = blog;
+        $this->blog = $blog;
     }
 
-    public function removeBlog(Comments $blog): Comments
+    public function removeBlog(Blog $blog): Comment
     {
         $this->blog = null;
     }
@@ -52,7 +55,7 @@ class Comments
         return $this->comment;
     }
 
-    public function setComment(string $comment): Comments
+    public function setComment(string $comment): Comment
     {
         $this->comment = $comment;
         return $this;
@@ -63,7 +66,7 @@ class Comments
         return $this->email;
     }
 
-    public function setEmail(string $email): Comments
+    public function setEmail(string $email): Comment
     {
         $this->email = $email;
         return $this;
@@ -74,7 +77,7 @@ class Comments
         return $this->name;
     }
 
-    public function setName(string $name): Comments
+    public function setName(string $name): Comment
     {
         $this->name = $name;
         return $this;

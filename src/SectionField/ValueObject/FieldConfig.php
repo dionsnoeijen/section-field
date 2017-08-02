@@ -86,6 +86,14 @@ final class FieldConfig
         return $this->fieldConfig['field']['entityEvents'];
     }
 
+    public function getKind(): string
+    {
+        Assertion::keyExists($this->fieldConfig['field'], 'kind', 'Kind is not defined');
+        Assertion::string($this->fieldConfig['field']['kind'], 'The kind must be of type string');
+
+        return $this->fieldConfig['field']['kind'];
+    }
+
     public function __toString(): string
     {
         $config = '';

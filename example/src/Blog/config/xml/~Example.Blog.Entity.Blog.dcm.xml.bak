@@ -24,5 +24,13 @@
 <field name="blogSlug" type="string" unique="true" />
 
 
+        
+
+        
+
+        
+
+        
+
     </entity>
 </doctrine-mapping>

@@ -1,2 +1,9 @@
+<?php if ($kind === 'one-to-many') { ?>
 /** @var ArrayCollection */
-protected ${{ propertyName }};
+protected $<?php echo $pluralPropertyName; ?>;
+<?php } ?>
+
+<?php if ($kind === 'many-to-one') { ?>
+/** @var <?php echo $entity; ?> */
+protected $<?php echo $propertyName; ?>;
+<?php } ?>

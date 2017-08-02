@@ -4,8 +4,8 @@
                     http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
     <entity
-        name="Example\Blog\Entity\Comments"
-        table="comments"
+        name="Example\Blog\Entity\Comment"
+        table="comment"
     >
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="onPrePersist" />

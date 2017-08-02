@@ -13,6 +13,7 @@ While the aim for this tool is to be very high level, simplicity should never pr
 
 ## @todo (don't forget)
 
+- Doctrines inflector is really powerfull, use that instead of my helper methods.
 - Move FieldTypes to separate dependency
 - Deleting a field type should ony be possible if there are no installed fields with that type.
 - Field handles should not be created based on their name. At least. Maybe on creation when no handle is given, but an update should contain an explicit handle config to prevent application breaking changes just on updating a field name.

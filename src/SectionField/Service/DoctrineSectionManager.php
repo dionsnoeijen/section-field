@@ -104,7 +104,21 @@ class DoctrineSectionManager implements SectionManager
         return $section;
     }
 
-    public function readByHandles(array $handles)
+    public function readByHandle(string $handle): Section
+    {
+        $sectionRepository = $this->entityManager->getRepository(SectionEntity::class);
+
+        /** @var SectionEntity $section */
+        $section = $sectionRepository->findBy(['handle' => $handle]);
+
+        if (empty($section)) {
+            throw new SectionNotFoundException();
+        }
+
+        return $section[0];
+    }
+
+    public function readByHandles(array $handles): array
     {
         $sectionHandles = [];
         foreach ($handles as $handle) {

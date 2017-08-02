@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Generator;
 
 use Assert\Assertion;
+use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
@@ -35,11 +36,11 @@ class EntityGenerator extends Generator implements GeneratorInterface
     public function generateBySection(
         Section $section
     ): Writable {
+
         $this->sectionConfig = $section->getConfig();
 
         $fields = $this->fieldManager->readFieldsByHandles($this->sectionConfig->getFields());
         $fields = $this->addOpposingRelationships($section, $fields);
-
         $this->generateElements($fields);
 
         return Writable::create(
@@ -96,7 +97,16 @@ class EntityGenerator extends Generator implements GeneratorInterface
                 if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class)
                 {
                     try {
-                        $this->templates[$item][] = $generator::generate($field);
+                        $reflector = new ReflectionClass($generator);
+                        $method = $reflector->getMethod('generate');
+                        $options = null;
+                        if (isset($method->getParameters()[1])) {
+                            $options = [
+                                'sectionManager' => $this->sectionManager,
+                                'sectionConfig' => $this->sectionConfig
+                            ];
+                        }
+                        $this->templates[$item][] = $generator::generate($field, $options);
                     } catch (\Exception $exception) {
                         $this->buildMessages[] = $exception->getMessage();
                     }

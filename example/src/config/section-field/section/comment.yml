@@ -1,6 +1,6 @@
 section:
-  name: Comments
-  handle: comments
+  name: Comment
+  handle: comment
   fields:
     - name
     - email

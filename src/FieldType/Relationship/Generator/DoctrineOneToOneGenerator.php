@@ -10,10 +10,22 @@ use Tardigrades\FieldType\FieldTypeInterface\Generator;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class DoctrineOneToManyGenerator implements Generator
+/**
+ * Class DoctrineOneToOneGenerator
+ *
+ * @todo: We have an automatic inverse relationship detector in
+ * the generators. What we have to take care of is that the opposing
+ * relationship for a many to many field in case of a unidirectional
+ * opposing side get's the correct opposing field added. With type
+ * bidirectional.
+ *
+ * @package Tardigrades\FieldType\Relationship\Generator
+ */
+class DoctrineOneToOneGenerator implements Generator
 {
-    const KIND = 'ony-to-many';
+    const KIND = 'one-to-one';
 
     public static function generate(Field $field, ...$options): Template
     {
@@ -22,6 +34,9 @@ class DoctrineOneToManyGenerator implements Generator
         /** @var SectionManager $sectionManager */
         $sectionManager = $options[0]['sectionManager'];
 
+        /** @var SectionConfig $sectionConfig */
+        $sectionConfig = $options[0]['sectionConfig'];
+
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
             /** @var Section $target */
@@ -29,12 +44,13 @@ class DoctrineOneToManyGenerator implements Generator
 
             return Template::create(
                 TemplateLoader::load(
-                    __DIR__ . '/../GeneratorTemplate/doctrine.onetomany.xml.php', [
+                    __DIR__ . '/../GeneratorTemplate/doctrine.onetooone.xml.php', [
                         'type' => $fieldConfig['field']['type'],
                         'thatPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']),
                         'thatFullyQualifiedClassName' => $target->getConfig()->getFullyQualifiedClassName(),
                         'thisHandle' => $fieldConfig['field']['handle'],
                         'thisPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']),
+                        'thisFullyQualifiedClassName' => $sectionConfig->getFullyQualifiedClassName(),
                         'thatHandle' => $fieldConfig['field']['to']
                     ]
                 )

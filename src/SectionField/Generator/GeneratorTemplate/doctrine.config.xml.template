@@ -18,5 +18,13 @@
 
         {{ fields }}
 
+        {{ manyToOne }}
+
+        {{ oneToMany }}
+
+        {{ oneToOne }}
+
+        {{ manyToMany }}
+
     </entity>
 </doctrine-mapping>

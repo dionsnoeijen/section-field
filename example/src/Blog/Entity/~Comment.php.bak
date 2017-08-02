@@ -5,8 +5,15 @@ namespace Example\Blog\Entity;
 
 use Tardigrades;
 
-class Comments
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Doctrine\Common\Collections\Collection;
+
+class Comment
 {
+    /** @var Blog */
+    protected $blog;
+
     /** @var string */
     protected $comment;
 
@@ -21,6 +28,9 @@ class Comments
 
     public function __construct()
     {
+
+        /** @var Blog */
+        protected $blog;
     }
 
     public function getId(): int
@@ -28,12 +38,27 @@ class Comments
         return $this->id;
     }
 
+    public function getBlog(): Blog
+    {
+        return $this->blog;
+    }
+
+    public function setBlog(Blog $blog): Comment
+    {
+        $this->blog = $blog;
+    }
+
+    public function removeBlog(Blog $blog): Comment
+    {
+        $this->blog = null;
+    }
+
     public function getComment(): string
     {
         return $this->comment;
     }
 
-    public function setComment(string $comment): Comments
+    public function setComment(string $comment): Comment
     {
         $this->comment = $comment;
         return $this;
@@ -44,7 +69,7 @@ class Comments
         return $this->email;
     }
 
-    public function setEmail(string $email): Comments
+    public function setEmail(string $email): Comment
     {
         $this->email = $email;
         return $this;
@@ -55,7 +80,7 @@ class Comments
         return $this->name;
     }
 
-    public function setName(string $name): Comments
+    public function setName(string $name): Comment
     {
         $this->name = $name;
         return $this;

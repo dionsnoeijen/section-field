@@ -70,6 +70,14 @@ final class SectionConfig
         return SectionNamespace::fromString($this->sectionConfig['section']['namespace']);
     }
 
+    public function getFullyQualifiedClassName(): SectionFullyQualifiedClassName
+    {
+        return SectionFullyQualifiedClassName::fromNamespaceAndClassName(
+            $this->getNamespace(),
+            $this->getClassName()
+        );
+    }
+
     public function __toString(): string
     {
         $configText = '';

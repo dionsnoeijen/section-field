@@ -10,9 +10,10 @@ class PhpFormatter
         $tabs = 0;
         $startCounter = 0;
         $result = '';
+        $use = true;
         foreach (preg_split("/((\r?\n)|(\r\n?))/", $string) as $line) {
             $line = str_replace('    ', '', $line);
-            if ($line === '}') {
+            if (strpos($line, '}') !== false) {
                 $tabs--;
             }
             $indent = '';
@@ -26,16 +27,21 @@ class PhpFormatter
                     }
                     $startCounter++;
                 }
+
+                if (substr($line, 0, 3) === 'use' && $use) {
+                    $result .= PHP_EOL;
+                    $use = false;
+                }
+
                 if (substr($line,0,6 ) === 'public' ||
                     substr($line, 0, 9) === 'namespace' ||
-                    substr($line, 0, 5) === 'class' ||
-                    substr($line, 0, 3) === 'use'
+                    substr($line, 0, 5) === 'class'
                 ) {
                     $result .= PHP_EOL;
                 }
                 $result .= $indent . $line . PHP_EOL;
             }
-            if ($line === '{') {
+            if (strpos($line, '{') !== false) {
                 $tabs++;
             }
         }

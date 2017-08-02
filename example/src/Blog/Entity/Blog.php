@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Example\Blog\Entity;
 
 use Tardigrades;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class Blog
 {
@@ -25,11 +27,15 @@ class Blog
     /** @var string */
     protected $blogSlug;
 
+    /** @var ArrayCollection */
+    protected $comments;
+
     /** @var int */
     private $id;
 
     public function __construct()
     {
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): int
@@ -95,6 +101,31 @@ class Blog
     public function getBlogSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
     {
         return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->blogSlug);
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): Blog
+    {
+        if ($this->comments->contains($comment)) {
+            return $this;
+        }
+        $this->comments->add($comment);
+        $comment->setBlog($this);
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): Blog
+    {
+        if (!$this->comments->contains($comment)) {
+            return $this;
+        }
+        $this->comments->removeElement($comment);
+        $comment->removeBlog($this);
+        return $this;
     }
 
     public function getSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
