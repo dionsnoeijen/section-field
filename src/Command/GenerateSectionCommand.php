@@ -44,6 +44,8 @@ class GenerateSectionCommand extends SectionCommand
 
         $writables = $this->entityGenerator->generateBySection($section);
 
+        // @todo: First ask if you want to continue.
+        // And show what will be generated.
         foreach ($writables as $writable) {
             GeneratorFileWriter::write($writable);
         }
