@@ -44,4 +44,12 @@ services:
 
   section_field.generator:
     class: Tardigrades\SectionField\Generator\Generators
-    arguments: [['@section_field.generator.entity_generator', '@section_field.generator.doctrine_config_generator']]
+    arguments:
+      - - '@section_field.generator.entity_generator'
+        - '@section_field.generator.doctrine_config_generator'
+
+  section_field.form:
+    class: Tardigrades\SectionField\Form\Form
+    arguments:
+      - '@section_field.manager.doctrine.section_manager'
+      - '@form.factory'

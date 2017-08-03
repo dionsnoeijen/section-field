@@ -16,6 +16,7 @@ class SectionFieldExtension extends Extension
             $container,
             new FileLocator([
                 __DIR__.'/../config/service'
+
             ])
         );
 

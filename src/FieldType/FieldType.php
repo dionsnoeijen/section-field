@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType;
 
+use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
@@ -23,8 +24,5 @@ abstract class FieldType implements FieldTypeInterface
         return $this->fieldConfig;
     }
 
-    public function getGenerator()
-    {
-        throw new NoCustomGeneratorDefinedException();
-    }
+    abstract public function addToForm(FormBuilderInterface $formBuilder): FormBuilderInterface;
 }
