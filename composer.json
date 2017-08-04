@@ -19,6 +19,7 @@
     "symfony/yaml": "^3.3.2",
     "symfony/config": "^3.3.2",
     "symfony/templating": "^3.3.2",
+    "symfony/translation": "^3.3.2",
     "symfony/twig-bridge": "^3.3.2",
     "beberlei/assert": "2.6.5",
     "twig/twig": "~2.0",

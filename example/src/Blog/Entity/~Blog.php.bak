@@ -43,7 +43,7 @@ class Blog
         return $this->id;
     }
 
-    public function getBody(): string
+    public function getBody(): ?string
     {
         return $this->body;
     }
@@ -54,7 +54,7 @@ class Blog
         return $this;
     }
 
-    public function getCreated(): \DateTime
+    public function getCreated(): ?\DateTime
     {
         return $this->created;
     }
@@ -65,7 +65,7 @@ class Blog
         return $this;
     }
 
-    public function getSubtitle(): string
+    public function getSubtitle(): ?string
     {
         return $this->subtitle;
     }
@@ -76,7 +76,7 @@ class Blog
         return $this;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -87,7 +87,7 @@ class Blog
         return $this;
     }
 
-    public function getUpdated(): \DateTime
+    public function getUpdated(): ?\DateTime
     {
         return $this->updated;
     }
@@ -98,9 +98,12 @@ class Blog
         return $this;
     }
 
-    public function getBlogSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
+    public function getBlogSlug(): ?Tardigrades\FieldType\Slug\ValueObject\Slug
     {
-        return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->blogSlug);
+        if (!$this->blogSlug !== null) {
+            return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->blogSlug);
+        }
+        return null;
     }
 
     public function getComments(): Collection

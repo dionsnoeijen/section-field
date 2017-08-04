@@ -48,7 +48,7 @@ class Comment
         $this->blog = null;
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -59,7 +59,7 @@ class Comment
         return $this;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -70,7 +70,7 @@ class Comment
         return $this;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }

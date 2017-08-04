@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\DateTime;
 
-use Doctrine\DBAL\Types\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\FieldType\DateTime\DateTimeInterface\DateTimeFieldType;
 use Tardigrades\FieldType\FieldType;

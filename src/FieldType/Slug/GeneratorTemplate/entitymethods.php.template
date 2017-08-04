@@ -1,4 +1,7 @@
-public function get{{ methodName }}(): Tardigrades\FieldType\Slug\ValueObject\Slug
+public function get{{ methodName }}(): ?Tardigrades\FieldType\Slug\ValueObject\Slug
 {
-    return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->{{ propertyName }});
+    if (!empty($this->{{ propertyName }})) {
+        return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->{{ propertyName }});
+    }
+    return null;
 }

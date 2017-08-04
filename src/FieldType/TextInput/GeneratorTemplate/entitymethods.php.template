@@ -1,4 +1,4 @@
-public function get{{ methodName }}(): string
+public function get{{ methodName }}(): ?string
 {
     return $this->{{ propertyName }};
 }

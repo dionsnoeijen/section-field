@@ -32,7 +32,8 @@ class Form
         $sectionFullyQualifiedClassName = (string) $section->getConfig()->getFullyQualifiedClassName();
         $sectionEntity = new $sectionFullyQualifiedClassName;
 
-        $form = $this->formFactory->createBuilder(FormType::class)->create($sectionEntity);
+        $form = $this->formFactory
+            ->createBuilder(FormType::class, $sectionEntity);
 
         /** @var Field $field */
         foreach ($section->getFields() as $field) {

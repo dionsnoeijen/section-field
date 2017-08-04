@@ -1,9 +1,28 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Dit is de titel</title>
-    </head>
-    <body>
-        <h1>Create BLOG</h1>
-    </body>
-</html>
+{% extends "master.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Create a new blogpost</h3>
+        </div>
+    </div>
+    {{ form_start(form) }}
+    {% do form.created.setRendered %}
+    {% do form.updated.setRendered %}
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_errors(form) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            {{ form_row(form.title) }}
+            {{ form_row(form.subtitle) }}
+            {{ form_row(form.body) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(form.blogSlug) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
