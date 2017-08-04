@@ -30,7 +30,10 @@ $container
             'port' => '3306',
             'driver' => 'pdo_mysql'
         ],
-        Setup::createXMLMetadataConfiguration([__DIR__."/../src/config/xml"], true)
+        Setup::createXMLMetadataConfiguration([
+            __DIR__.'/../src/config/xml',
+            __DIR__.'/src/Blog/config/xml'
+        ], true)
     ]);
 
 $sectionFieldExtension = new \Tardigrades\DependencyInjection\SectionFieldExtension();
@@ -49,6 +52,9 @@ $form = $container->get('section_field.form');
 
 /** @var \Tardigrades\SectionField\SectionFieldInterface\SectionManager $sectionManager */
 $sectionManager = $container->get('section_field.manager.doctrine.section_manager');
+
+/** @var \Tardigrades\SectionField\SectionFieldInterface\CreateSection $createSection */
+$createSection = $container->get('section_field.create.section');
 
 // -----------------------------
 // Get the templating up and running
@@ -100,7 +106,12 @@ if (strpos($requestUri, '/edit-blog') !== false) {
 }
 
 $indexController = new \Example\Controller\IndexController($templating, $form);
-$blogController = new \Example\Controller\BlogController($templating, $form, $sectionManager);
+$blogController = new \Example\Controller\BlogController(
+    $templating,
+    $form,
+    $sectionManager,
+    $createSection
+);
 
 switch ($requestUri) {
     case '/':

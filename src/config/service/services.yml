@@ -54,3 +54,14 @@ services:
     arguments:
       - '@section_field.manager.doctrine.section_manager'
       - '@form.factory'
+
+  section_field.doctrine.create.section:
+    class: Tardigrades\SectionField\Service\DoctrineSectionCreator
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
+  section_field.create.section:
+    class: Tardigrades\SectionField\Service\CreateSection
+    arguments:
+      -
+        - '@section_field.doctrine.create.section'

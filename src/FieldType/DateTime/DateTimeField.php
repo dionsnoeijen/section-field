@@ -12,7 +12,10 @@ class DateTimeField extends FieldType implements DateTimeFieldType
 {
     public function addToForm(FormBuilderInterface $formBuilder): FormBuilderInterface
     {
-        $formBuilder->add((string) $this->getConfig()->getHandle(), DateTimeType::class);
+//        $formBuilder->add(
+//            (string) $this->getConfig()->getHandle(),
+//            DateTimeType::class
+//        );
 
         return $formBuilder;
     }

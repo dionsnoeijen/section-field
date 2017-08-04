@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Form;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Tardigrades\Entity\EntityInterface\Field;
@@ -33,7 +34,11 @@ class Form
         $sectionEntity = new $sectionFullyQualifiedClassName;
 
         $form = $this->formFactory
-            ->createBuilder(FormType::class, $sectionEntity);
+            ->createBuilder(
+                FormType::class,
+                $sectionEntity,
+                ['method' => 'POST']
+            );
 
         /** @var Field $field */
         foreach ($section->getFields() as $field) {
@@ -43,6 +48,8 @@ class Form
             $fieldType->setConfig($field->getConfig());
             $fieldType->addToForm($form);
         }
+
+        $form->add('save', SubmitType::class);
 
         return $form->getForm();
     }

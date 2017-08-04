@@ -7,8 +7,8 @@
         </div>
     </div>
     {{ form_start(form) }}
-    {% do form.created.setRendered %}
-    {% do form.updated.setRendered %}
+    {#{% do form.created.setRendered %}#}
+    {#{% do form.updated.setRendered %}#}
     <div class="row">
         <div class="col-md-12">
             {{ form_errors(form) }}
@@ -19,9 +19,10 @@
             {{ form_row(form.title) }}
             {{ form_row(form.subtitle) }}
             {{ form_row(form.body) }}
+            {{ form_row(form.save) }}
         </div>
         <div class="col-md-2">
-            {{ form_row(form.blogSlug) }}
+            {#{{ form_row(form.blogSlug) }}#}
         </div>
     </div>
     {{ form_end(form) }}

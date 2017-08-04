@@ -59,7 +59,7 @@ class Blog
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created): Blog
+    public function setCreated(\DateTime $created = null): Blog
     {
         $this->created = $created;
         return $this;
@@ -92,7 +92,7 @@ class Blog
         return $this->updated;
     }
 
-    public function setUpdated(\DateTime $updated): Blog
+    public function setUpdated(\DateTime $updated = null): Blog
     {
         $this->updated = $updated;
         return $this;
