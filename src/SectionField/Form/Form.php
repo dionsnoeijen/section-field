@@ -11,8 +11,9 @@ use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\FieldTypeInterface\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\SectionFieldInterface\Form as SectionFormInterface;
 
-class Form
+class Form implements SectionFormInterface
 {
     /** @var SectionManager */
     private $sectionManager;
@@ -25,13 +26,15 @@ class Form
         FormFactory $formFactory
     ) {
         $this->sectionManager = $sectionManager;
-        $this->formFactory = $formFactory;;
+        $this->formFactory = $formFactory;
     }
 
-    public function buildFormForSection(Section $section): FormInterface
+    public function buildFormForSection(Section $section, $sectionEntity = null): FormInterface
     {
-        $sectionFullyQualifiedClassName = (string) $section->getConfig()->getFullyQualifiedClassName();
-        $sectionEntity = new $sectionFullyQualifiedClassName;
+        if (empty($sectionEntity)) {
+            $sectionFullyQualifiedClassName = (string)$section->getConfig()->getFullyQualifiedClassName();
+            $sectionEntity = new $sectionFullyQualifiedClassName;
+        }
 
         $form = $this->formFactory
             ->createBuilder(

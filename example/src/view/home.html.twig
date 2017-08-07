@@ -1,13 +1,50 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Dit is de titel</title>
-    </head>
-    <body>
-        <h1>Homepage {{ test }}</h1>
-        <ul>
-            <li><a href="/create-blog">Create</a></li>
-            <li><a href="/edit-blog/some-super-blog">Edit</a></li>
-        </ul>
-    </body>
-</html>
+{% extends "master.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Basic example of reading a section</h2>
+                    <pre>
+{{
+'{% for entry in section(\'Example.Blog.Entity.Blog\').limit(10).fetch() %}
+<div class="row">
+    <div class="col-md-10">
+        <h3>{{ entry.title }}</h3>
+        <h5>{{ entry.subtitle }}</h5>
+    </div>
+    <div class="col-md-2">
+        By: {{ entry.author }}<br />
+        At: {{ entry.date|date(\'Y-m-d\') }}
+    </div>
+</div>
+{% endfor %}'|escape
+}}
+                    </pre>
+                </div>
+            </div>
+            {% for entry in section('Example.Blog.Entity.Blog').limit(10).fetch() %}
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>{{ entry.title }}</h3>
+                    <h5>{{ entry.subtitle }}</h5>
+                    <a href="/article/{{ entry.slug }}">Lees verder</a>
+                </div>
+                <div class="col-md-2">
+                    <p>By: Dion Snoeijen<br />At: {{ entry.created|date('d-m-Y') }}</p>
+                </div>
+            </div>
+            <hr />
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Create a new entry</h5>
+            <ul>
+                <li><a href="/create-blog">Create</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

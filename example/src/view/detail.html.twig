@@ -1,0 +1,31 @@
+{% extends "master.html.twig" %}
+
+{% block content %}
+
+    <h1>Detail: {{ slug }}</h1>
+
+    {% for entry in section('Example.Blog.Entity.Blog').fetch({slug: slug}) %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Basic example of reading a section</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>{{ entry.title }}</h3>
+                    <h5>{{ entry.subtitle }}</h5>
+
+                    {{ entry.body }}
+
+                    <a href="/edit-blog/{{ entry.slug }}">Edit entry</a>
+                </div>
+                <div class="col-md-2">
+                    <p>By: Dion Snoeijen<br />At: {{ entry.created|date('d-m-Y') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

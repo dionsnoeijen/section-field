@@ -29,4 +29,11 @@ class FullyQualifiedClassNameConverter
 
         return $dir;
     }
+
+    public static function toHandle(FullyQualifiedClassName $fullyQualifiedClassName): string
+    {
+        $handle = explode('\\', (string) $fullyQualifiedClassName);
+        $handle = end($handle);
+        return lcfirst($handle);
+    }
 }

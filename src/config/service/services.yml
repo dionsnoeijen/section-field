@@ -60,8 +60,35 @@ services:
     arguments:
       - '@doctrine.orm.entity_manager'
 
+  section_field.doctrine.read.section:
+    class: Tardigrades\SectionField\Service\DoctrineSectionReader
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
   section_field.create.section:
     class: Tardigrades\SectionField\Service\CreateSection
     arguments:
       -
         - '@section_field.doctrine.create.section'
+
+  section_field.read.section:
+    class: Tardigrades\SectionField\Service\ReadSection
+    arguments:
+      -
+        - '@section_field.doctrine.read.section'
+      - '@section_field.manager.doctrine.section_manager'
+
+  section_field.twig.section:
+    class: Tardigrades\Twig\SectionTwigExtension
+    arguments:
+      - '@section_field.read.section'
+    tags: [twig.extension]
+
+  section_field.twig.section_form:
+    class: Tardigrades\Twig\SectionFormTwigExtension
+    arguments:
+      - '@section_field.manager.doctrine.section_manager'
+      - '@section_field.create.section'
+      - '@section_field.read.section'
+      - '@section_field.form'
+    tags: [twig.extension]

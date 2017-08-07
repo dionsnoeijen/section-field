@@ -1,9 +1,15 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Dit is de titel</title>
-    </head>
-    <body>
-        <h1>Edit BLOG: {{ slug }}</h1>
-    </body>
-</html>
+{% extends "master.html.twig" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Edit a blogpost</h3>
+        </div>
+    </div>
+
+    {% include 'blog-form.html.twig' with {
+        form: sectionForm('Example.Blog.Entity.Blog', slug)
+    } %}
+
+{% endblock %}

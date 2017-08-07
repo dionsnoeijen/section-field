@@ -25,12 +25,7 @@ final class Slug
 
     public function __toString(): string
     {
-        $text = '';
-        foreach ($this->slug as $slug) {
-            $text .= ' -' . $slug . PHP_EOL;
-        }
-
-        return $text;
+        return implode('-', $this->slug);
     }
 
     public static function create(array $slug): self

@@ -25,8 +25,6 @@ class IndexController
 
     public function indexAction(Request $request)
     {
-        return $this->templating->render('home.html.twig', [
-            'test' => 'Is Benthe'
-        ]);
+        return $this->templating->render('home.html.twig');
     }
 }

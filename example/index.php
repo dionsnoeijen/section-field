@@ -86,6 +86,14 @@ $twig->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension(
 ));
 $twig->addExtension(new Twig_Extension_Debug());
 
+/** @var \Tardigrades\Twig\SectionTwigExtension $twigSectionExtension */
+$twigSectionExtension = $container->get('section_field.twig.section');
+$twig->addExtension($twigSectionExtension);
+
+/** @var \Tardigrades\Twig\SectionFormTwigExtension $twigSectionFormExtension */
+$twigSectionFormExtension = $container->get('section_field.twig.section_form');
+$twig->addExtension($twigSectionFormExtension);
+
 $templating = new \Symfony\Bridge\Twig\TwigEngine(
     $twig,
     new TemplateNameParser()
@@ -104,8 +112,16 @@ if (strpos($requestUri, '/edit-blog') !== false) {
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
+if (strpos($requestUri, '/article') !== false) {
+    $requestUri = '/article';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
 
-$indexController = new \Example\Controller\IndexController($templating, $form);
+$indexController = new \Example\Controller\IndexController(
+    $templating,
+    $form
+);
 $blogController = new \Example\Controller\BlogController(
     $templating,
     $form,
@@ -113,14 +129,24 @@ $blogController = new \Example\Controller\BlogController(
     $createSection
 );
 
-switch ($requestUri) {
-    case '/':
-        echo $indexController->indexAction($request);
+try {
+    switch ($requestUri) {
+        case '/':
+            echo $indexController->indexAction($request);
         break;
-    case '/create-blog':
-        echo $blogController->createAction($request);
+        case '/create-blog':
+            //echo $blogController->createAction($request);
+            echo $templating->render('create-blog.html.twig');
         break;
-    case '/edit-blog':
-        echo $blogController->editAction($slug, $request);
+        case '/edit-blog':
+            //echo $blogController->editAction($slug, $request);
+            echo $templating->render('edit-blog.html.twig', ['slug' => $slug]);
         break;
+        case '/article':
+            echo $templating->render('detail.html.twig', ['slug' => $slug]);
+        break;
+    }
+} catch (\Exception $exception) {
+    header("HTTP/1.0 404 Not Found");
+    echo $templating->render('404.html.twig', ['slug'=>$slug]);
 }
