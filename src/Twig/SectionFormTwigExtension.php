@@ -5,6 +5,7 @@ namespace Tardigrades\Twig;
 
 use Example\Blog\Entity\Blog;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
@@ -64,11 +65,12 @@ class SectionFormTwigExtension extends Twig_Extension
             $form->isValid()
         ) {
             $data = $form->getData();
-
             $request = $this->requestStack->getCurrentRequest();
             $relationships = $this->hasRelationship($request->get('form'));
-
             $this->createSection->save($data, $relationships);
+
+            header('Location: /');
+            exit;
         }
 
         return $form->createView();
@@ -79,13 +81,25 @@ class SectionFormTwigExtension extends Twig_Extension
         $relationships = [];
         foreach ($formData as $key=>$data) {
             if (strpos($key, '_id')) {
-                $relationship = explode(':', $data);
-                $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
-                    FullyQualifiedClassName::create($relationship[0]),
-                    Id::create((int) $relationship[1])
-                );
+                if (is_string($data)) {
+                    $relationship = explode(':', $data);
+                    $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
+                        FullyQualifiedClassName::create($relationship[0]),
+                        Id::create((int)$relationship[1])
+                    );
+                    $relationships[] = $relationship;
+                }
 
-                $relationships[] = $relationship;
+                if (is_array($data)) {
+                    foreach ($data as $value) {
+                        $relationship = explode(':', $value);
+                        $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
+                            FullyQualifiedClassName::create($relationship[0]),
+                            Id::create((int)$relationship[1])
+                        );
+                        $relationships[] = $relationship;
+                    }
+                }
             }
         }
 

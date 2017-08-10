@@ -89,7 +89,7 @@ class Author
             return $this;
         }
         $this->blogs->add($blog);
-        $blog->setAuthor($this);
+        $blog->addAuthor($this);
         return $this;
     }
 
@@ -99,7 +99,6 @@ class Author
             return $this;
         }
         $this->blogs->removeElement($blog);
-        $blog->removeAuthor($this);
         return $this;
     }
 

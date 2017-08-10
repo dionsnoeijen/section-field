@@ -25,6 +25,7 @@ class {{ section }}
 
     {{ methods }}
     {{ getSlug }}
+    {{ getDefault }}
 
     public function onPrePersist(): void
     {

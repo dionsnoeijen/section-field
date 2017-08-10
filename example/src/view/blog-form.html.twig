@@ -5,14 +5,14 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-9">
         {{ form_row(form.title) }}
         {{ form_row(form.subtitle) }}
         {{ form_row(form.body) }}
         {{ form_row(form.save) }}
     </div>
-    <div class="col-md-2">
-        {#{{ form_row(form.blogSlug) }}#}
+    <div class="col-md-3">
+        {{ form_row(form.authors_id) }}
     </div>
 </div>
 {{ form_end(form) }}

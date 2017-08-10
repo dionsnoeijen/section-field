@@ -164,6 +164,11 @@ class Blog
         return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->blogSlug);
     }
 
+    public function getDefault(): string
+    {
+        return $this->title;
+    }
+
     public function onPrePersist(): void
     {
         $this->created = new \DateTime('now');

@@ -83,11 +83,6 @@ class Comment
         return $this;
     }
 
-    public function getDefault(): string
-    {
-        return $this->name;
-    }
-
     public function onPrePersist(): void
     {
     }

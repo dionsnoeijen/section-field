@@ -25,7 +25,7 @@ class ReadOptions
             $valid = true;
         }
 
-        if ($options['section'] instanceof FullyQualifiedClassName) {
+        if ($options['section'] instanceof FullyQualifiedClassName || $options['section'] instanceof SectionFullyQualifiedClassName) {
             $valid = true;
         }
 
@@ -40,7 +40,7 @@ class ReadOptions
     {
         $sectionEntities = [];
 
-        if ($this->options['section'] instanceof FullyQualifiedClassName) {
+        if ($this->options['section'] instanceof FullyQualifiedClassName || $this->options['section'] instanceof SectionFullyQualifiedClassName) {
             $sectionEntities = [$this->options['section']];
         }
 

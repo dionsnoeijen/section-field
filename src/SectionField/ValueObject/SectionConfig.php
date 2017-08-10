@@ -65,6 +65,11 @@ final class SectionConfig
         return SlugField::fromString($this->sectionConfig['section']['slug']);
     }
 
+    public function getDefault(): string
+    {
+        return $this->sectionConfig['section']['default'];
+    }
+
     public function getNamespace(): SectionNamespace
     {
         return SectionNamespace::fromString($this->sectionConfig['section']['namespace']);

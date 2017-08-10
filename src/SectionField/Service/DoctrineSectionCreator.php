@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
+use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
@@ -41,8 +42,14 @@ class DoctrineSectionCreator implements CreateSection
                 (string) $jitRelationship->getFullyQualifiedClassName(),
                 $jitRelationship->getId()->toInt()
             );
-
-            $data->{'set' . ucfirst($handle)}($reference);
+            $singularMethod = 'set' . ucfirst($handle);
+            if (method_exists($data, $singularMethod)) {
+                $data->{$singularMethod}($reference);
+            }
+            $pluralMethod = 'add' . ucfirst($handle);
+            if (method_exists($data, $pluralMethod)) {
+                $data->{$pluralMethod}($reference);
+            }
         }
     }
 }

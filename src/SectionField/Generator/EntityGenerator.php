@@ -124,12 +124,22 @@ class EntityGenerator extends Generator implements GeneratorInterface
         }
     }
 
-    protected function generateSlugFieldGetMethod(SlugField $slugField)
+    protected function generateSlugFieldGetMethod(SlugField $slugField): string
     {
         return <<<EOT
 public function getSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
 {
     return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString(\$this->{$slugField});
+}
+EOT;
+    }
+
+    protected function generateDefaultFieldGetMethod(string $defaultField): string
+    {
+        return <<<EOT
+public function getDefault(): string
+{
+    return \$this->{$defaultField};
 }
 EOT;
     }
@@ -171,6 +181,12 @@ EOT;
             );
             $this->buildMessages[] = 'There is no slug field available, skipping generic method.';
         }
+
+        $asString = str_replace(
+            '{{ getDefault }}',
+            $this->generateDefaultFieldGetMethod($this->sectionConfig->getDefault()),
+            $asString
+        );
 
         $asString = str_replace(
             '{{ section }}',

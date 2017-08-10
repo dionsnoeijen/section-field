@@ -8,8 +8,7 @@ section:
     - created
     - updated
   slug: authorSlug
-  default:
-    - name
+  default: name
   namespace: Example\Blog
   form:
     required:

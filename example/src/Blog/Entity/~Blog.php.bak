@@ -121,7 +121,7 @@ class Blog
             return $this;
         }
         $this->authors->add($author);
-        $author->setBlog($this);
+        $author->addBlog($this);
         return $this;
     }
 
@@ -131,7 +131,6 @@ class Blog
             return $this;
         }
         $this->authors->removeElement($author);
-        $author->removeBlog($this);
         return $this;
     }
 

@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Form;
 
+use ReflectionClass;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactory;
@@ -45,10 +46,11 @@ class Form implements SectionFormInterface
     ): FormInterface {
 
         $section = $this->getSection($forHandle);
+        $sectionEntity = $this->getSectionEntity($forHandle, $section, $slug);
         $form = $this->formFactory
             ->createBuilder(
                 FormType::class,
-                $this->getSectionEntity($forHandle, $section, $slug),
+                $sectionEntity,
                 ['method' => 'POST']
             );
 
@@ -60,7 +62,18 @@ class Form implements SectionFormInterface
             /** @var FieldType $fieldType */
             $fieldType = new $fieldTypeFulluQualifiedClassName;
             $fieldType->setConfig($field->getConfig());
-            $fieldType->addToForm($form);
+
+            $reflector = new ReflectionClass($fieldType);
+            $method = $reflector->getMethod('addToForm');
+            $options = null;
+            if (isset($method->getParameters()[1])) {
+                $options = [
+                    'sectionManager' => $this->sectionManager,
+                    'readSection' => $this->readSection,
+                    'sectionEntity' => $sectionEntity
+                ];
+            }
+            $fieldType->addToForm($form, $options);
         }
 
         $form->add('save', SubmitType::class);

@@ -107,6 +107,11 @@ class Author
         return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->authorSlug);
     }
 
+    public function getDefault(): string
+    {
+        return $this->name;
+    }
+
     public function onPrePersist(): void
     {
         $this->created = new \DateTime('now');
