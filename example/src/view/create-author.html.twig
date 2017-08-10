@@ -1,0 +1,32 @@
+{% extends "master.html.twig" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-10">
+            <h3>Create an author: {{ slug }}</h3>
+        </div>
+    </div>
+
+    {% include 'author-form.html.twig' with {
+        form: sectionForm('Example.Blog.Entity.Author')
+    } %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="50"># ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entry in section('Example.Blog.Entity.Author').fetch() %}
+            <tr>
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

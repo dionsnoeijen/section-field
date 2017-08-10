@@ -13,6 +13,7 @@ While the aim for this tool is to be very high level, simplicity should never pr
 
 ## @todo (don't forget)
 
+- For many-to-many fields it's probably better to have two fields. One on each side.
 - Doctrines inflector is really powerfull, use that instead of my helper methods.
 - Move FieldTypes to separate dependency
 - Deleting a field type should ony be possible if there are no installed fields with that type.

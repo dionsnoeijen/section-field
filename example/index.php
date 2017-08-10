@@ -130,6 +130,9 @@ try {
         case '/create-blog':
             echo $templating->render('create-blog.html.twig');
         break;
+        case '/create-author':
+            echo $templating->render('create-author.html.twig');
+        break;
         case '/edit-blog':
             echo $templating->render('edit-blog.html.twig', [
                 'slug' => $slug
