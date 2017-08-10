@@ -41,11 +41,13 @@ class Comment
     public function setBlog(Blog $blog): Comment
     {
         $this->blog = $blog;
+        return $this;
     }
 
     public function removeBlog(Blog $blog): Comment
     {
         $this->blog = null;
+        return $this;
     }
 
     public function getComment(): ?string

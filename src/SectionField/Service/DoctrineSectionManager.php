@@ -23,7 +23,14 @@ class DoctrineSectionManager implements SectionManager
     /** @var array */
     private $opposingRelationships = [
         'many-to-one' => 'one-to-many',
-        'one-to-many' => 'many-to-one'
+        'one-to-many' => 'many-to-one',
+        'many-to-many' => 'many-to-many'
+    ];
+
+    /** @var array */
+    private $opposingRealtionshipTypes = [
+        'bidirectional' => 'unidirectional',
+        'unidirectional' => 'bidirectional'
     ];
 
     public function __construct(
@@ -158,6 +165,18 @@ class DoctrineSectionManager implements SectionManager
                         'to' => $field->getConfig()->getRelationshipTo(),
                         'fullyQualifiedClassName' => $field->getFieldType()->getFullyQualifiedClassName()
                     ];
+
+                    $fieldConfig = $field->getConfig()->toArray();
+
+                    // @todo: Add to value object
+                    if (!empty($fieldConfig['field']['relationship-type'])) {
+                        $relationships[$sectionHandle][$fieldHandle]['relationship-type'] =
+                            $fieldConfig['field']['relationship-type'];
+                    }
+
+                    if (!empty($fieldConfig['field']['from'])) {
+                        $relationships[$sectionHandle][$fieldHandle]['from'] = $fieldConfig['field']['from'];
+                    }
                 } catch (\Exception $exception) {}
             }
         }
@@ -171,12 +190,20 @@ class DoctrineSectionManager implements SectionManager
     {
         foreach ($relationships as $sectionHandle=>$relationshipFields) {
             if (count($relationshipFields)) {
-                foreach ($relationshipFields as $fieldHandle=>$kindToFieldType) {
+                foreach ($relationshipFields as $fieldHandle => $kindToFieldType) {
                     $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite'] = [
                         'kind' => $this->opposingRelationships[$kindToFieldType['kind']],
                         'to' => $sectionHandle,
                         'fullyQualifiedClassName' => $kindToFieldType['fullyQualifiedClassName']
                     ];
+                    if (!empty($kindToFieldType['from'])) {
+                        $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite']['from'] =
+                            $kindToFieldType['to'];
+                    }
+                    if (!empty($kindToFieldType['relationship-type'])) {
+                        $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite']['relationship-type'] =
+                            $this->opposingRealtionshipTypes[$kindToFieldType['relationship-type']];
+                    }
                 }
             }
         }

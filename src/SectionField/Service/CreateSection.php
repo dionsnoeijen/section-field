@@ -15,11 +15,11 @@ class CreateSection implements CreateSectionInterface
         $this->creators = $creators;
     }
 
-    public function save($data)
+    public function save($data, array $jitRelationships = null)
     {
         /** @var CreateSectionInterface $writer */
         foreach ($this->creators as $writer) {
-            $writer->save($data);
+            $writer->save($data, $jitRelationships);
         }
     }
 }

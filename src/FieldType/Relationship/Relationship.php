@@ -12,6 +12,11 @@ class Relationship extends FieldType implements RelationshipInterface
 
     public function addToForm(FormBuilderInterface $formBuilder): FormBuilderInterface
     {
+//        $formBuilder->add((string) $this->getConfig()->getHandle(), EntityType::class, [
+//            'class' => 'Tardigrades\\Blog\\Entity\\Blog',
+//            'choice_label' => 'displayName',
+//        ]);
+
         return $formBuilder;
     }
 }

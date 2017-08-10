@@ -37,27 +37,38 @@ abstract class Generator implements GeneratorInterface
         $this->fieldTypeManager = $fieldTypeManager;
         $this->sectionManager = $sectionManager;
 
-        $this->relationships = $this->sectionManager->getRelationshipsOfAll();
+        $this->relationships = [];
     }
 
     protected function addOpposingRelationships(Section $section, array $fields): array
     {
+        $this->relationships = $this->sectionManager->getRelationshipsOfAll();
         foreach ($this->relationships[(string) $section->getHandle()] as $fieldHandle=>$relationship) {
             if (false !== strpos($fieldHandle, '-opposite')) {
+
+                $fieldHandle = str_replace('-opposite', '', $fieldHandle);
+
                 $oppositeRelationshipField = new FieldEntity();
                 // @todo: I sense the field labels are going to be a problem.
                 // I propbably need a config value for the default language and use it here
                 // Also, the relationship opposite side might require more configuration
                 // make that available in the field config and use it here
-                $oppositeRelationshipField->setConfig([
+                $config = [
                     'field' => [
                         'name' => $fieldHandle,
                         'handle' => $fieldHandle,
                         'label' => ['en_EN' => $fieldHandle],
                         'kind' => $relationship['kind'],
-                        'to' => $relationship['to']
+                        'to' => $relationship['to'],
                     ]
-                ]);
+                ];
+                if (!empty($relationship['from'])) {
+                    $config['field']['from'] = $relationship['from'];
+                }
+                if (!empty($relationship['relationship-type'])) {
+                    $config['field']['relationship-type'] = $relationship['relationship-type'];
+                }
+                $oppositeRelationshipField->setConfig($config);
                 $oppositeRelationshipFieldType = $this->fieldTypeManager
                     ->readByFullyQualifiedClassName(
                         $relationship['fullyQualifiedClassName']

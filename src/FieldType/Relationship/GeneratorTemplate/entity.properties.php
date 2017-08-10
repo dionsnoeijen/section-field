@@ -1,4 +1,4 @@
-<?php if ($kind === 'one-to-many') { ?>
+<?php if ($kind === 'one-to-many' || $kind === 'many-to-many') { ?>
 /** @var ArrayCollection */
 protected $<?php echo $pluralPropertyName; ?>;
 <?php } ?>

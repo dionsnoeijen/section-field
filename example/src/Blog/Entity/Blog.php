@@ -28,6 +28,9 @@ class Blog
     protected $blogSlug;
 
     /** @var ArrayCollection */
+    protected $authors;
+
+    /** @var ArrayCollection */
     protected $comments;
 
     /** @var int */
@@ -35,6 +38,7 @@ class Blog
 
     public function __construct()
     {
+        $this->authors = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
@@ -59,7 +63,7 @@ class Blog
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created = null): Blog
+    public function setCreated(\DateTime $created): Blog
     {
         $this->created = $created;
         return $this;
@@ -92,7 +96,7 @@ class Blog
         return $this->updated;
     }
 
-    public function setUpdated(\DateTime $updated = null): Blog
+    public function setUpdated(\DateTime $updated): Blog
     {
         $this->updated = $updated;
         return $this;
@@ -104,6 +108,30 @@ class Blog
             return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->blogSlug);
         }
         return null;
+    }
+
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
+    }
+
+    public function addAuthor(Author $author): Blog
+    {
+        if ($this->authors->contains($author)) {
+            return $this;
+        }
+        $this->authors->add($author);
+        $author->addBlog($this);
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): Blog
+    {
+        if (!$this->authors->contains($author)) {
+            return $this;
+        }
+        $this->authors->removeElement($author);
+        return $this;
     }
 
     public function getComments(): Collection

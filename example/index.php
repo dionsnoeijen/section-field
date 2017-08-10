@@ -17,6 +17,10 @@ use Symfony\Component\Templating\TemplateNameParser;
 // Create the container
 // -----------------------------
 
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$requestStack = new \Symfony\Component\HttpFoundation\RequestStack();
+$requestStack->push($request);
+
 $container = new ContainerBuilder();
 $container
     ->register('doctrine.orm.entity_manager')
@@ -35,6 +39,8 @@ $container
             __DIR__.'/src/Blog/config/xml'
         ], true)
     ]);
+$container->set('request_stack', $requestStack);
+
 
 $sectionFieldExtension = new \Tardigrades\DependencyInjection\SectionFieldExtension();
 $sectionFieldExtension->load([], $container);
@@ -103,8 +109,6 @@ $templating = new \Symfony\Bridge\Twig\TwigEngine(
 // Set up some amazing routing
 // ------------------------------
 
-$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-
 $requestUri = $request->getRequestUri();
 $slug = '';
 if (strpos($requestUri, '/edit-blog') !== false) {
@@ -118,35 +122,29 @@ if (strpos($requestUri, '/article') !== false) {
     $slug = $slug[count($slug) -1];
 }
 
-$indexController = new \Example\Controller\IndexController(
-    $templating,
-    $form
-);
-$blogController = new \Example\Controller\BlogController(
-    $templating,
-    $form,
-    $sectionManager,
-    $createSection
-);
-
 try {
     switch ($requestUri) {
         case '/':
-            echo $indexController->indexAction($request);
+            echo $templating->render('home.html.twig');
         break;
         case '/create-blog':
-            //echo $blogController->createAction($request);
             echo $templating->render('create-blog.html.twig');
         break;
         case '/edit-blog':
-            //echo $blogController->editAction($slug, $request);
-            echo $templating->render('edit-blog.html.twig', ['slug' => $slug]);
+            echo $templating->render('edit-blog.html.twig', [
+                'slug' => $slug
+            ]);
         break;
         case '/article':
-            echo $templating->render('detail.html.twig', ['slug' => $slug]);
+            echo $templating->render('detail.html.twig', [
+                'slug' => $slug
+            ]);
         break;
     }
 } catch (\Exception $exception) {
     header("HTTP/1.0 404 Not Found");
-    echo $templating->render('404.html.twig', ['slug'=>$slug]);
+    echo $templating->render('404.html.twig', [
+        'slug' => $slug,
+        'message' => $exception->getMessage()
+    ]);
 }

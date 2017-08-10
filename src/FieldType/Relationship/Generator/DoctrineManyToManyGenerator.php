@@ -45,12 +45,19 @@ class DoctrineManyToManyGenerator implements Generator
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.manytomany.xml.php', [
-                        'type' => $fieldConfig['field']['type'],
-                        'thatPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']),
-                        'thatFullyQualifiedClassName' => $target->getConfig()->getFullyQualifiedClassName(),
-                        'thisHandle' => $fieldConfig['field']['handle'],
-                        'thisPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']),
-                        'thisFullyQualifiedClassName' => $sectionConfig->getFullyQualifiedClassName(),
+                        'type' => $fieldConfig['field']['relationship-type'],
+                        'thatPluralHandle' => Inflector::pluralize(
+                            $fieldConfig['field']['to']
+                        ),
+                        'thatFullyQualifiedClassName' => $target
+                            ->getConfig()
+                            ->getFullyQualifiedClassName(),
+                        'thisHandle' => $fieldConfig['field']['from'],
+                        'thisPluralHandle' => Inflector::pluralize(
+                            $fieldConfig['field']['from']
+                        ),
+                        'thisFullyQualifiedClassName' => $sectionConfig
+                            ->getFullyQualifiedClassName(),
                         'thatHandle' => $fieldConfig['field']['to']
                     ]
                 )

@@ -5,5 +5,5 @@ namespace Tardigrades\SectionField\SectionFieldInterface;
 
 interface CreateSection
 {
-    public function save($data);
+    public function save($data, array $jitRelationships = null);
 }

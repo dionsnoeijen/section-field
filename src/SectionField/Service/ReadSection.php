@@ -25,7 +25,9 @@ class ReadSection implements ReadSectionInterface
         $this->sectionManager = $sectionManager;
     }
 
-    public function read(ReadOptions $options, SectionConfig $sectionConfig = null): \ArrayIterator
+    public function read(
+        ReadOptions $options,
+        SectionConfig $sectionConfig = null): \ArrayIterator
     {
         $sectionData = new \ArrayIterator();
 
@@ -36,8 +38,8 @@ class ReadSection implements ReadSectionInterface
         $slug = $options->getSlug();
         $section = null;
         if (!empty($slug)) {
-            // @todo: We probably want to get rid of the section
-            // handle and use the FullyQualifiedClassName of the entity instead
+            // @todo: We probably want to get rid of the section handle
+            // and use the FullyQualifiedClassName of the entity instead
             // That way we don't have to go for this kind of weird magic
             // with the converter
             $section = $this->sectionManager->readByHandle(

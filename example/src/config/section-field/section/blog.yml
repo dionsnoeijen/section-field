@@ -6,11 +6,13 @@ section:
     - subTitle
     - body
     - blogSlug
+    - authorBlog
     - created
     - updated
   slug: blogSlug #assign the field that will function as slug
-  required:
-    - title
-    - body
   default: title
   namespace: Example\Blog
+  form:
+    required:
+      - title
+      - body

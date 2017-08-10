@@ -1,0 +1,20 @@
+field:
+  name:
+    - nl_NL: Auteur slug
+    - en_EN: Author slug
+  handle: authorSlug
+  label:
+    - nl_NL: Onderdeel voor url segment
+    - en_EN: Composit for url segment
+  type: Slug
+  length: 255 #move to generator->doctrine config
+  typeConfig: [ name ] #move to generator config
+  generator:
+    entity:
+      slugFields: [ name ]
+    doctrine:
+      length: 255
+      unique: true
+  form:
+    default:
+      available: false

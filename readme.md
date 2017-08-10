@@ -18,9 +18,10 @@ While the aim for this tool is to be very high level, simplicity should never pr
 - Deleting a field type should ony be possible if there are no installed fields with that type.
 - Field handles should not be created based on their name. At least. Maybe on creation when no handle is given, but an update should contain an explicit handle config to prevent application breaking changes just on updating a field name.
 - All commands that list something should check if there are entries.
-- Unit tests for commands.
+- Finish up all types of relationships
 - Unit tests for value objects.
-- The symfony bundle will need a loader that adds classes to compile: https://symfony.com/doc/current/bundles/extension.html 
+- The symfony bundle will need a loader that adds classes to compile: https://symfony.com/doc/current/bundles/extension.html
+- Make sure the use statements are only added once.
 
 ## Config
 

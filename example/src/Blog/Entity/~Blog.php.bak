@@ -28,6 +28,9 @@ class Blog
     protected $blogSlug;
 
     /** @var ArrayCollection */
+    protected $authors;
+
+    /** @var ArrayCollection */
     protected $comments;
 
     /** @var int */
@@ -35,6 +38,7 @@ class Blog
 
     public function __construct()
     {
+        $this->authors = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
@@ -100,10 +104,35 @@ class Blog
 
     public function getBlogSlug(): ?Tardigrades\FieldType\Slug\ValueObject\Slug
     {
-        if (!$this->blogSlug !== null) {
+        if (!empty($this->blogSlug)) {
             return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->blogSlug);
         }
         return null;
+    }
+
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
+    }
+
+    public function addAuthor(Author $author): Blog
+    {
+        if ($this->authors->contains($author)) {
+            return $this;
+        }
+        $this->authors->add($author);
+        $author->setBlog($this);
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): Blog
+    {
+        if (!$this->authors->contains($author)) {
+            return $this;
+        }
+        $this->authors->removeElement($author);
+        $author->removeBlog($this);
+        return $this;
     }
 
     public function getComments(): Collection

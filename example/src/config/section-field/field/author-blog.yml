@@ -1,0 +1,14 @@
+field:
+  name:
+    - nl_NL: Auteur
+    - en_EN: Author
+  handle: authorBlog
+  label:
+    - nl_NL: Auteur van blog
+    - en_EN: Author that wrote blog
+  type: Relationship
+  variant: hidden
+  kind: many-to-many
+  relationship-type: unidirectional
+  from: blog #this
+  to: author #that

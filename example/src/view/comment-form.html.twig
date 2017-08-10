@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+<input type="hidden" name="form[blog_id]" value="{{ blogEntity }}:{{ blogId }}" />
+<div class="row">
+    <div class="col-md-12">
+        {{ form_errors(form) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10">
+        {{ form_row(form.name) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.comment) }}
+        {{ form_row(form.save) }}
+    </div>
+    <div class="col-md-2">
+        {#{{ form_row(form.blogSlug) }}#}
+    </div>
+</div>
+{{ form_end(form) }}

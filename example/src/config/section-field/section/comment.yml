@@ -6,10 +6,11 @@ section:
     - email
     - comment
     - blog
-  required:
-    - name
-    - email
-    - comment
-    - blog
   default: name
   namespace: Example\Blog
+  form:
+    required:
+      - name
+      - email
+      - comment
+      - blog

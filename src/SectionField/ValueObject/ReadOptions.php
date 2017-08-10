@@ -15,14 +15,22 @@ class ReadOptions
     private function __construct(
         array $options
     ) {
-        try {
-            Assertion::isArray($options['section'],
-                'Section must be passed in array as entity.'
-            );
-        } catch (InvalidArgumentException $exception) {
-            Assertion::string($options['section'],
-                'Section must be passed as an array or string.'
-            );
+
+        $valid = false;
+        if (is_array($options['section'])) {
+            $valid = true;
+        }
+
+        if (is_string($options['section'])) {
+            $valid = true;
+        }
+
+        if ($options['section'] instanceof FullyQualifiedClassName) {
+            $valid = true;
+        }
+
+        if (!$valid) {
+            throw new InvalidArgumentException('The section is not of a valid type', 400, null, $options['section']);
         }
 
         $this->options = $options;
@@ -32,13 +40,17 @@ class ReadOptions
     {
         $sectionEntities = [];
 
+        if ($this->options['section'] instanceof FullyQualifiedClassName) {
+            $sectionEntities = [$this->options['section']];
+        }
+
         if (is_string($this->options['section'])) {
             $sectionEntities = [FullyQualifiedClassName::create($this->options['section'])];
         }
 
         if (is_array($this->options['section'])) {
             foreach ($this->options['section'] as $section) {
-                $sectionEntities[] = FullyQualifiedClassName::create($section);
+                $sectionEntities[] = FullyQualifiedClassName::create((string) $section);
             }
         }
 
@@ -95,9 +107,12 @@ class ReadOptions
     {
         try {
             Assertion::keyIsset($this->options, 'slug', 'The slug is not set');
-            Assertion::string($this->options['slug'], 'The slug is supposed to be a string');
 
-            return Slug::fromString($this->options['slug']);
+            // There is a possibility the read options are built with a value object,
+            // added flexibility by converting value to slug first.
+            Assertion::string((string) $this->options['slug'], 'The slug is supposed to be a string');
+
+            return Slug::fromString((string) $this->options['slug']);
         } catch (InvalidArgumentException $exception) {
             return null;
         }

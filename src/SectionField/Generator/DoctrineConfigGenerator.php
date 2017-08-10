@@ -150,6 +150,6 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
             $asString
         );
 
-        return Template::create($asString);
+        return Template::create(XmlFormatter::format($asString));
     }
 }

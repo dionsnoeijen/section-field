@@ -112,6 +112,15 @@ class EntityGenerator extends Generator implements GeneratorInterface
                     }
                 }
             }
+
+            $this->removeDoubles();
+        }
+    }
+
+    private function removeDoubles()
+    {
+        foreach ($this->templates as $item=>&$templates) {
+            $templates = array_unique($templates);
         }
     }
 

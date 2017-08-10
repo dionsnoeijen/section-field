@@ -3,8 +3,6 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Generator\Loader;
 
-use Tardigrades\SectionField\ValueObject\FieldConfig;
-
 class TemplateLoader
 {
     public static function load(string $location, array $variables = []): string

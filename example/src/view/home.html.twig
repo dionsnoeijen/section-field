@@ -15,8 +15,8 @@
         <h5>{{ entry.subtitle }}</h5>
     </div>
     <div class="col-md-2">
-        By: {{ entry.author }}<br />
-        At: {{ entry.date|date(\'Y-m-d\') }}
+        <p>By: {{ entry.author }}<br />
+        At: {{ entry.date|date(\'Y-m-d\') }}</p>
     </div>
 </div>
 {% endfor %}'|escape

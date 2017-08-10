@@ -12,5 +12,5 @@
 <?php } ?>
 
 <?php if ($type === 'bidirectional') { ?>
-<many-to-many field="<?php echo $thisPluralHandle; ?>" mapped-by="<?php echo $thatPluralHandle; ?>" target-entity="<?php echo $thisFullyQualifiedClassName; ?>"/>
+<many-to-many field="<?php echo $thatPluralHandle; ?>" mapped-by="<?php echo $thisPluralHandle; ?>" target-entity="<?php echo $thatFullyQualifiedClassName; ?>"/>
 <?php } ?>

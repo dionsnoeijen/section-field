@@ -1,0 +1,18 @@
+section:
+  name: Author
+  handle: author
+  fields:
+    - name
+    - brithdate
+    - authorSlug
+    - created
+    - updated
+  slug: authorSlug
+  default:
+    - name
+  namespace: Example\Blog
+  form:
+    required:
+      - title
+      - body
+
