@@ -50,6 +50,10 @@ class SectionFormTwigExtension extends Twig_Extension
             new Twig_Function(
                 'sectionForm',
                 array($this, 'sectionForm')
+            ),
+            new Twig_Function(
+                'formJavascript',
+                array($this, 'formJavascript')
             )
         );
     }
@@ -85,6 +89,15 @@ class SectionFormTwigExtension extends Twig_Extension
         }
 
         return $form->createView();
+    }
+
+    /**
+     * A form can have javascript powered fields,
+     * fetch them to bring them to your template
+     */
+    public function formJavascript()
+    {
+
     }
 
     private function hasRelationship($formData): array

@@ -21,12 +21,6 @@ class Slug extends FieldType implements SlugFieldType
         ReadSection $readSection
     ): FormBuilderInterface {
 
-        try {
-            $requiredFields = $section->getConfig()->getRequired();
-        } catch (\Exception $exception) {
-            $requiredFields = [];
-        }
-
 //        $formBuilder->add((string) $this->getConfig()->getHandle(), TextType::class);
 
         return $formBuilder;

@@ -10,9 +10,6 @@ section:
   slug: authorSlug
   default: name
   namespace: Example\Blog
-  required:
-    - title
-    - body
   form:
     required:
       - title

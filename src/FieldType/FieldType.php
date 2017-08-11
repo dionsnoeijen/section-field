@@ -27,6 +27,31 @@ abstract class FieldType implements FieldTypeInterface
         return $this->fieldConfig;
     }
 
+    public function isRequired(Section $section): bool
+    {
+        try {
+            $requiredFields = $section->getConfig()->getRequired();
+        } catch (\Exception $exception) {
+            $requiredFields = [];
+        }
+
+        return in_array(
+            (string) $this->getConfig()->getHandle(),
+            $requiredFields
+        );
+    }
+
+    public function hasEntityEvent(string $event): bool
+    {
+        try {
+            $entityEvents = $this->getConfig()->getEntityEvents();
+        } catch (\Exception $exception) {
+            $entityEvents = [];
+        }
+
+        return in_array($event, $entityEvents);
+    }
+
     abstract public function addToForm(
         FormBuilderInterface $formBuilder,
         Section $section,

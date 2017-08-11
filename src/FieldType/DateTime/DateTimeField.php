@@ -21,29 +21,15 @@ class DateTimeField extends FieldType implements DateTimeFieldType
         ReadSection $readSection
     ): FormBuilderInterface {
 
-        try {
-            $entityEvents = $this->getConfig()->getEntityEvents();
-        } catch (\Exception $exception) {
-            $entityEvents = [];
-        }
-
-        if (!in_array('prePersist', $entityEvents)) {
-
-            try {
-                $requiredFields = $section->getConfig()->getRequired();
-            } catch (\Exception $exception) {
-                $requiredFields = [];
-            }
+        if (!$this->hasEntityEvent('prePersist')) {
 
             $formBuilder->add(
                 (string) $this->getConfig()->getHandle(),
                 DateTimeType::class,
                 [
-                    'required' => in_array(
-                        (string) $this->getConfig()->getHandle(),
-                        $requiredFields
-                    ),
-                    'format' => 'DD-mm-yyy H:i:s'
+                    'required' => $this->isRequired($section),
+                    'format' => 'DD-mm-yyy H:i:s',
+                    'data' => new \DateTime() // @todo: hmmm
                 ]
             );
         }
