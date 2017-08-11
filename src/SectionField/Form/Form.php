@@ -62,10 +62,6 @@ class Form implements SectionFormInterface
             /** @var FieldType $fieldType */
             $fieldType = new $fieldTypeFulluQualifiedClassName;
             $fieldType->setConfig($field->getConfig());
-
-            $reflector = new ReflectionClass($fieldType);
-            $method = $reflector->getMethod('addToForm');
-
             $fieldType->addToForm(
                 $form,
                 $section,
