@@ -65,15 +65,14 @@ class Form implements SectionFormInterface
 
             $reflector = new ReflectionClass($fieldType);
             $method = $reflector->getMethod('addToForm');
-            $options = null;
-            if (isset($method->getParameters()[1])) {
-                $options = [
-                    'sectionManager' => $this->sectionManager,
-                    'readSection' => $this->readSection,
-                    'sectionEntity' => $sectionEntity
-                ];
-            }
-            $fieldType->addToForm($form, $options);
+
+            $fieldType->addToForm(
+                $form,
+                $section,
+                $sectionEntity,
+                $this->sectionManager,
+                $this->readSection
+            );
         }
 
         $form->add('save', SubmitType::class);

@@ -13,8 +13,8 @@
 
         <field name="body" type="text"/>
 <field name="created" type="datetime"/>
-<field name="subtitle" type="string"/>
-<field name="title" type="string"/>
+<field name="subtitle" nullable="true" type="string"/>
+<field name="title" nullable="true" type="string"/>
 <field name="updated" type="datetime"/>
 <field name="blogSlug" type="string" unique="true"/>
 

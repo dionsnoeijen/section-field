@@ -4,7 +4,10 @@ declare (strict_types=1);
 namespace Tardigrades\FieldType;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
+use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
+use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 abstract class FieldType implements FieldTypeInterface
@@ -24,5 +27,11 @@ abstract class FieldType implements FieldTypeInterface
         return $this->fieldConfig;
     }
 
-    abstract public function addToForm(FormBuilderInterface $formBuilder): FormBuilderInterface;
+    abstract public function addToForm(
+        FormBuilderInterface $formBuilder,
+        Section $section,
+        $sectionEntity,
+        SectionManager $sectionManager,
+        ReadSection $readSection
+    ): FormBuilderInterface;
 }

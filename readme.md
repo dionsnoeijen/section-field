@@ -13,6 +13,7 @@ While the aim for this tool is to be very high level, simplicity should never pr
 
 ## @todo (don't forget)
 
+- Connect nullable field to required field.
 - I have introduced the concept of JIT relationships. Right now tose fields are dectected by the presence of _id. Change that to _jit.
 - We have a vo for FullyQualifiedClassName and SectionFullyQualifiedClassName. Take away the "Section" one.
 - For many-to-many fields it's probably better to have two fields. One on each side.

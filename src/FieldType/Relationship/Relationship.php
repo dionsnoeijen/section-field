@@ -6,6 +6,7 @@ namespace Tardigrades\FieldType\Relationship;
 use Doctrine\Common\Util\Inflector;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\FieldType;
 use Tardigrades\FieldType\Relationship\RelationshipInterface\Relationship as RelationshipInterface;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
@@ -17,18 +18,19 @@ class Relationship extends FieldType implements RelationshipInterface
 
     public function addToForm(
         FormBuilderInterface $formBuilder,
-        ...$options
+        Section $section,
+        $sectionEntity,
+        SectionManager $sectionManager,
+        ReadSection $readSection
     ): FormBuilderInterface {
         switch ($this->getConfig()->getKind()) {
             case 'many-to-many':
-                $readSection = $options[0]['readSection'];
-                $sectionManager = $options[0]['sectionManager'];
-                $sectionEntity = $options[0]['sectionEntity'];
                 return $this->addManyToManyToForm(
                     $formBuilder,
                     $readSection,
                     $sectionManager,
-                    $sectionEntity
+                    $sectionEntity,
+                    $section
                 );
                 break;
         }
@@ -40,10 +42,12 @@ class Relationship extends FieldType implements RelationshipInterface
         FormBuilderInterface $formBuilder,
         ReadSection $readSection,
         SectionManager $sectionManager,
-        $sectionEntity
-    ): FormBuilderInterface
-    {
+        $sectionEntity,
+        Section $section
+    ): FormBuilderInterface {
         $fieldConfig = $this->getConfig()->toArray();
+
+        $requiredFields = $section->getConfig()->toArray()['section']['required'];
 
         $sectionTo = $sectionManager
             ->readByHandle($fieldConfig['field']['to']);
@@ -77,7 +81,7 @@ class Relationship extends FieldType implements RelationshipInterface
                 'data' => $selected,
                 'multiple' => true,
                 'mapped' => false,
-                'placeholder' => 'Choose an option',
+                'required' => in_array((string) $this->getConfig()->getHandle(), $requiredFields)
             ]
         );
 
