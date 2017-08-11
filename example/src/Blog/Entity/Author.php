@@ -18,6 +18,9 @@ class Author
     /** @var \DateTime */
     protected $updated;
 
+    /** @var \DateTime */
+    protected $birthdate;
+
     /** @var string */
     protected $authorSlug;
 
@@ -67,6 +70,17 @@ class Author
     public function setUpdated(\DateTime $updated): Author
     {
         $this->updated = $updated;
+        return $this;
+    }
+
+    public function getBirthdate(): ?\DateTime
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTime $birthdate): Author
+    {
+        $this->birthdate = $birthdate;
         return $this;
     }
 

@@ -121,6 +121,11 @@ if (strpos($requestUri, '/article') !== false) {
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
+if (strpos($requestUri, '/edit-author') !== false) {
+    $requestUri = '/edit-author';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
 
 try {
     switch ($requestUri) {
@@ -135,6 +140,11 @@ try {
         break;
         case '/edit-blog':
             echo $templating->render('edit-blog.html.twig', [
+                'slug' => $slug
+            ]);
+        break;
+        case '/edit-author':
+            echo $templating->render('edit-author.html.twig', [
                 'slug' => $slug
             ]);
         break;

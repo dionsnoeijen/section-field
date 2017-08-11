@@ -7,4 +7,6 @@ field:
     - nl_NL: Titel
     - en_EN: Title
   type: TextInput
-  length: 255
+  form:
+    length: 255
+

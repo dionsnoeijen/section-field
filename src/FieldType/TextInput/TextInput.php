@@ -17,14 +17,20 @@ class TextInput extends FieldType implements TextInputFieldType
         $sectionEntity,
         SectionManager $sectionManager,
         ReadSection $readSection
-    ): FormBuilderInterface
-    {
-        $requiredFields = $section->getConfig()->toArray()['section']['required'];
+    ): FormBuilderInterface {
+        try {
+            $requiredFields = $section->getConfig()->getRequired();
+        } catch (\Exception $exception) {
+            $requiredFields = [];
+        }
 
         $formBuilder->add(
             (string) $this->getConfig()->getHandle(),
             TextType::class, [
-                'required' => in_array((string) $this->getConfig()->getHandle(), $requiredFields)
+                'required' => in_array(
+                    (string) $this->getConfig()->getHandle(),
+                    $requiredFields
+                )
             ]
         );
 

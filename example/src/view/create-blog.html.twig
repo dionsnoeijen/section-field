@@ -9,7 +9,9 @@
     </div>
 
     {% include 'blog-form.html.twig' with {
-        form: sectionForm('Example.Blog.Entity.Blog')
+        form: sectionForm('Example.Blog.Entity.Blog', {
+            redirect:'/create-blog/' ~ slug
+        })
     } %}
 
 {% endblock %}

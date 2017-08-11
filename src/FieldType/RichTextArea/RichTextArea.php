@@ -21,7 +21,11 @@ class RichTextArea extends FieldType implements RichTextAreaInterface
         ReadSection $readSection
     ): FormBuilderInterface {
 
-        $requiredFields = $section->getConfig()->toArray()['section']['required'];
+        try {
+            $requiredFields = $section->getConfig()->getRequired();
+        } catch (\Exception $exception) {
+            $requiredFields = [];
+        }
 
         $formBuilder->add(
             (string) $this->getConfig()->getHandle(),

@@ -11,9 +11,10 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="created" type="datetime"/>
-<field name="name" type="string"/>
-<field name="updated" type="datetime"/>
+        <field name="created" nullable="true" type="datetime"/>
+<field name="name" nullable="true" type="string"/>
+<field name="updated" nullable="true" type="datetime"/>
+<field name="birthdate" nullable="true" type="datetime"/>
 <field name="authorSlug" type="string" unique="true"/>
 
 

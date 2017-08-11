@@ -65,6 +65,15 @@ final class SectionConfig
         return SlugField::fromString($this->sectionConfig['section']['slug']);
     }
 
+    public function getRequired(): array
+    {
+        Assertion::keyExists($this->sectionConfig['section'], 'required', 'Section is not defined');
+        Assertion::notEmpty($this->sectionConfig['section']['required'], 'The required fields must be defined as an array');
+        Assertion::isArray($this->sectionConfig['section']['required'], 'The required fields are not defined as an array');
+
+        return $this->sectionConfig['section']['required'];
+    }
+
     public function getDefault(): string
     {
         return $this->sectionConfig['section']['default'];
@@ -91,6 +100,8 @@ final class SectionConfig
             if (is_array($value)) {
                 $configText .= PHP_EOL;
                 foreach ($value as $subKey=>$subValue) {
+                    // @todo: Because I don't feel to add recursion right now.
+                    $subValue = is_array($subValue) ? print_r($subValue, true) : $subValue;
                     $configText .= " - {$subValue}" . PHP_EOL;
                 }
                 continue;

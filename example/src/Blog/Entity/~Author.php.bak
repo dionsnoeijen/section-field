@@ -18,6 +18,9 @@ class Author
     /** @var \DateTime */
     protected $updated;
 
+    /** @var \DateTime */
+    protected $birthdate;
+
     /** @var string */
     protected $authorSlug;
 
@@ -37,8 +40,11 @@ class Author
         return $this->id;
     }
 
-    public function getCreated(): ?\DateTime
+    public function getCreated(): \DateTime
     {
+        if (empty($this->created)) {
+            return new \DateTime();
+        }
         return $this->created;
     }
 
@@ -59,14 +65,31 @@ class Author
         return $this;
     }
 
-    public function getUpdated(): ?\DateTime
+    public function getUpdated(): \DateTime
     {
+        if (empty($this->updated)) {
+            return new \DateTime();
+        }
         return $this->updated;
     }
 
     public function setUpdated(\DateTime $updated): Author
     {
         $this->updated = $updated;
+        return $this;
+    }
+
+    public function getBirthdate(): \DateTime
+    {
+        if (empty($this->birthdate)) {
+            return new \DateTime();
+        }
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTime $birthdate): Author
+    {
+        $this->birthdate = $birthdate;
         return $this;
     }
 
@@ -105,6 +128,11 @@ class Author
     public function getSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
     {
         return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->authorSlug);
+    }
+
+    public function getDefault(): string
+    {
+        return $this->name;
     }
 
     public function onPrePersist(): void

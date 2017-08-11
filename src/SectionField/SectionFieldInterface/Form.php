@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\SectionFieldInterface;
 
 use Symfony\Component\Form\FormInterface;
-use Tardigrades\FieldType\Slug\ValueObject\Slug;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
+use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 interface Form
 {
     public function buildFormForSection(
         FullyQualifiedClassName $forHandle,
-        Slug $slug = null
+        SectionFormOptions $sectionFormOptions
     ): FormInterface;
 }

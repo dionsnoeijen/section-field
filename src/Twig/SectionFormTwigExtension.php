@@ -14,6 +14,7 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\JitRelationship;
+use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 use Twig_Extension;
 use Twig_Function;
 
@@ -53,11 +54,16 @@ class SectionFormTwigExtension extends Twig_Extension
         );
     }
 
-    public function sectionForm(string $forHandle, string $slug = null): FormView
-    {
+    public function sectionForm(
+        string $forHandle,
+        array $sectionFormOptions = []
+    ): FormView {
+
+        $sectionFormOptions = SectionFormOptions::fromArray($sectionFormOptions);
+
         $form = $this->form->buildFormForSection(
             FullyQualifiedClassName::create($forHandle),
-            !empty($slug) ? Slug::fromString($slug) : null
+            $sectionFormOptions
         );
         $form->handleRequest();
 
@@ -69,7 +75,12 @@ class SectionFormTwigExtension extends Twig_Extension
             $relationships = $this->hasRelationship($request->get('form'));
             $this->createSection->save($data, $relationships);
 
-            header('Location: /');
+            try {
+                $redirect = $sectionFormOptions->getRedirect();
+            } catch (\Exception $exception) {
+                $redirect = '/';
+            }
+            header('Location: ' . $redirect);
             exit;
         }
 

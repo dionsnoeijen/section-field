@@ -7,3 +7,5 @@ field:
     - nl_NL: Geboortedatum van auteur
     - en_EN: Authors birthdate
   type: DateTimeField
+  form:
+    format: DD-mm-yyy H:i:s

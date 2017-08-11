@@ -19,12 +19,34 @@ class DateTimeField extends FieldType implements DateTimeFieldType
         $sectionEntity,
         SectionManager $sectionManager,
         ReadSection $readSection
-    ): FormBuilderInterface
-    {
-//        $formBuilder->add(
-//            (string) $this->getConfig()->getHandle(),
-//            DateTimeType::class
-//        );
+    ): FormBuilderInterface {
+
+        try {
+            $entityEvents = $this->getConfig()->getEntityEvents();
+        } catch (\Exception $exception) {
+            $entityEvents = [];
+        }
+
+        if (!in_array('prePersist', $entityEvents)) {
+
+            try {
+                $requiredFields = $section->getConfig()->getRequired();
+            } catch (\Exception $exception) {
+                $requiredFields = [];
+            }
+
+            $formBuilder->add(
+                (string) $this->getConfig()->getHandle(),
+                DateTimeType::class,
+                [
+                    'required' => in_array(
+                        (string) $this->getConfig()->getHandle(),
+                        $requiredFields
+                    ),
+                    'format' => 'DD-mm-yyy H:i:s'
+                ]
+            );
+        }
 
         return $formBuilder;
     }

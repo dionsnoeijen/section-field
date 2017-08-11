@@ -3,13 +3,16 @@ section:
   handle: author
   fields:
     - name
-    - brithdate
+    - birthdate
     - authorSlug
     - created
     - updated
   slug: authorSlug
   default: name
   namespace: Example\Blog
+  required:
+    - title
+    - body
   form:
     required:
       - title

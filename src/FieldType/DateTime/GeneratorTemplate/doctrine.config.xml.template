@@ -1,1 +1,1 @@
-<field name="{{ handle }}" type="datetime" />
+<field name="{{ handle }}" nullable="true" type="datetime" />

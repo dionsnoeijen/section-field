@@ -47,7 +47,11 @@ class Relationship extends FieldType implements RelationshipInterface
     ): FormBuilderInterface {
         $fieldConfig = $this->getConfig()->toArray();
 
-        $requiredFields = $section->getConfig()->toArray()['section']['required'];
+        try {
+            $requiredFields = $section->getConfig()->getRequired();
+        } catch (\Exception $exception) {
+            $requiredFields = [];
+        }
 
         $sectionTo = $sectionManager
             ->readByHandle($fieldConfig['field']['to']);
@@ -81,7 +85,10 @@ class Relationship extends FieldType implements RelationshipInterface
                 'data' => $selected,
                 'multiple' => true,
                 'mapped' => false,
-                'required' => in_array((string) $this->getConfig()->getHandle(), $requiredFields)
+                'required' => in_array(
+                    (string) $this->getConfig()->getHandle(),
+                    $requiredFields
+                )
             ]
         );
 

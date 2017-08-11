@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 <th width="50"># ID</th>
-                <th>Name</th>
+                <th colspan="2">Name</th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +24,7 @@
             <tr>
                 <td>{{ entry.id }}</td>
                 <td>{{ entry.name }}</td>
+                <td><a class="btn btn-default" href="/edit-author/{{ entry.slug }}">Edit Author</a></td>
             </tr>
         {% endfor %}
         </tbody>

@@ -19,8 +19,14 @@ class Slug extends FieldType implements SlugFieldType
         $sectionEntity,
         SectionManager $sectionManager,
         ReadSection $readSection
-    ): FormBuilderInterface
-    {
+    ): FormBuilderInterface {
+
+        try {
+            $requiredFields = $section->getConfig()->getRequired();
+        } catch (\Exception $exception) {
+            $requiredFields = [];
+        }
+
 //        $formBuilder->add((string) $this->getConfig()->getHandle(), TextType::class);
 
         return $formBuilder;

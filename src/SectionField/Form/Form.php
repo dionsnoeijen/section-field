@@ -3,7 +3,6 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Form;
 
-use ReflectionClass;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactory;
@@ -18,6 +17,7 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\SectionFieldInterface\Form as SectionFormInterface;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 class Form implements SectionFormInterface
 {
@@ -42,10 +42,17 @@ class Form implements SectionFormInterface
 
     public function buildFormForSection(
         FullyQualifiedClassName $forHandle,
-        Slug $slug = null
+        SectionFormOptions $sectionFormOptions
     ): FormInterface {
 
         $section = $this->getSection($forHandle);
+
+        try {
+            $slug = $sectionFormOptions->getSlug();
+        } catch (\Exception $exception) {
+            $slug = null;
+        }
+
         $sectionEntity = $this->getSectionEntity($forHandle, $section, $slug);
         $form = $this->formFactory
             ->createBuilder(

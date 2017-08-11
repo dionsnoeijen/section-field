@@ -1,0 +1,17 @@
+{% extends "master.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-9">
+            <h3>Edit an author: {{ slug }}</h3>
+        </div>
+
+    </div>
+
+    {% include 'author-form.html.twig' with {
+        form: sectionForm('Example.Blog.Entity.Author', {
+            slug: slug,
+            redirect: '/author-blog/' ~ slug
+        })
+    } %}
+{% endblock %}
