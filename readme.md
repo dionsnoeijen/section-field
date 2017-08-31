@@ -27,7 +27,7 @@ While the aim for this tool is to be very high level, simplicity should never pr
 - The symfony bundle will need a loader that adds classes to compile: https://symfony.com/doc/current/bundles/extension.html
 - Make sure the use statements are only added once.
 
-TODO (v1.0) V1.0 Is een volledig werkende setup (zie tab 1) voor Doctrine (MySQL) compatibiliteit.
+TODO (v1.0)  v1.0 Is een volledig werkende setup (zie tab 1) voor Doctrine (MySQL) compatibiliteit.
 
 - Input validatie (voor forms) toevoegen.
 Dit vergt aanpassingen in de section config opties en de form afhandeling.
@@ -50,7 +50,7 @@ De unit tests zijn incompleet, er moet nog veel onder unit test komen.
 
 TODO (v1.1) v1.1 Voegt een aantal functionaliteiten toe om de flexibiliteit te vergroten.
 
-Events... events everywhere
+- Events... events everywhere
 - Je wil kunnen acteren op bepaalde acties die voorkomen in het systeem. Dit kan met events. Denk bijvoorbeeld aan, onBeforeWrite, onAfterWrite, onRead, onGenerate... enz.
 - Hooks... hooks everywhere
 Met hooks kan je inhaken op de flow van de aplicatie om het verloop aan te passen.
