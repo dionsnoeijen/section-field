@@ -27,6 +27,36 @@ While the aim for this tool is to be very high level, simplicity should never pr
 - The symfony bundle will need a loader that adds classes to compile: https://symfony.com/doc/current/bundles/extension.html
 - Make sure the use statements are only added once.
 
+TODO (v1.0) V1.0 Is een volledig werkende setup (zie tab 1) voor Doctrine (MySQL) compatibiliteit.
+
+- Input validatie (voor forms) toevoegen.
+Dit vergt aanpassingen in de section config opties en de form afhandeling.
+
+- Alle symfony field types toevoegen.
+Symfony heeft een hele boel field types, deze moeten aan SectionField toegevoegd worden. Dit pas na de input validatie goed geintegreerd is.
+
+- Endpoints (rest api voor secties)
+Aanpassing aan section configuratie. Optie toevoegen om voor een sectie endpoints in te schakelen en daarbij eventueel welke endpoints beschikbaar gesteld moeten worden. Maak ook een endpoint per section waarmee je de section structuur kan ophalen.
+
+- Alle relationship vormen in orde maken.
+Nog niet alle relationship types werken goed. Hier moet nog extra tijd in gestoken worden.
+
+- Update all command toevoegen.
+Wanneer je een aanpassingen doet in de yml configuratie van bijvoorbeeld een field type of een sectie moet je een aantal handelingen verrichten. Maak een command dat meteen alles in orde maakt.
+
+- Twig reader extension / reader service uitbreiden.
+De twig reader (om sectie data naar een template te halen) is nu nog tamelijk beperkt, deze moet worden uitgebreid om de meest voorkomende functionaliteit te bevatten).
+
+- Entry versioning toevoegen?
+Misschien is dit niet direct nodig, maar de optie om entries te versionen kan relevant zijn. (anders v.1.1)
+
+- Multilanguage toevoegen / afmaken?
+Er zitten voorbereidingen in om multilanguage te kunnen werken met  de sections. Het is even de vraag of dit direct relevant is maar de integratie moet nog afgemaakt worden. (anders v.1.1)
+
+- Unit tests afmaken.
+De unit tests zijn incompleet, er moet nog veel onder unit test komen.
+
+
 ## Config
 
 On the configuration of sections and fields

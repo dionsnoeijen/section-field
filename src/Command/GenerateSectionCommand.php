@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Tardigrades\SectionField\Generator\Writer\GeneratorFileWriter;
 use Tardigrades\SectionField\SectionFieldInterface\Generators;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
@@ -44,8 +45,11 @@ class GenerateSectionCommand extends SectionCommand
 
         $writables = $this->entityGenerator->generateBySection($section);
 
-        // @todo: First ask if you want to continue.
-        // And show what will be generated.
+        $sure = new ConfirmationQuestion('<comment>Are you sure?</comment> (y/n) ', false);
+        if (!$this->getHelper('question')->ask($input, $output, $sure)) {
+            $output->writeln('<comment>Cancelled, nothing generated.</comment>');
+            return;
+        }
         foreach ($writables as $writable) {
             GeneratorFileWriter::write($writable);
         }
