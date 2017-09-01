@@ -16,8 +16,9 @@ interface FieldType
     public function addToForm(
         FormBuilderInterface $formBuilder,
         Section $section,
-        $sectionEntity, // This can be any entity generated for a seciton
+        $sectionEntity, // This can be any entity generated for a section
         SectionManager $sectionManager,
         ReadSection $readSection
     ): FormBuilderInterface;
+    public function directory(): string;
 }

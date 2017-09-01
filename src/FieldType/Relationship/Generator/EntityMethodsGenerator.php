@@ -21,9 +21,8 @@ class EntityMethodsGenerator implements Generator
         $sectionConfig = $options[0]['sectionConfig'];
 
         return Template::create((string) TemplateLoader::load(
-            FullyQualifiedClassNameConverter::toDir(
-                $field->getFieldType()->getFullyQualifiedClassName()
-            ) . '/GeneratorTemplate/entity.methods.php', [
+            $field->getFieldType()->getInstance()->directory() .
+            '/GeneratorTemplate/entity.methods.php', [
                 'kind' => $fieldConfig['field']['kind'],
                 'pluralMethodName' => ucfirst(Inflector::pluralize($fieldConfig['field']['to'])),
                 'pluralPropertyName' => Inflector::pluralize($fieldConfig['field']['to']),

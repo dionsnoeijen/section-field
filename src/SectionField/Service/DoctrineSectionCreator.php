@@ -27,8 +27,8 @@ class DoctrineSectionCreator implements CreateSection
             $this->entityManager->persist($data);
             $this->entityManager->flush();
         } catch (\Exception $exception) {
-            // @todo: Those kind of messages are valuable to return to the user
-            // on a failed save.
+            // @todo: Those kind of messages are valuable to return to the user.
+            // I might want to emit an event here.
             echo $exception->getMessage();
             exit;
         }

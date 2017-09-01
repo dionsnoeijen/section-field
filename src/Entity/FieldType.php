@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
 use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
+use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInstance;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -162,5 +163,11 @@ class FieldType implements FieldTypeInterface
     public function onPreUpdate(): void
     {
         $this->updated = new \DateTime("now");
+    }
+
+    public function getInstance(): FieldTypeInstance
+    {
+        $fieldType = (string) $this->getFullyQualifiedClassName();
+        return new $fieldType();
     }
 }

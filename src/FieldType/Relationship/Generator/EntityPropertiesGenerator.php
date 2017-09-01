@@ -21,9 +21,8 @@ class EntityPropertiesGenerator implements Generator
         $sectionConfig = $options[0]['sectionConfig'];
 
         return Template::create((string) TemplateLoader::load(
-            FullyQualifiedClassNameConverter::toDir(
-                $field->getFieldType()->getFullyQualifiedClassName()
-            ) . '/GeneratorTemplate/entity.properties.php', [
+            $field->getFieldType()->getInstance()->directory() .
+            '/GeneratorTemplate/entity.properties.php', [
                 'kind' => $fieldConfig['field']['kind'],
                 'pluralPropertyName' => Inflector::pluralize($fieldConfig['field']['to']),
                 'entity' => ucfirst($fieldConfig['field']['to']),

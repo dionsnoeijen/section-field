@@ -8,6 +8,7 @@ use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
+use Tardigrades\FieldType\FieldTypeInterface\FieldType;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
@@ -55,10 +56,7 @@ class EntityGenerator extends Generator implements GeneratorInterface
         /** @var Field $field */
         foreach ($fields as $field) {
 
-            $yml = FullyQualifiedClassNameConverter::toDir(
-                $field->getFieldType()->getFullyQualifiedClassName()
-            ) . '/config/config.yml';
-
+            $yml = $field->getFieldType()->getInstance()->directory() . '/config/config.yml';
             $parsed = Yaml::parse(\file_get_contents($yml));
 
             try {

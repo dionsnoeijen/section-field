@@ -6,7 +6,6 @@ namespace Tardigrades\FieldType\Generator;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\FieldType\FieldTypeInterface\Generator;
 use Tardigrades\FieldType\ValueObject\Template;
-use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 
 class EntityMethodsGenerator implements Generator
@@ -14,9 +13,11 @@ class EntityMethodsGenerator implements Generator
 
     public static function generate(Field $field): Template
     {
-        $asString = (string) TemplateLoader::load( FullyQualifiedClassNameConverter::toDir(
-            $field->getFieldType()->getFullyQualifiedClassName()
-            ) . '/GeneratorTemplate/entitymethods.php.template'
+        $asString = (string) TemplateLoader::load(
+            $field->getFieldType()
+                ->getInstance()
+                ->directory() .
+            '/GeneratorTemplate/entitymethods.php.template'
         );
 
         $asString = str_replace(

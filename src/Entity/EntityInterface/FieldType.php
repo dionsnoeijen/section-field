@@ -10,6 +10,7 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 use Tardigrades\SectionField\ValueObject\Updated;
 use Tardigrades\Entity\FieldType as FieldTypeEntity;
+use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInstance;
 
 interface FieldType
 {
@@ -31,4 +32,5 @@ interface FieldType
     public function getUpdatedValueObject(): Updated;
     public function onPrePersist(): void;
     public function onPreUpdate(): void;
+    public function getInstance(): FieldTypeInstance;
 }

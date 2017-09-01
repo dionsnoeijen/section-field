@@ -29,7 +29,7 @@ class DateTimeField extends FieldType implements DateTimeFieldType
                 [
                     'required' => $this->isRequired($section),
                     'format' => 'DD-mm-yyy H:i:s',
-                    'data' => new \DateTime() // @todo: hmmm
+                    'data' => new \DateTime()
                 ]
             );
         }

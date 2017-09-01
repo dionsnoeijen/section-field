@@ -40,11 +40,8 @@ class Author
         return $this->id;
     }
 
-    public function getCreated(): \DateTime
+    public function getCreated(): ?\DateTime
     {
-        if (empty($this->created)) {
-            return new \DateTime();
-        }
         return $this->created;
     }
 
@@ -65,11 +62,8 @@ class Author
         return $this;
     }
 
-    public function getUpdated(): \DateTime
+    public function getUpdated(): ?\DateTime
     {
-        if (empty($this->updated)) {
-            return new \DateTime();
-        }
         return $this->updated;
     }
 
@@ -79,11 +73,8 @@ class Author
         return $this;
     }
 
-    public function getBirthdate(): \DateTime
+    public function getBirthdate(): ?\DateTime
     {
-        if (empty($this->birthdate)) {
-            return new \DateTime();
-        }
         return $this->birthdate;
     }
 

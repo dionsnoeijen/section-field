@@ -15,10 +15,9 @@ class EntityUseGenerator implements Generator
     public static function generate(Field $field): Template
     {
         return Template::create(
-                (string) TemplateLoader::load(
-                FullyQualifiedClassNameConverter::toDir(
-                    $field->getFieldType()->getFullyQualifiedClassName()
-                ) . '/GeneratorTemplate/entity.use.php.template'
+            (string) TemplateLoader::load(
+               $field->getFieldType()->getInstance()->directory() .
+                '/GeneratorTemplate/entity.use.php.template'
             )
         );
     }

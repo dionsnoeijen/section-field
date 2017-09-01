@@ -15,9 +15,8 @@ class EntityPropertiesGenerator implements Generator
     public static function generate(Field $field): Template
     {
         $asString = (string) TemplateLoader::load(
-            FullyQualifiedClassNameConverter::toDir(
-                $field->getFieldType()->getFullyQualifiedClassName()
-            ) . '/GeneratorTemplate/entityproperties.php.template'
+            $field->getFieldType()->getInstance()->directory() .
+            '/GeneratorTemplate/entityproperties.php.template'
         );
 
         $asString = str_replace(

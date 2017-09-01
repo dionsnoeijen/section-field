@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType;
 
+use ReflectionClass;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInterface;
@@ -50,6 +51,12 @@ abstract class FieldType implements FieldTypeInterface
         }
 
         return in_array($event, $entityEvents);
+    }
+
+    public function directory(): string
+    {
+        $fieldType = new ReflectionClass($this);
+        return dirname($fieldType->getFilename());
     }
 
     abstract public function addToForm(
