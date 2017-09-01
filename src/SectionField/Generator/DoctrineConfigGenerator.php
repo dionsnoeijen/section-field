@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Generator;
 
 use Assert\Assertion;
+use Doctrine\Common\Util\Inflector;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
-use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\Generator\Writer\Writable;
 use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
@@ -140,7 +140,7 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
         $asString = str_replace(
             '{{ fullyQualifiedClassName }}',
             (string) $this->sectionConfig->getNamespace() . '\\Entity\\' . ucfirst(
-                StringConverter::toCamelCase((string) $this->sectionConfig->getName())
+                Inflector::camelize((string) $this->sectionConfig->getName())
             ),
             $asString
         );

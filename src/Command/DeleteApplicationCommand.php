@@ -82,7 +82,6 @@ class DeleteApplicationCommand extends ApplicationCommand
 
         $output->writeln('<info>Record with id #' . $application->getId() . ' will be deleted</info>');
 
-
         $sure = new ConfirmationQuestion('<comment>Are you sure?</comment> (y/n) ', false);
 
         if (!$this->questionHelper->ask($input, $output, $sure)) {

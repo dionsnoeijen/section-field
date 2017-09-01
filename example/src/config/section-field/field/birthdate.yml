@@ -2,10 +2,10 @@ field:
   name:
     - nl_NL: Geboortedatum
     - en_EN: Birthdate
-  handle: birthdate
   label:
     - nl_NL: Geboortedatum van auteur
     - en_EN: Authors birthdate
+  handle: birthdate
   type: DateTimeField
   form:
     format: DD-mm-yyy H:i:s

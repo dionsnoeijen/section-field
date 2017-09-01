@@ -6,6 +6,7 @@ namespace Tardigrades\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
+use Tardigrades\SectionField\Service\LanguageNotFoundException;
 
 class ListLanguageCommand extends LanguageCommand
 {
@@ -28,8 +29,11 @@ class ListLanguageCommand extends LanguageCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $languages = $this->languageManager->readAll();
-
-        $this->renderTable($output, $languages, 'All installed languages');
+        try {
+            $languages = $this->languageManager->readAll();
+            $this->renderTable($output, $languages, 'All installed languages');
+        } catch (LanguageNotFoundException $exception) {
+            $output->writeln('No language found');
+        }
     }
 }

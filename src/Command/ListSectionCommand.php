@@ -6,6 +6,7 @@ namespace Tardigrades\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionNotFoundException;
 
 class ListSectionCommand extends SectionCommand
 {
@@ -25,9 +26,12 @@ class ListSectionCommand extends SectionCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $sections = $this->sectionManager->readAll();
-
-        $this->renderTable($output, $sections, 'All installed Sections');
+        try {
+            $sections = $this->sectionManager->readAll();
+            $this->renderTable($output, $sections, 'All installed Sections');
+        } catch (SectionNotFoundException $exception) {
+            $output->writeln('No section found');
+        }
     }
 }
 

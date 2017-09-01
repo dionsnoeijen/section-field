@@ -85,6 +85,10 @@ class DeleteLanguageCommand extends LanguageCommand
         }
         $this->languageManager->delete($language);
 
-        $this->renderTable($output, $this->languageManager->readAll(), 'Removed!');
+        try {
+            $this->renderTable($output, $this->languageManager->readAll(), 'Removed!');
+        } catch (LanguageNotFoundException $exception) {
+            $output->writeln('No languages left');
+        }
     }
 }

@@ -84,9 +84,9 @@ final class SectionConfig
         return SectionNamespace::fromString($this->sectionConfig['section']['namespace']);
     }
 
-    public function getFullyQualifiedClassName(): SectionFullyQualifiedClassName
+    public function getFullyQualifiedClassName(): FullyQualifiedClassName
     {
-        return SectionFullyQualifiedClassName::fromNamespaceAndClassName(
+        return FullyQualifiedClassName::fromNamespaceAndClassName(
             $this->getNamespace(),
             $this->getClassName()
         );

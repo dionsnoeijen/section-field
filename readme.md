@@ -14,18 +14,13 @@ While the aim for this tool is to be very high level, simplicity should never pr
 ## @todo (don't forget)
 
 - Connect nullable field to required field.
-- I have introduced the concept of JIT relationships. Right now tose fields are dectected by the presence of _id. Change that to _jit.
-- We have a vo for FullyQualifiedClassName and SectionFullyQualifiedClassName. Take away the "Section" one.
+- I have introduced the concept of JIT relationships. Right now tose fields are dectected by the presence of _id. Change that to _jit_id.
 - For many-to-many fields it's probably better to have two fields. One on each side.
-- Doctrines inflector is really powerfull, use that instead of my helper methods.
 - Move FieldTypes to separate dependency
 - Deleting a field type should ony be possible if there are no installed fields with that type.
-- Field handles should not be created based on their name. At least. Maybe on creation when no handle is given, but an update should contain an explicit handle config to prevent application breaking changes just on updating a field name.
-- All commands that list something should check if there are entries.
 - Finish up all types of relationships
 - Unit tests for value objects.
 - The symfony bundle will need a loader that adds classes to compile: https://symfony.com/doc/current/bundles/extension.html
-- Make sure the use statements are only added once.
 
 TODO (v1.0)  v1.0 Is een volledig werkende setup (zie tab 1) voor Doctrine (MySQL) compatibiliteit.
 
@@ -47,6 +42,7 @@ Misschien is dit niet direct nodig, maar de optie om entries te versionen kan re
 Er zitten voorbereidingen in om multilanguage te kunnen werken met  de sections. Het is even de vraag of dit direct relevant is maar de integratie moet nog afgemaakt worden. (anders v.1.1)
 - Unit tests afmaken.
 De unit tests zijn incompleet, er moet nog veel onder unit test komen.
+- Maak toevoegen van metadata aan field configuratie mogelijk.
 
 TODO (v1.1) v1.1 Voegt een aantal functionaliteiten toe om de flexibiliteit te vergroten.
 

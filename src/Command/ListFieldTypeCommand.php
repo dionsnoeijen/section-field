@@ -6,6 +6,7 @@ namespace Tardigrades\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
 
 class ListFieldTypeCommand extends FieldTypeCommand
 {
@@ -32,8 +33,11 @@ class ListFieldTypeCommand extends FieldTypeCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fieldTypes = $this->fieldTypeManager->readAll();
-
-        $this->renderTable($output, $fieldTypes, 'All installed FieldTypes');
+        try {
+            $fieldTypes = $this->fieldTypeManager->readAll();
+            $this->renderTable($output, $fieldTypes, 'All installed FieldTypes');
+        } catch (FieldTypeNotFoundException $exception) {
+            $output->writeln('No FieldType found');
+        }
     }
 }

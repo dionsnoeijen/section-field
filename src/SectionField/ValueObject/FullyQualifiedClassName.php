@@ -31,6 +31,16 @@ final class FullyQualifiedClassName {
         return $this->fullyQualifiedClassName;
     }
 
+    public static function fromNamespaceAndClassName(SectionNamespace $namespace, ClassName $className)
+    {
+        return new self((string) $namespace . '\\Entity\\' . (string) $className);
+    }
+
+    public static function fromString(string $fullyQualifiedClassName): self
+    {
+        return new self($fullyQualifiedClassName);
+    }
+
     public static function create(string $fullyQualifiedClassName): self
     {
         return new self($fullyQualifiedClassName);

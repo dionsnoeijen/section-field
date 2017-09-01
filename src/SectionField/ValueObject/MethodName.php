@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
-use Tardigrades\Helper\StringConverter;
+use Doctrine\Common\Util\Inflector;
 
 final class MethodName
 {
@@ -27,7 +27,7 @@ final class MethodName
 
     public static function create(string $methodName): self
     {
-        $methodName = StringConverter::toCamelCase($methodName);
+        $methodName = Inflector::camelize($methodName);
 
         return new self(ucfirst($methodName));
     }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
+use Doctrine\Common\Util\Inflector;
 use Tardigrades\Helper\StringConverter;
 
 final class ClassName
@@ -15,7 +16,7 @@ final class ClassName
     {
         Assertion::string($className, 'ClassName must be a string');
 
-        $this->className = $className;
+        $this->className = Inflector::classify($className);
     }
 
     public function __toString(): string
@@ -25,8 +26,6 @@ final class ClassName
 
     public static function fromString(string $className): self
     {
-        StringConverter::toCamelCase($className);
-
-        return new self(ucfirst($className));
+        return new self($className);
     }
 }

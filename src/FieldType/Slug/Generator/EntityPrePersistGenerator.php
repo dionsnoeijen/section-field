@@ -3,11 +3,11 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\Slug\Generator;
 
+use Doctrine\Common\Util\Inflector;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\FieldType\FieldTypeInterface\Generator;
 use Tardigrades\FieldType\ValueObject\PrePersistTemplate;
 use Tardigrades\FieldType\ValueObject\Template;
-use Tardigrades\Helper\StringConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\FieldType\Slug\ValueObject\Slug as SlugValueObject;
 
@@ -53,7 +53,7 @@ class EntityPrePersistGenerator implements Generator
                         break;
                 }
             }
-            $assignment[] = '$this->get' . ucfirst(StringConverter::toCamelCase($element[0])) . '()' . $attach;
+            $assignment[] = '$this->get' . Inflector::classify($element[0]) . '()' . $attach;
         }
         return 'Tardigrades\Helper\StringConverter::toSlug(' . implode(' . \'-\' . ', $assignment) . ');';
     }
