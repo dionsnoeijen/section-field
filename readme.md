@@ -11,10 +11,10 @@ It helps with:
 
 While the aim for this tool is to be very high level, simplicity should never prevail over flexibility.
 
-## @todo (don't forget)
+## @todo
 
 - Connect nullable field to required field.
-- I have introduced the concept of JIT relationships. Right now tose fields are dectected by the presence of _id. Change that to _jit_id.
+- I have introduced the concept of JIT relationships. Right now tose fields are detected by the presence of _id. Change that to _jit_id.
 - For many-to-many fields it's probably better to have two fields. One on each side.
 - Move FieldTypes to separate dependency
 - Deleting a field type should ony be possible if there are no installed fields with that type.
