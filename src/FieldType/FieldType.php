@@ -56,7 +56,7 @@ abstract class FieldType implements FieldTypeInterface
     public function directory(): string
     {
         $fieldType = new ReflectionClass($this);
-        return dirname($fieldType->getFilename());
+        return pathinfo($fieldType->getFilename(), PATHINFO_DIRNAME);
     }
 
     abstract public function addToForm(
