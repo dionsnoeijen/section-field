@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -24,27 +25,72 @@ final class DeleteFieldCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var FieldManager
-     */
+    /** @var FieldManager */
     private $fieldManager;
 
-    /**
-     * @var DeleteFieldCommand
-     */
+    /** @var DeleteFieldCommand */
     private $deleteFieldCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
+
+    /** @var vfsStream */
+    private $file;
 
     public function setUp()
     {
+        vfsStream::setup('home');
+        $this->file = vfsStream::url('home/some-config-file.yml');
         $this->fieldManager = Mockery::mock(FieldManager::class);
         $this->deleteFieldCommand = new DeleteFieldCommand($this->fieldManager);
         $this->application = new Application();
         $this->application->add($this->deleteFieldCommand);
+    }
+
+    /**
+     * @test
+     * @covers ::configure
+     * @covers ::execute
+     */
+    public function it_should_delete_field_with_id_1()
+    {
+        $yml = <<<YML
+field:
+    name: foo
+    handle: bar
+    label: [ label ]
+YML;
+
+        file_put_contents($this->file, $yml);
+
+        $command = $this->application->find('sf:delete-field');
+        $commandTester = new CommandTester($command);
+
+        $fields = $this->givenAnArrayOfFields();
+
+        $this->fieldManager
+            ->shouldReceive('readAll')
+            ->once()
+            ->andReturn($fields);
+
+        $this->fieldManager
+            ->shouldReceive('read')
+            ->once()
+            ->andReturn($fields[0]);
+
+        $this->fieldManager
+            ->shouldReceive('delete')
+            ->once();
+
+        $commandTester->setInputs([1, 'y']);
+        $commandTester->execute([
+            'command' => $command->getName()
+        ]);
+
+        $this->assertRegExp(
+            '/Removed!/',
+            $commandTester->getDisplay()
+        );
     }
 
     private function givenAnArrayOfFields()
@@ -79,7 +125,7 @@ final class DeleteFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -117,7 +163,7 @@ final class DeleteFieldCommandTest extends TestCase
                         'handle' => 'someOtherName',
                     ]
                 ])
-                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Field())
@@ -149,46 +195,9 @@ final class DeleteFieldCommandTest extends TestCase
                         ->setCreated(new \DateTime())
                         ->setUpdated(new \DateTime())
                 )
-                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
         ];
-    }
-
-    /**
-     * @test
-     * @covers ::configure
-     * @covers ::execute
-     */
-    public function it_should_delete_field_with_id_1()
-    {
-        $command = $this->application->find('sf:delete-field');
-        $commandTester = new CommandTester($command);
-
-        $fields = $this->givenAnArrayOfFields();
-
-        $this->fieldManager
-            ->shouldReceive('readAll')
-            ->once()
-            ->andReturn($fields);
-
-        $this->fieldManager
-            ->shouldReceive('read')
-            ->once()
-            ->andReturn($fields[0]);
-
-        $this->fieldManager
-            ->shouldReceive('delete')
-            ->once();
-
-        $commandTester->setInputs([1, 'y']);
-        $commandTester->execute([
-            'command' => $command->getName()
-        ]);
-
-        $this->assertRegExp(
-            '/Removed!/',
-            $commandTester->getDisplay()
-        );
     }
 }

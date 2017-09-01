@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -21,45 +22,26 @@ final class DeleteSectionCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var SectionManager|Mockery\MockInterface
-     */
+    /** @var SectionManager|Mockery\MockInterface */
     private $sectionManager;
 
-    /**
-     * @var DeleteSectionCommand
-     */
+    /** @var DeleteSectionCommand */
     private $deleteSectionCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
+
+    /** @var vfsStream */
+    private $file;
 
     public function setUp()
     {
+        vfsStream::setup('home');
+        $this->file = vfsStream::url('home/some-config-file.yml');
         $this->sectionManager = Mockery::mock(SectionManager::class);
         $this->deleteSectionCommand = new DeleteSectionCommand($this->sectionManager);
         $this->application = new Application();
         $this->application->add($this->deleteSectionCommand);
-    }
-
-    private function givenAnArrayOfSections()
-    {
-        return [
-            (new Section())
-                ->setName('Some name')
-                ->setHandle('someHandle')
-                ->setConfig(Yaml::parse(file_get_contents('some-section-config-file.yml')))
-                ->setCreated(new \DateTime())
-                ->setUpdated(new \DateTime()),
-            (new Section())
-                ->setName('Some other name')
-                ->setHandle('someOtherHandle')
-                ->setConfig(Yaml::parse(file_get_contents('some-section-config-file.yml')))
-                ->setCreated(new \DateTime())
-                ->setUpdated(new \DateTime()),
-        ];
     }
 
     /**
@@ -69,6 +51,17 @@ final class DeleteSectionCommandTest extends TestCase
      */
     public function it_should_delete_section_with_id_1()
     {
+        $yml = <<<YML
+section:
+    name: foo
+    handle: bar
+    fields: []
+    default: Default
+    namespace: My\Namespace
+YML;
+
+        file_put_contents($this->file, $yml);
+
         $command = $this->application->find('sf:delete-section');
         $commandTester = new CommandTester($command);
 
@@ -95,5 +88,23 @@ final class DeleteSectionCommandTest extends TestCase
             '/Removed!/',
             $commandTester->getDisplay()
         );
+    }
+
+    private function givenAnArrayOfSections()
+    {
+        return [
+            (new Section())
+                ->setName('Some name')
+                ->setHandle('someHandle')
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
+                ->setCreated(new \DateTime())
+                ->setUpdated(new \DateTime()),
+            (new Section())
+                ->setName('Some other name')
+                ->setHandle('someOtherHandle')
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
+                ->setCreated(new \DateTime())
+                ->setUpdated(new \DateTime()),
+        ];
     }
 }

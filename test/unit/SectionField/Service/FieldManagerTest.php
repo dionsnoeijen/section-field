@@ -369,4 +369,3 @@ final class FieldManagerTest extends TestCase
         return $field;
     }
 }
-

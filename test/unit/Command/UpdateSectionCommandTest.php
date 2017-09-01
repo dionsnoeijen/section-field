@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -21,53 +22,26 @@ final class UpdateSectionCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var SectionManager
-     */
+    /** @var SectionManager */
     private $sectionManager;
 
-    /**
-     * @var UpdateSectionCommand
-     */
+    /** @var UpdateSectionCommand */
     private $updateSectionCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
+
+    /** @var vfsStream */
+    private $file;
 
     public function setUp()
     {
+        vfsStream::setup('home');
+        $this->file = vfsStream::url('home/some-config-file.yml');
         $this->sectionManager = Mockery::mock(SectionManager::class);
         $this->updateSectionCommand = new UpdateSectionCommand($this->sectionManager);
         $this->application = new Application();
         $this->application->add($this->updateSectionCommand);
-    }
-
-    private function givenAnArrayOfSections()
-    {
-        return [
-            (new Section())
-                ->setName('Some name')
-                ->setHandle('someHandle')
-                ->setConfig(
-                    Yaml::parse(
-                        file_get_contents('some-section-config-file.yml')
-                    )
-                )
-                ->setCreated(new \DateTime())
-                ->setUpdated(new \DateTime()),
-            (new Section())
-                ->setName('Some other name')
-                ->setHandle('someOtherHandle')
-                ->setConfig(
-                    Yaml::parse(
-                        file_get_contents('some-section-config-file.yml')
-                    )
-                )
-                ->setCreated(new \DateTime())
-                ->setUpdated(new \DateTime()),
-        ];
     }
 
     /**
@@ -77,12 +51,23 @@ final class UpdateSectionCommandTest extends TestCase
      */
     public function it_should_update_a_section()
     {
+        $yml = <<<YML
+section:
+    name: foo
+    handle: bar
+    fields: []
+    default: Default
+    namespace: My\Namespace
+YML;
+
+        file_put_contents($this->file, $yml);
+
         $command = $this->application->find('sf:update-section');
         $commandTester = new CommandTester($command);
 
         $this->sectionManager
             ->shouldReceive('readAll')
-            ->once()
+            ->twice()
             ->andReturn($this->givenAnArrayOfSections());
 
         $this->sectionManager
@@ -99,7 +84,7 @@ final class UpdateSectionCommandTest extends TestCase
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                'config' => 'some-section-config-file.yml'
+                'config' => $this->file
             ]
         );
 
@@ -116,6 +101,23 @@ final class UpdateSectionCommandTest extends TestCase
      */
     public function it_should_fail_on_incorrect_config()
     {
+        $yml = <<<YML
+section:
+    name: foo
+    handle: bar
+    fields: []
+    default: Default
+    namespace: My\Namespace
+YML;
+
+        $wrongYml = <<<YML
+wrong: yml
+YML;
+
+        file_put_contents($this->file, $yml);
+        $wrongConfig = vfsStream::url('home/wrong-config-file.yml');
+        file_put_contents($wrongConfig, $wrongYml);
+
         $command = $this->application->find('sf:update-section');
         $commandTester = new CommandTester($command);
 
@@ -133,7 +135,7 @@ final class UpdateSectionCommandTest extends TestCase
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                'config' => 'some-erroneous-section-config-file.yml'
+                'config' => $wrongConfig
             ]
         );
 
@@ -141,5 +143,31 @@ final class UpdateSectionCommandTest extends TestCase
             '/Invalid configuration/',
             $commandTester->getDisplay()
         );
+    }
+
+    private function givenAnArrayOfSections()
+    {
+        return [
+            (new Section())
+                ->setName('Some name')
+                ->setHandle('someHandle')
+                ->setConfig(
+                    Yaml::parse(
+                        file_get_contents($this->file)
+                    )
+                )
+                ->setCreated(new \DateTime())
+                ->setUpdated(new \DateTime()),
+            (new Section())
+                ->setName('Some other name')
+                ->setHandle('someOtherHandle')
+                ->setConfig(
+                    Yaml::parse(
+                        file_get_contents($this->file)
+                    )
+                )
+                ->setCreated(new \DateTime())
+                ->setUpdated(new \DateTime()),
+        ];
     }
 }

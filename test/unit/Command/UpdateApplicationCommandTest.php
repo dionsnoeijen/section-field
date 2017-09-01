@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -31,38 +32,17 @@ final class UpdateApplicationCommandTest extends TestCase
     /** @var Application */
     private $application;
 
+    /** @var vfsStream */
+    private $file;
+
     public function setUp()
     {
+        vfsStream::setup('home');
+        $this->file = vfsStream::url('home/some-config-file.yml');
         $this->applicationManager = Mockery::mock(ApplicationManager::class);
         $this->updateApplicationCommand = new UpdateApplicationCommand($this->applicationManager);
         $this->application = new Application();
         $this->application->add($this->updateApplicationCommand);
-    }
-
-    private function givenAnArrayOfApplications()
-    {
-        return [
-            (new ApplicationEntity())
-                ->setId(1)
-                ->setHandle('someName')
-                ->setName('Some Name')
-                ->addLanguage((new Language())->setI18n('nl_NL'))
-                ->addLanguage((new Language())->setI18n('en_EN'))
-                ->addSection((new Section())->setName('Section Name'))
-                ->addSection((new Section())->setName('Another section name'))
-                ->setCreated(new \DateTime())
-                ->setUpdated(new \DateTime()),
-            (new ApplicationEntity())
-                ->setId(1)
-                ->setHandle('someOtherName')
-                ->setName('Some Other Name')
-                ->addLanguage((new Language())->setI18n('nl_NL'))
-                ->addLanguage((new Language())->setI18n('en_EN'))
-                ->addSection((new Section())->setName('Section Super Name'))
-                ->addSection((new Section())->setName('Another Super section name'))
-                ->setCreated(new \DateTime())
-                ->setUpdated(new \DateTime()),
-        ];
     }
 
     /**
@@ -72,6 +52,15 @@ final class UpdateApplicationCommandTest extends TestCase
      */
     public function it_should_update_an_application_based_on_config()
     {
+        $yml = <<<YML
+application:
+    name: foo
+    handle: bar
+    languages: []
+YML;
+
+        file_put_contents($this->file, $yml);
+
         $command = $this->application->find('sf:update-application');
         $commandTester = new CommandTester($command);
 
@@ -94,7 +83,7 @@ final class UpdateApplicationCommandTest extends TestCase
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                'config' => 'some-application-config-file.yml'
+                'config' => $this->file
             ]
         );
 
@@ -128,7 +117,7 @@ final class UpdateApplicationCommandTest extends TestCase
         $commandTester->execute(
             [
                 'command' => $command->getName(),
-                'config' => 'some-erroneous-application-config-file.yml'
+                'config' => $this->file
             ]
         );
 
@@ -136,5 +125,31 @@ final class UpdateApplicationCommandTest extends TestCase
             '/Invalid configuration/',
             $commandTester->getDisplay()
         );
+    }
+
+    private function givenAnArrayOfApplications()
+    {
+        return [
+            (new ApplicationEntity())
+                ->setId(1)
+                ->setHandle('someName')
+                ->setName('Some Name')
+                ->addLanguage((new Language())->setI18n('nl_NL'))
+                ->addLanguage((new Language())->setI18n('en_EN'))
+                ->addSection((new Section())->setName('Section Name'))
+                ->addSection((new Section())->setName('Another section name'))
+                ->setCreated(new \DateTime())
+                ->setUpdated(new \DateTime()),
+            (new ApplicationEntity())
+                ->setId(1)
+                ->setHandle('someOtherName')
+                ->setName('Some Other Name')
+                ->addLanguage((new Language())->setI18n('nl_NL'))
+                ->addLanguage((new Language())->setI18n('en_EN'))
+                ->addSection((new Section())->setName('Section Super Name'))
+                ->addSection((new Section())->setName('Another Super section name'))
+                ->setCreated(new \DateTime())
+                ->setUpdated(new \DateTime()),
+        ];
     }
 }

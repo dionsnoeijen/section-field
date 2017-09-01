@@ -197,4 +197,3 @@ final class ApplicationManagerTest extends TestCase
         $this->applicationManager->delete($application);
     }
 }
-
