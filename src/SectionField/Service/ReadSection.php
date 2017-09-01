@@ -31,14 +31,14 @@ class ReadSection implements ReadSectionInterface
     {
         $sectionData = new \ArrayIterator();
 
-        // The story goes as follows:
+        // @todo: The story goes as follows:
         // When we have a slug, the slug field is in the section
         // config, we need to make an extra query to get the rules
-        // for querying based on slug.
+        // for querying based on slug and we don't wan't that.
         $slug = $options->getSlug();
         $section = null;
         if (!empty($slug)) {
-            // @todo: We probably want to get rid of the section handle
+            // We probably want to get rid of the section handle
             // and use the FullyQualifiedClassName of the entity instead
             // That way we don't have to go for this kind of weird magic
             // with the converter
