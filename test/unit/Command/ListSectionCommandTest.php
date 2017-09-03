@@ -15,6 +15,7 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 /**
  * @coversDefaultClass Tardigrades\Command\ListSectionCommand
  * @covers ::<private>
+ * @covers ::<protected>
  * @covers ::__construct
  */
 final class ListSectionCommandTest extends TestCase
@@ -70,6 +71,60 @@ YML;
             ->andReturn($languages);
 
         $commandTester->execute(['command' => $command->getName()]);
+
+        $this->assertRegExp(
+            '/Some name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/someHandle/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/name:foo/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/handle:bar/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/fields:/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/default:Default/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            "/namespace:My\\\\Namespace/",
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Some other name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/someOtherHandle/',
+            $commandTester->getDisplay()
+        );
+        $this->assertRegExp(
+            '/All installed Sections/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/All installed Sections/',
+            $commandTester->getDisplay()
+        );
 
         $this->assertRegExp(
             '/All installed Sections/',

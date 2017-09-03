@@ -13,6 +13,7 @@ use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 /**
  * @coversDefaultClass Tardigrades\Command\ListFieldTypeCommand
  * @covers ::<private>
+ * @covers ::<protected>
  * @covers ::__construct
  */
 final class ListFieldTypeCommandTest extends TestCase
@@ -76,6 +77,26 @@ final class ListFieldTypeCommandTest extends TestCase
             ->andReturn($fieldTypes);
 
         $commandTester->execute(['command' => $command->getName()]);
+
+        $this->assertRegExp(
+            '/TextArea/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/TextInput/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Super\\\\Qualified/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Amazing\\\\Input/',
+            $commandTester->getDisplay()
+        );
 
         $this->assertRegExp(
             '/All installed FieldTypes/',

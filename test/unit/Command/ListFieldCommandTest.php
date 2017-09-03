@@ -19,6 +19,7 @@ use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 /**
  * @coversDefaultClass Tardigrades\Command\ListFieldCommand
  * @covers ::<private>
+ * @covers ::<protected>
  * @covers ::__construct
  */
 final class ListFieldCommandTest extends TestCase
@@ -74,6 +75,81 @@ YML;
             ->andReturn($fields);
 
         $commandTester->execute(['command' => $command->getName()]);
+
+        $this->assertRegExp(
+            '/en_EN Some field name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL Een veldnaam/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN Some other field name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL Een andere veldnaam/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN And another field name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL En nog een veldnaam/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN Dit is een label/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL Dit is een label/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/andAnotherName/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/TextInput/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/TextArea/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/name:foo/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/handle:bar/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/label:/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/-label/',
+            $commandTester->getDisplay()
+        );
 
         $this->assertRegExp(
             '/All installed Fields/',

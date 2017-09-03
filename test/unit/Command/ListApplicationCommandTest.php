@@ -16,6 +16,7 @@ use Tardigrades\Entity\Application as ApplicationEntity;
 /**
  * @coversDefaultClass Tardigrades\Command\ListApplicationCommand
  * @covers ::<private>
+ * @covers ::<protected>
  * @covers ::__construct
  */
 final class ListApplicationCommandTest extends TestCase
@@ -90,6 +91,56 @@ final class ListApplicationCommandTest extends TestCase
 
         $this->assertRegExp(
             '/All installed Applications/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/someName/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Some Name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Section Name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Another section name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/someOtherName/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Some Other Name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Section Super Name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Another Super section name/',
             $commandTester->getDisplay()
         );
     }
