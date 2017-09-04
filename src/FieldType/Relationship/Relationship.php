@@ -74,7 +74,7 @@ class Relationship extends FieldType implements RelationshipInterface
         }
 
         $formBuilder->add(
-            $toHandle . '_id',
+            $toHandle . '_jit_id',
             ChoiceType::class, [
                 'choices' => $choices,
                 'data' => $selected,
