@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -18,33 +19,142 @@ use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 /**
  * @coversDefaultClass Tardigrades\Command\ListFieldCommand
  * @covers ::<private>
+ * @covers ::<protected>
  * @covers ::__construct
  */
 final class ListFieldCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var FieldManager
-     */
+    /** @var FieldManager */
     private $fieldManager;
 
-    /**
-     * @var ListFieldCommand
-     */
+    /** @var ListFieldCommand */
     private $listFieldCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
+
+    /** @var vfsStream */
+    private $file;
 
     public function setUp()
     {
+        vfsStream::setup('home');
+        $this->file = vfsStream::url('home/some-config-file.yml');
         $this->fieldManager = Mockery::mock(FieldManager::class);
         $this->listFieldCommand = new ListFieldCommand($this->fieldManager);
         $this->application = new Application();
         $this->application->add($this->listFieldCommand);
+    }
+
+    /**
+     * @test
+     * @covers ::configure
+     * @covers ::execute
+     */
+    public function it_should_list_fields()
+    {
+        $yml = <<<YML
+field:
+    name: foo
+    handle: bar
+    label: [ label ]
+YML;
+
+        file_put_contents($this->file, $yml);
+
+        $command = $this->application->find('sf:list-field');
+        $commandTester = new CommandTester($command);
+
+        $fields = $this->givenAnArrayOfFields();
+
+        $this->fieldManager
+            ->shouldReceive('readAll')
+            ->once()
+            ->andReturn($fields);
+
+        $commandTester->execute(['command' => $command->getName()]);
+
+        $this->assertRegExp(
+            '/en_EN Some field name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL Een veldnaam/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN Some other field name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL Een andere veldnaam/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN And another field name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL En nog een veldnaam/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN Dit is een label/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL Dit is een label/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/andAnotherName/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/TextInput/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/TextArea/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/name:foo/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/handle:bar/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/label:/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/-label/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/All installed Fields/',
+            $commandTester->getDisplay()
+        );
     }
 
     private function givenAnArrayOfFields()
@@ -57,7 +167,7 @@ final class ListFieldCommandTest extends TestCase
                     (new FieldType())
                         ->setName('TextInput')
                 )
-                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some field name')
@@ -89,7 +199,7 @@ final class ListFieldCommandTest extends TestCase
                     (new FieldType())
                         ->setName('TextArea')
                 )
-                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('Some other field name')
@@ -121,7 +231,7 @@ final class ListFieldCommandTest extends TestCase
                     (new FieldType())
                         ->setName('TextArea')
                 )
-                ->setConfig(Yaml::parse(file_get_contents('some-field-config-file.yml')))
+                ->setConfig(Yaml::parse(file_get_contents($this->file)))
                 ->addFieldTranslation(
                     (new FieldTranslation())
                         ->setName('And another field name')
@@ -147,30 +257,5 @@ final class ListFieldCommandTest extends TestCase
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
         ];
-    }
-
-    /**
-     * @test
-     * @covers ::configure
-     * @covers ::execute
-     */
-    public function it_should_list_fields()
-    {
-        $command = $this->application->find('sf:list-field');
-        $commandTester = new CommandTester($command);
-
-        $fields = $this->givenAnArrayOfFields();
-
-        $this->fieldManager
-            ->shouldReceive('readAll')
-            ->once()
-            ->andReturn($fields);
-
-        $commandTester->execute(['command' => $command->getName()]);
-
-        $this->assertRegExp(
-            '/All installed Fields/',
-            $commandTester->getDisplay()
-        );
     }
 }

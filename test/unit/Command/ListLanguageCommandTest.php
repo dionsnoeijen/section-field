@@ -14,6 +14,7 @@ use Tardigrades\Entity\Application as ApplicationEntity;
 /**
  * @coversDefaultClass Tardigrades\Command\ListLanguageCommand
  * @covers ::<private>
+ * @covers ::<protected>
  * @covers ::__construct
  */
 final class ListLanguageCommandTest extends TestCase
@@ -98,6 +99,36 @@ final class ListLanguageCommandTest extends TestCase
 
         $this->assertRegExp(
             '/All installed languages/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/nl_NL/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/en_EN/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Application name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Another application name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Again, a name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Fffff, name/',
             $commandTester->getDisplay()
         );
     }

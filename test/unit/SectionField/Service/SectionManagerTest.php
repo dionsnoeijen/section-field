@@ -180,9 +180,7 @@ final class SectionManagerTest extends TestCase
         $this->entityManager->shouldReceive('persist')->once()->with($section);
         $this->entityManager->shouldReceive('flush')->once();
 
-        $receive = $this->sectionManager->update($section);
-
-        $this->assertSame($receive, $section);
+        $this->sectionManager->update($section);
     }
 
     /**
@@ -207,13 +205,15 @@ final class SectionManagerTest extends TestCase
         $sectionConfig = SectionConfig::create([
             'section' => [
                 'name' => 'Super Section',
+                'handle' => 'superSection',
                 'fields' => [
                     'title',
                     'body',
                     'created'
                 ],
                 'slug' => ['title'],
-                'default' => 'title'
+                'default' => 'title',
+                'namespace' => 'My\Namespace'
             ]
         ]);
 
@@ -246,13 +246,15 @@ final class SectionManagerTest extends TestCase
         $sectionConfig = SectionConfig::create([
             'section' => [
                 'name' => 'Super Section',
+                'handle' => 'superSection',
                 'fields' => [
                     'title',
                     'body',
                     'created'
                 ],
                 'slug' => ['title'],
-                'default' => 'title'
+                'default' => 'title',
+                'namespace' => 'My\Namespace'
             ]
         ]);
 

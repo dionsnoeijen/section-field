@@ -168,9 +168,11 @@ final class SectionTest extends TestCase
         $config = [
             'section' => [
                 'name' => 'I have a field name',
+                'handle' => 'handle',
                 'fields' => ['these', 'are', 'fields'],
                 'slug' => ['these'],
-                'default' => 'these'
+                'default' => 'these',
+                'namespace' => 'My\Namespace'
             ]
         ];
 
@@ -188,9 +190,11 @@ final class SectionTest extends TestCase
         $config = [
             'section' => [
                 'name' => 'I have a field name',
+                'handle' => 'handle',
                 'fields' => ['these', 'are', 'fields'],
                 'slug' => ['these'],
-                'default' => 'these'
+                'default' => 'these',
+                'namespace' => 'My\Namespace'
             ]
         ];
 

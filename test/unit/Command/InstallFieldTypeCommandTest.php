@@ -58,7 +58,8 @@ final class InstallFieldTypeCommandTest extends TestCase
         $this->fieldTypeManager
             ->shouldReceive('createWithFullyQualifiedClassName')
             ->once()
-            ->andReturn((new FieldType())
+            ->andReturn(
+                (new FieldType())
                 ->setType('TextArea')
                 ->setFullyQualifiedClassName('Some\\Fully\\Qualified\\Class\\Name')
                 ->setCreated(new \DateTime())
