@@ -11,54 +11,9 @@ It helps with:
 
 While the aim for this tool is to be very high level, simplicity should never prevail over flexibility.
 
-## @todo
+# Concept
 
-- Connect nullable field to required field.
-- I have introduced the concept of JIT relationships. Right now tose fields are detected by the presence of _id. Change that to _jit_id.
-- For many-to-many fields it's probably better to have two fields. One on each side.
-- Move FieldTypes to separate dependency
-- Deleting a field type should ony be possible if there are no installed fields with that type.
-- Finish up all types of relationships
-- Unit tests for value objects.
-- The symfony bundle will need a loader that adds classes to compile: https://symfony.com/doc/current/bundles/extension.html
-
-TODO (v1.0)  v1.0 Is een volledig werkende setup (zie tab 1) voor Doctrine (MySQL) compatibiliteit.
-
-- Input validatie (voor forms) toevoegen.
-Dit vergt aanpassingen in de section config opties en de form afhandeling.
-- Alle symfony field types toevoegen.
-Symfony heeft een hele boel field types, deze moeten aan SectionField toegevoegd worden. Dit pas na de input validatie goed geintegreerd is.
-- Endpoints (rest api voor secties)
-Aanpassing aan section configuratie. Optie toevoegen om voor een sectie endpoints in te schakelen en daarbij eventueel welke endpoints beschikbaar gesteld moeten worden. Maak ook een endpoint per section waarmee je de section structuur kan ophalen.
-- Alle relationship vormen in orde maken.
-Nog niet alle relationship types werken goed. Hier moet nog extra tijd in gestoken worden.
-- Update all command toevoegen.
-Wanneer je een aanpassingen doet in de yml configuratie van bijvoorbeeld een field type of een sectie moet je een aantal handelingen verrichten. Maak een command dat meteen alles in orde maakt.
-- Twig reader extension / reader service uitbreiden.
-De twig reader (om sectie data naar een template te halen) is nu nog tamelijk beperkt, deze moet worden uitgebreid om de meest voorkomende functionaliteit te bevatten).
-- Entry versioning toevoegen?
-Misschien is dit niet direct nodig, maar de optie om entries te versionen kan relevant zijn. (anders v.1.1)
-- Multilanguage toevoegen / afmaken?
-Er zitten voorbereidingen in om multilanguage te kunnen werken met  de sections. Het is even de vraag of dit direct relevant is maar de integratie moet nog afgemaakt worden. (anders v.1.1)
-- Unit tests afmaken.
-De unit tests zijn incompleet, er moet nog veel onder unit test komen.
-- Maak toevoegen van metadata aan field configuratie mogelijk.
-
-TODO (v1.1) v1.1 Voegt een aantal functionaliteiten toe om de flexibiliteit te vergroten.
-
-- Events... events everywhere
-- Je wil kunnen acteren op bepaalde acties die voorkomen in het systeem. Dit kan met events. Denk bijvoorbeeld aan, onBeforeWrite, onAfterWrite, onRead, onGenerate... enz.
-- Hooks... hooks everywhere
-Met hooks kan je inhaken op de flow van de aplicatie om het verloop aan te passen.
-- Extra readers
-Het systeem kan lezen uit verschillende databronnen maar we hebben alleen nog maar een Doctrine reader. Er zijn een aantal relevante extra readers te bedenken. Waarschijnlijk willen we die in een aparte package leveren.
-- Extra writers
-Dit gaat samen met de readers. We kunnen schrijven naar verschillende databronnen.
-- Entry versioning
-- Entry multilanguage
-- Application settings
-Je kan applications configureren. Maak dit af.
-
+Hereby a high level overview of the conceptual idea, real documentation is underway. (it really is...)
 
 ## Config
 
