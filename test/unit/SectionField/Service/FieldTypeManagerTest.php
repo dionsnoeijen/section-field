@@ -190,7 +190,9 @@ final class FieldTypeManagerTest extends TestCase
      */
     public function it_should_create_with_fully_qualified_class_name()
     {
-        $fullyQualifiedClassName = FullyQualifiedClassName::create('There\\Are\\ClassNames\\That\\Are\\Fully\\Qualified');
+        $fullyQualifiedClassName = FullyQualifiedClassName::create(
+            'There\\Are\\ClassNames\\That\\Are\\Fully\\Qualified'
+        );
 
         $fieldType = new FieldType();
         $fieldType->setType($fullyQualifiedClassName->getClassName());

@@ -75,8 +75,9 @@ class DoctrineSectionManager implements SectionManager
         return $sections;
     }
 
-    public function update(): void
+    public function update(Section $entity): void
     {
+        $this->entityManager->persist($entity);
         $this->entityManager->flush();
     }
 

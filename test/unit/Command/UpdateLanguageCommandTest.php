@@ -5,6 +5,7 @@ namespace Tardigrades\Command;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -30,12 +31,84 @@ final class UpdateLanguageCommandTest extends TestCase
     /** @var Application */
     private $application;
 
+    /** @var vfsStream */
+    private $file;
+
     public function setUp()
     {
+        vfsStream::setup('home');
+        $this->file = vfsStream::url('home/some-config-file.yml');
         $this->languageManager = Mockery::mock(LanguageManager::class);
         $this->updateLanguageCommand = new UpdateLanguageCommand($this->languageManager);
         $this->application = new Application();
         $this->application->add($this->updateLanguageCommand);
+    }
+
+    /**
+     * @test
+     * @covers ::configure
+     * @covers ::execute
+     */
+    public function it_should_update_languages_based_on_config()
+    {
+        $yml = <<<YML
+language: [ en-EN ]
+YML;
+
+        file_put_contents($this->file, $yml);
+
+        $command = $this->application->find('sf:update-language');
+        $commandTester = new CommandTester($command);
+
+        $this->languageManager
+            ->shouldReceive('readAll')
+            ->once()
+            ->andReturn($this->givenAnArrayOfLanguages());
+
+        $this->languageManager
+            ->shouldReceive('updateByConfig')
+            ->once();
+
+        $commandTester->execute(
+            [
+                'command' => $command->getName(),
+                'config' => $this->file
+            ]
+        );
+
+        $this->assertRegExp(
+            '/Languages updated!/',
+            $commandTester->getDisplay()
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::configure
+     * @covers ::execute
+     */
+    public function it_should_fail_with_invalid_config()
+    {
+        $yml = <<<YML
+wrong: yml
+YML;
+
+        file_put_contents($this->file, $yml);
+
+        $command = $this->application->find('sf:update-language');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(
+            [
+                'command' => $command->getName(),
+                'config' => $this->file
+            ]
+        );
+
+        $this->assertRegExp(
+            '/Invalid configuration/',
+            $commandTester->getDisplay()
+        );
     }
 
     private function givenAnArrayOfLanguages(): array
@@ -72,60 +145,5 @@ final class UpdateLanguageCommandTest extends TestCase
                 ->setUpdated(new \DateTime())
                 ->setCreated(new \DateTime()),
         ];
-    }
-
-    /**
-     * @test
-     * @covers ::configure
-     * @covers ::execute
-     */
-    public function it_should_update_languages_based_on_config()
-    {
-        $command = $this->application->find('sf:update-language');
-        $commandTester = new CommandTester($command);
-
-        $this->languageManager
-            ->shouldReceive('readAll')
-            ->once()
-            ->andReturn($this->givenAnArrayOfLanguages());
-
-        $this->languageManager
-            ->shouldReceive('updateByConfig')
-            ->once();
-
-        $commandTester->execute(
-            [
-                'command' => $command->getName(),
-                'config' => 'some-language-config-file.yml'
-            ]
-        );
-
-        $this->assertRegExp(
-            '/Languages updated!/',
-            $commandTester->getDisplay()
-        );
-    }
-
-    /**
-     * @test
-     * @covers ::configure
-     * @covers ::execute
-     */
-    public function it_should_fail_with_invalid_config()
-    {
-        $command = $this->application->find('sf:update-language');
-        $commandTester = new CommandTester($command);
-
-        $commandTester->execute(
-            [
-                'command' => $command->getName(),
-                'config' => 'some-erroneous-language-config-file.yml'
-            ]
-        );
-
-        $this->assertRegExp(
-            '/Invalid configuration/',
-            $commandTester->getDisplay()
-        );
     }
 }

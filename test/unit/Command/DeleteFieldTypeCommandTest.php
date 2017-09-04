@@ -91,4 +91,39 @@ final class DeleteFieldTypeCommandTest extends TestCase
             $commandTester->getDisplay()
         );
     }
+
+    /**
+     * @test
+     * @covers ::configure
+     * @covers ::execute
+     */
+    public function it_should_not_delete_field_type_with_id_1_when_cancelled()
+    {
+        $command = $this->application->find('sf:delete-field');
+        $commandTester = new CommandTester($command);
+
+        $fields = $this->givenAnArrayOfFieldTypes();
+
+        $this->fieldTypeManager
+            ->shouldReceive('readAll')
+            ->once()
+            ->andReturn($fields);
+
+        $this->fieldTypeManager
+            ->shouldReceive('read')
+            ->once()
+            ->andReturn($fields[0]);
+
+        $this->fieldTypeManager
+            ->shouldReceive('delete')
+            ->never();
+
+        $commandTester->setInputs([1, 'n']);
+        $commandTester->execute(['command' => $command->getName()]);
+
+        $this->assertRegExp(
+            '/Cancelled, nothing deleted./',
+            $commandTester->getDisplay()
+        );
+    }
 }

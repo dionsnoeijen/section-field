@@ -225,4 +225,3 @@ final class LanguageManagerTest extends TestCase
         $this->assertEquals($language->getI18n(), $returnedLanguage->getI18n());
     }
 }
-

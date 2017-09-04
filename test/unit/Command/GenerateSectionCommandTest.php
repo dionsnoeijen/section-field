@@ -11,22 +11,26 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Section;
+use Tardigrades\SectionField\SectionFieldInterface\Generators;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
 /**
- * @coversDefaultClass Tardigrades\Command\DeleteSectionCommand
+ * @coversDefaultClass Tardigrades\Command\GenerateSectionCommand
  * @covers ::<private>
  * @covers ::__construct
  */
-final class DeleteSectionCommandTest extends TestCase
+final class GenerateSectionCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
     /** @var SectionManager|Mockery\MockInterface */
     private $sectionManager;
 
-    /** @var DeleteSectionCommand */
-    private $deleteSectionCommand;
+    /** @var Generators */
+    private $entityGenerator;
+
+    /** @var GenerateSectionCommand */
+    private $generateSectionCommand;
 
     /** @var Application */
     private $application;
@@ -39,9 +43,10 @@ final class DeleteSectionCommandTest extends TestCase
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
         $this->sectionManager = Mockery::mock(SectionManager::class);
-        $this->deleteSectionCommand = new DeleteSectionCommand($this->sectionManager);
+        $this->entityGenerator = Mockery::mock(Generators::class);
+        $this->generateSectionCommand = new GenerateSectionCommand($this->sectionManager, $this->entityGenerator);
         $this->application = new Application();
-        $this->application->add($this->deleteSectionCommand);
+        $this->application->add($this->generateSectionCommand);
     }
 
     /**
@@ -49,7 +54,7 @@ final class DeleteSectionCommandTest extends TestCase
      * @covers ::configure
      * @covers ::execute
      */
-    public function it_should_delete_section_with_id_1()
+    public function it_should_generate_a_section()
     {
         $yml = <<<YML
 section:
@@ -62,7 +67,7 @@ YML;
 
         file_put_contents($this->file, $yml);
 
-        $command = $this->application->find('sf:delete-section');
+        $command = $this->application->find('sf:generate-section');
         $commandTester = new CommandTester($command);
 
         $sections = $this->givenAnArrayOfSections();
@@ -77,15 +82,65 @@ YML;
             ->once()
             ->andReturn($sections[0]);
 
-        $this->sectionManager
-            ->shouldReceive('delete')
+        $this->entityGenerator
+            ->shouldReceive('generateBySection')
+            ->with($sections[0])
+            ->once();
+
+        $this->entityGenerator
+            ->shouldReceive('getBuildMessages')
             ->once();
 
         $commandTester->setInputs([1, 'y']);
         $commandTester->execute(['command' => $command->getName()]);
 
         $this->assertRegExp(
-            '/Removed!/',
+            '/Some name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Some other name/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/someHandle/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/someOtherHandle/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/name:foo/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/handle:bar/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/fields:/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/default:Default/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/namespace:My\\\\Namespace/',
+            $commandTester->getDisplay()
+        );
+
+        $this->assertRegExp(
+            '/Available sections/',
             $commandTester->getDisplay()
         );
     }
@@ -94,12 +149,14 @@ YML;
     {
         return [
             (new Section())
+                ->setId(1)
                 ->setName('Some name')
                 ->setHandle('someHandle')
                 ->setConfig(Yaml::parse(file_get_contents($this->file)))
                 ->setCreated(new \DateTime())
                 ->setUpdated(new \DateTime()),
             (new Section())
+                ->setId(2)
                 ->setName('Some other name')
                 ->setHandle('someOtherHandle')
                 ->setConfig(Yaml::parse(file_get_contents($this->file)))

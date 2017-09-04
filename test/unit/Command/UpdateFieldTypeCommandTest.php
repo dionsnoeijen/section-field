@@ -98,4 +98,3 @@ final class UpdateFieldTypeCommandTest extends TestCase
         );
     }
 }
-
