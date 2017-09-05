@@ -79,8 +79,7 @@ class Relationship extends FieldType implements RelationshipInterface
                 'choices' => $choices,
                 'data' => $selected,
                 'multiple' => true,
-                'mapped' => false,
-                'required' => $this->isRequired($section)
+                'mapped' => false
             ]
         );
 

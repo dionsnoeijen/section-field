@@ -24,10 +24,7 @@ class TextArea extends FieldType implements TextAreaInterface
 
         $formBuilder->add(
             (string) $this->getConfig()->getHandle(),
-            TextareaType::class,
-            [
-                'required' => $this->isRequired($section)
-            ]
+            TextareaType::class
         );
 
         return $formBuilder;

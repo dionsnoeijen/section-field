@@ -22,7 +22,6 @@ class RichTextArea extends FieldType implements RichTextAreaInterface
     ): FormBuilderInterface {
 
         $options = $this->formOptions($sectionEntity);
-        $options['required'] = $this->isRequired($section);
 
         $formBuilder->add(
             (string) $this->getConfig()->getHandle(),

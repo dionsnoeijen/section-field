@@ -27,7 +27,6 @@ class DateTimeField extends FieldType implements DateTimeFieldType
                 (string) $this->getConfig()->getHandle(),
                 DateTimeType::class,
                 [
-                    'required' => $this->isRequired($section),
                     'format' => 'DD-mm-yyy H:i:s',
                     'data' => new \DateTime()
                 ]
