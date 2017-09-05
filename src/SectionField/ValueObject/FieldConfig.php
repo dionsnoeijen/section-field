@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
-use Tardigrades\Helper\StringConverter;
+use Tardigrades\Helper\ArrayConverter;
 
 final class FieldConfig
 {
@@ -96,23 +96,7 @@ final class FieldConfig
 
     public function __toString(): string
     {
-        $config = '';
-        foreach ($this->fieldConfig['field'] as $key=>$value) {
-            if (is_array($value)) {
-                $config .= $key . ':' . PHP_EOL;
-                foreach ($value as $langValue) {
-                    if (is_array($langValue)) {
-                        $config .= ' -' . key($langValue) . ':' . array_shift($langValue) . "\n";
-                    } else {
-                        $config .= ' -' . $langValue . PHP_EOL;
-                    }
-                }
-            } else {
-                $config .= $key . ':' . $value . PHP_EOL;
-            }
-        }
-
-        return $config;
+        return ArrayConverter::recursive($this->fieldConfig['field']);
     }
 
     public static function create(array $fieldConfig): self

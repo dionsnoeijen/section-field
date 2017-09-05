@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
+use Tardigrades\Helper\ArrayConverter;
 
 final class ApplicationConfig
 {
@@ -26,6 +27,11 @@ final class ApplicationConfig
     public function toArray(): array
     {
         return $this->applicationConfig;
+    }
+
+    public function __toString(): string
+    {
+        return ArrayConverter::recursive($this->applicationConfig['generator']);
     }
 
     public static function create(array $applicationConfig): self

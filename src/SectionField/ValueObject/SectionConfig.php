@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
+use Tardigrades\Helper\ArrayConverter;
 
 final class SectionConfig
 {
@@ -65,15 +66,6 @@ final class SectionConfig
         return SlugField::fromString($this->sectionConfig['section']['slug']);
     }
 
-    public function getRequired(): array
-    {
-        Assertion::keyExists($this->sectionConfig['section'], 'required', 'Section is not defined');
-        Assertion::notEmpty($this->sectionConfig['section']['required'], 'The required fields must be defined as an array');
-        Assertion::isArray($this->sectionConfig['section']['required'], 'The required fields are not defined as an array');
-
-        return $this->sectionConfig['section']['required'];
-    }
-
     public function getDefault(): string
     {
         return $this->sectionConfig['section']['default'];
@@ -94,22 +86,7 @@ final class SectionConfig
 
     public function __toString(): string
     {
-        $configText = '';
-        foreach ($this->sectionConfig['section'] as $key=>$value) {
-            $configText .= $key . ':';
-            if (is_array($value)) {
-                $configText .= PHP_EOL;
-                foreach ($value as $subKey=>$subValue) {
-                    // @todo: Because I don't feel to add recursion right now.
-                    $subValue = is_array($subValue) ? print_r($subValue, true) : $subValue;
-                    $configText .= " - {$subValue}" . PHP_EOL;
-                }
-                continue;
-            }
-            $configText .= $value . PHP_EOL;
-        }
-
-        return $configText;
+        return ArrayConverter::recursive($this->sectionConfig['section']);
     }
 
     public static function create(array $sectionConfig): self
