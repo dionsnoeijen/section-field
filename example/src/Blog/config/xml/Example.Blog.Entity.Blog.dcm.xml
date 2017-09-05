@@ -12,10 +12,10 @@
         </id>
 
         <field name="body" type="text"/>
-<field name="created" type="datetime"/>
+<field name="created" nullable="true" type="datetime"/>
 <field name="subtitle" nullable="true" type="string"/>
 <field name="title" nullable="true" type="string"/>
-<field name="updated" type="datetime"/>
+<field name="updated" nullable="true" type="datetime"/>
 <field name="blogSlug" type="string" unique="true"/>
 
 

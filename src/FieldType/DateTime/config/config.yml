@@ -4,5 +4,6 @@ generator:
     methods: Tardigrades\FieldType\Generator\EntityMethodsGenerator
     prePersist: Tardigrades\FieldType\Generator\EntityPrePersistGenerator
     preUpdate: Tardigrades\FieldType\Generator\EntityPreUpdateGenerator
+    validatorMetadata: Tardigrades\FieldType\Generator\EntityValidatorMetadataGenerator
   doctrine:
     fields: Tardigrades\FieldType\Generator\DoctrineFieldGenerator

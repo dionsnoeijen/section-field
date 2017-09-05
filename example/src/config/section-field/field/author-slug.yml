@@ -16,5 +16,5 @@ field:
       length: 255
       unique: true
   form:
-    default:
+    all:
       available: false

@@ -2,11 +2,21 @@ field:
   name:
     - nl_NL: Titel
     - en_EN: Title
-  handle: title
   label:
     - nl_NL: Titel
     - en_EN: Title
+  handle: title
   type: TextInput
   form:
-    length: 255
-
+    all:
+      trim: true
+    update:
+      disabled: true
+  generator:
+    entity:
+      validator:
+        Length:
+          min: 2
+          max: 255
+    doctrine:
+      length: 255

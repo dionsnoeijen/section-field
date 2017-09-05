@@ -13,5 +13,6 @@ interface FieldManager
     public function delete(Field $entity): void;
     public function createByConfig(FieldConfig $fieldConfig): Field;
     public function updateByConfig(FieldConfig $fieldConfig, Field $field): Field;
+    public function readByHandle(string $handle): Field;
     public function readFieldsByHandles(array $fields): array;
 }

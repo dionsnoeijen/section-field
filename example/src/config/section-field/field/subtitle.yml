@@ -2,9 +2,11 @@ field:
   name:
     - nl_NL: Onderkopje
     - en_EN: Subtitle
-  handle: subtitle
   label:
     - nl_NL: Onderkopje
     - en_EN: Subtitle
+  handle: subtitle
   type: TextInput
-  length: 255
+  form:
+    all:
+      trim: true

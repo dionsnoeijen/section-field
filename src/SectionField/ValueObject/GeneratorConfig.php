@@ -6,7 +6,7 @@ namespace Tardigrades\SectionField\ValueObject;
 use Assert\Assertion;
 use Tardigrades\Helper\ArrayConverter;
 
-final class SectionGeneratorConfig
+final class GeneratorConfig
 {
     /**
      * @var array
@@ -17,7 +17,7 @@ final class SectionGeneratorConfig
     {
         Assertion::keyExists($sectionGeneratorConfig,'generator', 'Config is not a section config');
 
-        $this->sectionGeneratorConfig = $sectionGeneratorConfig;
+        $this->sectionGeneratorConfig = $sectionGeneratorConfig['generator'];
     }
 
     public function toArray(): array
@@ -30,8 +30,8 @@ final class SectionGeneratorConfig
         return ArrayConverter::recursive($this->sectionGeneratorConfig['generator']);
     }
 
-    public static function create(array $sectionConfig): self
+    public static function create(array $sectionGeneratorConfig): self
     {
-        return new self($sectionConfig);
+        return new self($sectionGeneratorConfig);
     }
 }

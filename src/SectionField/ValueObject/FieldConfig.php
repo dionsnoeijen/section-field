@@ -94,6 +94,11 @@ final class FieldConfig
         return $this->fieldConfig['field']['kind'];
     }
 
+    public function getGeneratorConfig(): GeneratorConfig
+    {
+        return GeneratorConfig::create($this->fieldConfig['field']);
+    }
+
     public function __toString(): string
     {
         return ArrayConverter::recursive($this->fieldConfig['field']);

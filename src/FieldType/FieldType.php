@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType;
 
+use Mockery\Exception;
 use ReflectionClass;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\EntityInterface\Section;
@@ -28,18 +29,21 @@ abstract class FieldType implements FieldTypeInterface
         return $this->fieldConfig;
     }
 
-    public function isRequired(Section $section): bool
+    public function formOptions($sectionEntity): array
     {
-        try {
-            $requiredFields = $section->getConfig()->getRequired();
-        } catch (\Exception $exception) {
-            $requiredFields = [];
+        $fieldConfig = $this->getConfig()->toArray();
+        $options = [];
+        if (!empty($fieldConfig['field']['form'])) {
+            $entryId = $sectionEntity->getId();
+            $options = $fieldConfig['field']['form']['all'];
+            if (empty($entryId) && !empty($fieldConfig['field']['form']['create'])) {
+                $options = array_merge($options, $fieldConfig['field']['form']['create']);
+            }
+            if (!empty($entryId) && !empty($fieldConfig['field']['form']['update'])) {
+                $options = array_merge($options, $fieldConfig['field']['form']['update']);
+            }
         }
-
-        return in_array(
-            (string) $this->getConfig()->getHandle(),
-            $requiredFields
-        );
+        return $options;
     }
 
     public function hasEntityEvent(string $event): bool

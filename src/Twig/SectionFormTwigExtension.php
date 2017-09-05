@@ -88,6 +88,8 @@ class SectionFormTwigExtension extends Twig_Extension
             exit;
         }
 
+
+
         return $form->createView();
     }
 

@@ -7,5 +7,3 @@ field:
     - nl_NL: Email adres
     - en_EN: Email address
   type: TextInput
-  length: 255
-  validate: email

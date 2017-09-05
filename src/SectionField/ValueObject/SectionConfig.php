@@ -66,6 +66,11 @@ final class SectionConfig
         return SlugField::fromString($this->sectionConfig['section']['slug']);
     }
 
+    public function getGeneratorConfig(): GeneratorConfig
+    {
+        return GeneratorConfig::create($this->sectionConfig['section']);
+    }
+
     public function getDefault(): string
     {
         return $this->sectionConfig['section']['default'];

@@ -58,16 +58,21 @@ class Form implements SectionFormInterface
             ->createBuilder(
                 FormType::class,
                 $sectionEntity,
-                ['method' => 'POST']
+                [
+                    'method' => 'POST',
+                    'attr' => [
+                        'novalidate' => 'novalidate'
+                    ]
+                ]
             );
 
         /** @var Field $field */
         foreach ($section->getFields() as $field) {
-            $fieldTypeFulluQualifiedClassName = (string) $field
+            $fieldTypeFullyQualifiedClassName = (string) $field
                 ->getFieldType()
                 ->getFullyQualifiedClassName();
             /** @var FieldType $fieldType */
-            $fieldType = new $fieldTypeFulluQualifiedClassName;
+            $fieldType = new $fieldTypeFullyQualifiedClassName;
             $fieldType->setConfig($field->getConfig());
             $fieldType->addToForm(
                 $form,

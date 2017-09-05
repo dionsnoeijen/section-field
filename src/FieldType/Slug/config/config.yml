@@ -3,5 +3,6 @@ generator:
     properties: Tardigrades\FieldType\Generator\EntityPropertiesGenerator
     methods: Tardigrades\FieldType\Generator\EntityMethodsGenerator
     prePersist: Tardigrades\FieldType\Slug\Generator\EntityPrePersistGenerator
+    validatorMetadata: Tardigrades\FieldType\Generator\EntityValidatorMetadataGenerator
   doctrine:
     fields: Tardigrades\FieldType\Generator\DoctrineFieldGenerator

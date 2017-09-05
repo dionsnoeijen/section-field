@@ -169,6 +169,26 @@ class DoctrineFieldManager implements FieldManager
         return $field;
     }
 
+    public function readByHandle(string $handle): Field
+    {
+        $fieldRepository = $this->entityManager->getRepository(Field::class);
+
+        $field = $fieldRepository->findBy(['handle' => $handle]);
+
+        if (empty($field)) {
+            throw new FieldNotFoundException();
+        }
+
+        return $field[0];
+    }
+
+    /**
+     * @todo change name to readByHandles
+     *
+     * @param array $handles
+     * @return array
+     * @throws FieldNotFoundException
+     */
     public function readFieldsByHandles(array $handles): array
     {
         $fieldHandles = [];

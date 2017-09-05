@@ -9,6 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\FieldTypeInterface\FieldType;
+use Tardigrades\FieldType\Generator\EntityValidatorMetadataGenerator;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
@@ -151,52 +152,146 @@ EOT;
         return $combined;
     }
 
-    private function generateEntity(): Template
+    private function insertRenderedTemplates(string $template): string
     {
-        $asString = TemplateLoader::load(__DIR__ . '/GeneratorTemplate/entity.php.template');
-
         foreach ($this->templates as $templateVariable=>$templates) {
-            $asString = str_replace(
+            $template = str_replace(
                 '{{ ' . $templateVariable . ' }}',
                 $this->combine($templates),
-                $asString
+                $template
             );
         }
 
+        return $template;
+    }
+
+    private function insertSlug(string $template): string
+    {
         try {
             if ($this->sectionConfig->getSlugField() !== 'slug') {
-                $asString = str_replace(
+                $template = str_replace(
                     '{{ getSlug }}',
                     $this->generateSlugFieldGetMethod($this->sectionConfig->getSlugField()),
-                    $asString
+                    $template
                 );
             }
         } catch (\Exception $exception) {
-            $asString = str_replace(
+            $template = str_replace(
                 '{{ getSlug }}',
                 '',
-                $asString
+                $template
             );
             $this->buildMessages[] = 'There is no slug field available, skipping generic method.';
         }
 
-        $asString = str_replace(
+        return $template;
+    }
+
+    private function insertDefaultFieldMethod(string $template): string
+    {
+        $template = str_replace(
             '{{ getDefault }}',
             $this->generateDefaultFieldGetMethod($this->sectionConfig->getDefault()),
-            $asString
+            $template
         );
 
-        $asString = str_replace(
+        return $template;
+    }
+
+    private function insertSection(string $template): string
+    {
+        $template = str_replace(
             '{{ section }}',
             $this->sectionConfig->getClassName(),
-            $asString
-        );
-        $asString = str_replace(
-            '{{ namespace }}',
-            (string) $this->sectionConfig->getNamespace() . '\\Entity',
-            $asString
+            $template
         );
 
-        return Template::create(PhpFormatter::format($asString));
+        return $template;
+    }
+
+    private function insertNamespace(string $template): string
+    {
+        $template = str_replace(
+            '{{ namespace }}',
+            (string) $this->sectionConfig->getNamespace() . '\\Entity',
+            $template
+        );
+
+        return $template;
+    }
+
+    private function insertValidationMetadata(string $template): string
+    {
+        $generatorConfig = $this->sectionConfig->getGeneratorConfig()->toArray();
+        $metadata = '';
+        foreach ($generatorConfig['entity'] as $handle => $options) {
+
+            $field = $this->fieldManager->readByHandle($handle);
+
+            foreach ($options as $assertion => $assertionOptions) {
+                try {
+                    $asString = (string)Template::create(
+                        (string)TemplateLoader::load(
+                            $field->getFieldType()->getInstance()->directory() .
+                            '/GeneratorTemplate/entity.validator-metadata.php.template'
+                        )
+                    );
+                    $asString = str_replace(
+                        '{{ propertyName }}',
+                        $field->getHandle(),
+                        $asString
+                    );
+                    $asString = str_replace(
+                        '{{ assertion }}',
+                        $assertion,
+                        $asString
+                    );
+                    $arguments = '';
+                    if (is_array($assertionOptions)) {
+                        foreach ($assertionOptions as $optionKey => $optionValue) {
+                            $arguments .= "'{$optionKey}' => '{$optionValue}',";
+                        }
+                        if (!empty($arguments)) {
+                            $arguments = rtrim($arguments, ',');
+                            $arguments = "[{$arguments}]";
+                        }
+                    }
+                    $asString = str_replace(
+                        '{{ assertionOptions }}',
+                        $arguments,
+                        $asString
+                    );
+                    if (strpos($template, $asString) === false) {
+                        // Add to metadata
+                        $metadata .= $asString;
+                    }
+                } catch (\Exception $exception) {
+                    $this->buildMessages[] = $exception->getMessage();
+                }
+            }
+        }
+
+        // Insert
+        $template = str_replace(
+            '{{ validatorMetadataSectionPhase }}',
+            $metadata,
+            $template
+        );
+
+        return $template;
+    }
+
+    private function generateEntity(): Template
+    {
+        $template = TemplateLoader::load(__DIR__ . '/GeneratorTemplate/entity.php.template');
+
+        $template = $this->insertRenderedTemplates($template);
+        $template = $this->insertSlug($template);
+        $template = $this->insertDefaultFieldMethod($template);
+        $template = $this->insertSection($template);
+        $template = $this->insertNamespace($template);
+        $template = $this->insertValidationMetadata($template);
+
+        return Template::create(PhpFormatter::format($template));
     }
 }

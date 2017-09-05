@@ -1,6 +1,6 @@
 {% set form = sectionForm('Example.Blog.Entity.Comment') %}
 {{ form_start(form) }}
-<input type="hidden" name="form[blog_jit_id]" value="Example.Blog.Entity.Blog:{{ blogId }}" />
+<input type="hidden" name="form[blog_id]" value="Example.Blog.Entity.Blog:{{ blogId }}" />
 <div class="row">
     <div class="col-md-12">
         {{ form_errors(form) }}

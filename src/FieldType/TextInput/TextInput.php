@@ -19,11 +19,12 @@ class TextInput extends FieldType implements TextInputFieldType
         ReadSection $readSection
     ): FormBuilderInterface {
 
+        $options = $this->formOptions($sectionEntity);
+
         $formBuilder->add(
             (string) $this->getConfig()->getHandle(),
-            TextType::class, [
-                'required' => $this->isRequired($section)
-            ]
+            TextType::class,
+            $options
         );
 
         return $formBuilder;
