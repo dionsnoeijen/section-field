@@ -2,3 +2,4 @@ vendor
 docker/data
 coverage
 log
+.notes
