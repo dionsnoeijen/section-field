@@ -53,7 +53,6 @@ services:
     class: Tardigrades\SectionField\Form\Form
     arguments:
       - '@section_field.manager.doctrine.section_manager'
-      - '@form.factory'
       - '@section_field.read.section'
 
   section_field.doctrine.create.section:
@@ -92,4 +91,5 @@ services:
       - '@section_field.create.section'
       - '@section_field.form'
       - '@request_stack'
+
     tags: [twig.extension]

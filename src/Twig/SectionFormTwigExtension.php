@@ -3,11 +3,8 @@ declare (strict_types=1);
 
 namespace Tardigrades\Twig;
 
-use Example\Blog\Entity\Blog;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Tardigrades\FieldType\Slug\ValueObject\Slug;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
@@ -87,8 +84,6 @@ class SectionFormTwigExtension extends Twig_Extension
             header('Location: ' . $redirect);
             exit;
         }
-
-
 
         return $form->createView();
     }

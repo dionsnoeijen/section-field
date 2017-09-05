@@ -5,8 +5,17 @@ namespace Tardigrades\SectionField\Form;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
+use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
+use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Form\Forms;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\FieldType\FieldTypeInterface\FieldType;
@@ -32,12 +41,12 @@ class Form implements SectionFormInterface
 
     public function __construct(
         SectionManager $sectionManager,
-        FormFactory $formFactory,
-        ReadSection $readSection
+        ReadSection $readSection,
+        FormFactory $formFactory = null
     ) {
         $this->sectionManager = $sectionManager;
-        $this->formFactory = $formFactory;
         $this->readSection = $readSection;
+        $this->formFactory = $formFactory;
     }
 
     public function buildFormForSection(
@@ -54,7 +63,10 @@ class Form implements SectionFormInterface
         }
 
         $sectionEntity = $this->getSectionEntity($forHandle, $section, $slug);
-        $form = $this->formFactory
+
+        $factory = $this->getFormFactory();
+
+        $form = $factory
             ->createBuilder(
                 FormType::class,
                 $sectionEntity,
@@ -62,7 +74,11 @@ class Form implements SectionFormInterface
                     'method' => 'POST',
                     'attr' => [
                         'novalidate' => 'novalidate'
-                    ]
+                    ],
+                    'csrf_protection' => true,
+                    'csrf_field_name' => '_token',
+                    // a unique key to help generate the secret token
+                    'csrf_token_id'   => 'tardigrades'
                 ]
             );
 
@@ -85,6 +101,31 @@ class Form implements SectionFormInterface
 
         $form->add('save', SubmitType::class);
         return $form->getForm();
+    }
+
+    /**
+     * If you use SexyField with symfony you might want to inject the formFactory from the framework
+     * If you use it stand-alone this will build a form factory right here.
+     * @return FormFactory
+     */
+    private function getFormFactory(): FormFactory
+    {
+        $factory = $this->formFactory;
+        if (empty($this->formFactory)) {
+            $validatorBuilder = Validation::createValidatorBuilder();
+            // Loads validator metadata from entity static method
+            $validatorBuilder->addMethodMapping('loadValidatorMetadata');
+            $validator = $validatorBuilder->getValidator();
+            $session = new Session();
+            $csrfGenerator = new UriSafeTokenGenerator();
+            $csrfStorage = new SessionTokenStorage($session);
+            $csrfManager = new CsrfTokenManager($csrfGenerator, $csrfStorage);
+            $factory = Forms::createFormFactoryBuilder()
+                ->addExtension(new CsrfExtension($csrfManager))
+                ->addExtension(new ValidatorExtension($validator))
+                ->getFormFactory();
+        }
+        return $factory;
     }
 
     private function getSection(
