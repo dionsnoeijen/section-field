@@ -175,6 +175,7 @@ class Blog
     {
         $metadata->addPropertyConstraint('title', new Assert\Length(['min' => '2','max' => '255']));
         $metadata->addPropertyConstraint('title', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('body', new Assert\NotBlank());
     }
 
     public function onPrePersist(): void
