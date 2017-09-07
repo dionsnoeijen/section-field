@@ -91,5 +91,4 @@ services:
       - '@section_field.create.section'
       - '@section_field.form'
       - '@request_stack'
-
     tags: [twig.extension]

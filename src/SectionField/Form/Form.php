@@ -25,6 +25,7 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\SectionFieldInterface\Form as SectionFormInterface;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 class Form implements SectionFormInterface
@@ -49,11 +50,12 @@ class Form implements SectionFormInterface
     }
 
     public function buildFormForSection(
-        FullyQualifiedClassName $forHandle,
-        SectionFormOptions $sectionFormOptions
+        string $forHandle,
+        SectionFormOptions $sectionFormOptions = null
     ): FormInterface {
 
-        $section = $this->getSection($forHandle);
+        $sectionConfig = $this->getSectionConfig($forHandle);
+        $section = $this->getSection($sectionConfig->getFullyQualifiedClassName());
 
         try {
             $slug = $sectionFormOptions->getSlug();
@@ -61,8 +63,7 @@ class Form implements SectionFormInterface
             $slug = null;
         }
 
-        $sectionEntity = $this->getSectionEntity($forHandle, $section, $slug);
-
+        $sectionEntity = $this->getSectionEntity($sectionConfig->getFullyQualifiedClassName(), $section, $slug);
         $factory = $this->getFormFactory();
 
         $form = $factory
@@ -100,6 +101,22 @@ class Form implements SectionFormInterface
 
         $form->add('save', SubmitType::class);
         return $form->getForm();
+    }
+
+    /**
+     * A section can be summoned by either it's handle: 'someCoolHandle'
+     * or it's fully qualified class name: 'Vendor\Entity\SomeCoolEntity'
+     * Make sure we fetch the entity config so we can get the FQCN from there
+     * @param string $forHandle
+     * @return SectionConfig
+     */
+    private function getSectionConfig(string $forHandle): SectionConfig
+    {
+        return $this->sectionManager->readByHandle(
+            FullyQualifiedClassNameConverter::toHandle(
+                FullyQualifiedClassName::fromString($forHandle)
+            )
+        )->getConfig();
     }
 
     /**

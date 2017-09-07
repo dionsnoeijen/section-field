@@ -1,0 +1,16 @@
+rest.section:
+  path: /v1/section/{sectionHandle}/{offset}/{limit}/{orderBy}/{sort}
+  defaults: { _controller: 'rest.controller:getEntries', offset: '0', limit: '10', orderBy: '', sort: 'DESC' }
+  requirements:
+    offset: '\d+'
+    limit: '\d+'
+
+rest.section.entry.by.id:
+  path: /v1/section/{sectionHandle}/{id}
+  defaults: { _controller: 'rest.controller:getEntryById' }
+  requirements:
+    id: '\d+'
+
+rest.section.entry.by.slug:
+  path: /v1/section/{sectionHandle}/{slug}
+  defaults: { _controller: 'rest.controller:getEntryBySlug' }

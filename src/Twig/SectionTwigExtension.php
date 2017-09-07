@@ -16,11 +16,6 @@ class SectionTwigExtension extends Twig_Extension
     /** @var array */
     private $options;
 
-    const SECTION = 'section';
-    const LIMIT = 'limit';
-    const OFFSET = 'offset';
-    const ORDER_BY = 'orderBy';
-
     public function __construct(ReadSection $readSection)
     {
         $this->readSection = $readSection;
@@ -35,28 +30,28 @@ class SectionTwigExtension extends Twig_Extension
 
     public function section(string $section): SectionTwigExtension
     {
-        $this->options[self::SECTION] = $section;
+        $this->options[ReadOptions::SECTION] = $section;
 
         return $this;
     }
 
     public function limit(int $limit): SectionTwigExtension
     {
-        $this->options[self::LIMIT] = $limit;
+        $this->options[ReadOptions::LIMIT] = $limit;
 
         return $this;
     }
 
     public function offset(int $offset): SectionTwigExtension
     {
-        $this->options[self::OFFSET] = $offset;
+        $this->options[ReadOptions::OFFSET] = $offset;
 
         return $this;
     }
 
     public function orderBy(array $orderBy): SectionTwigExtension
     {
-        $this->options[self::ORDER_BY] = $orderBy;
+        $this->options[ReadOptions::ORDER_BY] = $orderBy;
 
         return $this;
     }

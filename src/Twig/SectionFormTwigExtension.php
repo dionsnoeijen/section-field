@@ -5,12 +5,14 @@ namespace Tardigrades\Twig;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\JitRelationship;
+use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 use Twig_Extension;
 use Twig_Function;
@@ -63,7 +65,7 @@ class SectionFormTwigExtension extends Twig_Extension
         $sectionFormOptions = SectionFormOptions::fromArray($sectionFormOptions);
 
         $form = $this->form->buildFormForSection(
-            FullyQualifiedClassName::fromString($forHandle),
+            $forHandle,
             $sectionFormOptions
         );
         $form->handleRequest();

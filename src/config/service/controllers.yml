@@ -1,0 +1,7 @@
+services:
+  rest.controller:
+    class: Tardigrades\SectionField\Api\Controller\RestController
+    arguments:
+      - '@section_field.create.section'
+      - '@section_field.read.section'
+      - '@section_field.form'

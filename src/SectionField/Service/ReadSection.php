@@ -31,18 +31,8 @@ class ReadSection implements ReadSectionInterface
     {
         $sectionData = new \ArrayIterator();
 
-        // @todo: The story goes as follows:
-        // When we have a slug, the slug field is in the section
-        // config, we need to make an extra query to get the rules
-        // for querying based on slug and we don't wan't that.
-        $slug = $options->getSlug();
-        $section = null;
-        if (!empty($slug)) {
-            // We probably want to get rid of the section handle
-            // and use the FullyQualifiedClassName of the entity instead
-            // That way we don't have to go for this kind of weird magic
-            // with the converter
-            $section = $this->sectionManager->readByHandle(
+        if ($sectionConfig === null) {
+            $sectionConfig = $this->sectionManager->readByHandle(
                 FullyQualifiedClassNameConverter::toHandle(
                     $options->getSection()[0]
                 )
@@ -55,7 +45,7 @@ class ReadSection implements ReadSectionInterface
             // use the key to merge data. As mentioned, we probably need
             // to configure the priority of readers to know which one determines
             // the final state.
-            foreach ($reader->read($options, $section) as $entry) {
+            foreach ($reader->read($options, $sectionConfig) as $entry) {
                 $sectionData->append($entry);
             }
         }

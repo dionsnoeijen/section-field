@@ -11,7 +11,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Templating\TemplateNameParser;
+use Symfony\Component\HttpKernel;
 
 // -----------------------------
 // Create the container
@@ -161,3 +168,33 @@ try {
         'message' => $exception->getMessage()
     ]);
 }
+
+// ------------------------------
+// Symfony routing
+// ------------------------------
+
+$yamlRoutingLoader = new \Symfony\Component\Routing\Loader\YamlFileLoader(
+    new FileLocator([__DIR__.'/../src/config/routing'])
+);
+$yamlRoutes = $yamlRoutingLoader->load('api.yml');
+
+$context = new RequestContext();
+$context->fromRequest($request);
+$ymlMatcher = new UrlMatcher($yamlRoutes, $context);
+
+$controllerResolver = new HttpKernel\Controller\ContainerControllerResolver($container);
+$argumentResolver = new HttpKernel\Controller\ArgumentResolver();
+
+try {
+    $request->attributes->add($ymlMatcher->match($request->getPathInfo()));
+    $controller = $controllerResolver->getController($request);
+    $arguments = $argumentResolver->getArguments($request, $controller);
+
+    $response = call_user_func_array($controller, $arguments);
+} catch (Routing\Exception\ResourceNotFoundException $e) {
+    $response = new Response('Not Found', 404);
+} catch (Exception $e) {
+    $response = new Response('An error occurred: ' . $e->getMessage(), 500);
+}
+
+$response->send();

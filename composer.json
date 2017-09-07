@@ -23,9 +23,11 @@
     "symfony/templating": "^3.3.2",
     "symfony/translation": "^3.3.2",
     "symfony/twig-bridge": "^3.3.2",
+    "symfony/routing": "^3.3.2",
     "beberlei/assert": "2.6.5",
     "twig/twig": "~2.0",
-    "twig/extensions": "^1.5.1"
+    "twig/extensions": "^1.5.1",
+    "jms/serializer": "^1.8"
   },
   "autoload": {
     "psr-4": {

@@ -23,16 +23,18 @@ class DoctrineSectionReader implements ReadSection
 
     public function read(ReadOptions $options, SectionConfig $sectionConfig = null): \ArrayIterator
     {
-        // @todo: Implement the multi section thingie
-        $section = $options->getSection();
-
         $findBy = [];
         $slug = $options->getSlug();
         if (!empty($slug)) {
             $findBy = [(string) $sectionConfig->getSlugField() => $slug];
         }
 
-        $sectionRepository = $this->entityManager->getRepository((string) reset($section));
+        $id = $options->getId();
+        if (!empty($id)) {
+            $findBy = ['id' => $options->getId()->toInt()];
+        }
+
+        $sectionRepository = $this->entityManager->getRepository((string) $sectionConfig->getFullyQualifiedClassName());
 
         /** @var \ArrayIterator $results */
         $results = $sectionRepository->findBy(

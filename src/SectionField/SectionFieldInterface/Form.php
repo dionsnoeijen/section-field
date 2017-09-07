@@ -10,7 +10,7 @@ use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 interface Form
 {
     public function buildFormForSection(
-        FullyQualifiedClassName $forHandle,
-        SectionFormOptions $sectionFormOptions
+        string $forHandle,
+        SectionFormOptions $sectionFormOptions = null
     ): FormInterface;
 }
