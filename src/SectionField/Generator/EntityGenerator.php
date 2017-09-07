@@ -93,8 +93,7 @@ class EntityGenerator extends Generator implements GeneratorInterface
                     $this->buildMessages[] = 'Generators ' . $generator . ': Generators not found.';
                     break;
                 }
-                if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class)
-                {
+                if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class) {
                     try {
                         $reflector = new ReflectionClass($generator);
                         $method = $reflector->getMethod('generate');
