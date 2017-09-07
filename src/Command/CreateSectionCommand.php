@@ -35,7 +35,7 @@ class CreateSectionCommand extends SectionCommand
             if (file_exists($config)) {
                 $parsed = Yaml::parse(file_get_contents($config));
                 if (is_array($parsed)) {
-                    $sectionConfig = SectionConfig::create($parsed);
+                    $sectionConfig = SectionConfig::fromArray($parsed);
                     $this->sectionManager->createByConfig($sectionConfig);
                     $output->writeln('<info>Section created!</info>');
                     return;

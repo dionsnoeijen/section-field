@@ -55,12 +55,12 @@ class FieldType implements FieldTypeInterface
 
     public function getIdValueObject(): Id
     {
-        return Id::create($this->id);
+        return Id::fromInt($this->id);
     }
 
     public function getType(): Type
     {
-        return Type::create($this->type);
+        return Type::fromString($this->type);
     }
 
     public function setType(string $type): FieldType
@@ -105,12 +105,12 @@ class FieldType implements FieldTypeInterface
 
     public function getFullyQualifiedClassName(): FullyQualifiedClassName
     {
-        return FullyQualifiedClassName::create($this->fullyQualifiedClassName);
+        return FullyQualifiedClassName::fromString($this->fullyQualifiedClassName);
     }
 
     public function getName(): Name
     {
-        return Name::create($this->type);
+        return Name::fromString($this->type);
     }
 
     public function setName(string $name): FieldType
@@ -134,7 +134,7 @@ class FieldType implements FieldTypeInterface
 
     public function getCreatedValueObject(): Created
     {
-        return Created::create($this->created);
+        return Created::fromDateTime($this->created);
     }
 
     public function setUpdated(\DateTime $updated): FieldType
@@ -151,7 +151,7 @@ class FieldType implements FieldTypeInterface
 
     public function getUpdatedValueObject(): Updated
     {
-        return Updated::create($this->updated);
+        return Updated::fromDateTime($this->updated);
     }
 
     public function onPrePersist(): void

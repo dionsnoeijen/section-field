@@ -45,7 +45,7 @@ class UpdateLanguageCommand extends LanguageCommand
         $this->questionHelper = $this->getHelper('question');
 
         try {
-            $languageConfig = LanguageConfig::create(
+            $languageConfig = LanguageConfig::fromArray(
                 Yaml::parse(
                     file_get_contents($input->getArgument('config'))
                 )

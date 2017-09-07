@@ -70,12 +70,12 @@ class Field implements FieldInterface
 
     public function getHandle(): Handle
     {
-        return Handle::create($this->handle);
+        return Handle::fromString($this->handle);
     }
 
     public function getIdValueObject(): Id
     {
-        return Id::create($this->id);
+        return Id::fromInt($this->id);
     }
 
     public function addSection(SectionInterface $section): FieldInterface
@@ -160,7 +160,7 @@ class Field implements FieldInterface
 
     public function getConfig(): FieldConfig
     {
-        return FieldConfig::create((array) $this->config);
+        return FieldConfig::fromArray((array) $this->config);
     }
 
     public function setCreated(\DateTime $created): FieldInterface
@@ -177,7 +177,7 @@ class Field implements FieldInterface
 
     public function getCreatedValueObject(): Created
     {
-        return Created::create($this->created);
+        return Created::fromDateTime($this->created);
     }
 
     public function setUpdated(\DateTime $updated): FieldInterface
@@ -194,7 +194,7 @@ class Field implements FieldInterface
 
     public function getUpdatedValueObject(): Updated
     {
-        return Updated::create($this->updated);
+        return Updated::fromDateTime($this->updated);
     }
 
     public function onPrePersist(): void

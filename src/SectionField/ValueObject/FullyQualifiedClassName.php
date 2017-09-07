@@ -4,14 +4,12 @@ namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
 
-final class FullyQualifiedClassName {
-
-    /**
-     * @var string
-     */
+final class FullyQualifiedClassName
+{
+    /** @var string */
     private $fullyQualifiedClassName;
 
-    public function __construct(string $fullyQualifiedClassName)
+    private function __construct(string $fullyQualifiedClassName)
     {
         Assertion::string($fullyQualifiedClassName, 'The fully qualified class name needs to be a string');
 
@@ -37,11 +35,6 @@ final class FullyQualifiedClassName {
     }
 
     public static function fromString(string $fullyQualifiedClassName): self
-    {
-        return new self($fullyQualifiedClassName);
-    }
-
-    public static function create(string $fullyQualifiedClassName): self
     {
         return new self($fullyQualifiedClassName);
     }

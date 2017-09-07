@@ -49,12 +49,12 @@ class FieldTranslation implements FieldTranslationInterface
 
     public function getIdValueObject(): Id
     {
-        return Id::create($this->id);
+        return Id::fromInt($this->id);
     }
 
     public function getName(): Name
     {
-        return Name::create($this->name);
+        return Name::fromString($this->name);
     }
 
     public function setName(string $name): FieldTranslationInterface
@@ -66,7 +66,7 @@ class FieldTranslation implements FieldTranslationInterface
 
     public function getLabel(): Label
     {
-        return Label::create($this->label);
+        return Label::fromString($this->label);
     }
 
     public function setLabel(string $label): FieldTranslationInterface
@@ -123,7 +123,7 @@ class FieldTranslation implements FieldTranslationInterface
 
     public function getCreatedValueObject(): Created
     {
-        return Created::create($this->created);
+        return Created::fromDateTime($this->created);
     }
 
     public function setUpdated(\DateTime $updated): FieldTranslationInterface
@@ -140,7 +140,7 @@ class FieldTranslation implements FieldTranslationInterface
 
     public function getUpdatedValueObject(): Updated
     {
-        return Updated::create($this->updated);
+        return Updated::fromDateTime($this->updated);
     }
 
     public function onPrePersist(): void

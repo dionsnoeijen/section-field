@@ -25,7 +25,7 @@ final class PropertyName
         return $this->propertyName;
     }
 
-    public static function create(string $propertyName): self
+    public static function fromString(string $propertyName): self
     {
         return new self(StringConverter::toCamelCase($propertyName));
     }

@@ -44,7 +44,7 @@ final class LanguageTest extends TestCase
     {
         $field = $this->language->setId(10);
 
-        $this->assertEquals(Id::create(10), $this->language->getIdValueObject());
+        $this->assertEquals(Id::fromInt(10), $this->language->getIdValueObject());
     }
 
     /**
@@ -64,7 +64,7 @@ final class LanguageTest extends TestCase
     {
         $language = $this->language->setI18n('nl_NL');
 
-        $this->assertEquals(I18n::create('nl_NL'), $language->getI18n());
+        $this->assertEquals(I18n::fromString('nl_NL'), $language->getI18n());
     }
 
     /**

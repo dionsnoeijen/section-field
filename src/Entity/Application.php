@@ -59,7 +59,7 @@ class Application implements ApplicationInterface
 
     public function getIdValueObject(): Id
     {
-        return Id::create($this->id);
+        return Id::fromInt($this->id);
     }
 
     public function setName(string $name): ApplicationInterface
@@ -71,7 +71,7 @@ class Application implements ApplicationInterface
 
     public function getName(): Name
     {
-        return Name::create($this->name);
+        return Name::fromString($this->name);
     }
 
     public function setHandle(string $handle): ApplicationInterface
@@ -83,7 +83,7 @@ class Application implements ApplicationInterface
 
     public function getHandle(): Handle
     {
-        return Handle::create($this->handle);
+        return Handle::fromString($this->handle);
     }
 
     public function getLanguages(): Collection
@@ -150,7 +150,7 @@ class Application implements ApplicationInterface
 
     public function getCreatedValueObject(): Created
     {
-        return Created::create($this->created);
+        return Created::fromDateTime($this->created);
     }
 
     public function setUpdated(\DateTime $updated): ApplicationInterface
@@ -167,7 +167,7 @@ class Application implements ApplicationInterface
 
     public function getUpdatedValueObject(): Updated
     {
-        return Updated::create($this->updated);
+        return Updated::fromDateTime($this->updated);
     }
 
     public function onPrePersist(): void

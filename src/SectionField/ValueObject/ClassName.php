@@ -5,7 +5,6 @@ namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
 use Doctrine\Common\Util\Inflector;
-use Tardigrades\Helper\StringConverter;
 
 final class ClassName
 {

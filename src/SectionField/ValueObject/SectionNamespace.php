@@ -7,9 +7,7 @@ use Assert\Assertion;
 
 final class SectionNamespace
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $sectionNamespace;
 
     private function __construct(string $sectionNamespace)

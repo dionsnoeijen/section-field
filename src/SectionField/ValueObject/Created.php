@@ -10,7 +10,7 @@ final class Created
      */
     private $created;
 
-    public function __construct(\DateTime $created)
+    private function __construct(\DateTime $created)
     {
         $this->created = $created;
     }
@@ -25,7 +25,7 @@ final class Created
         return $this->created;
     }
 
-    public static function create(\DateTime $created): self
+    public static function fromDateTime(\DateTime $created): self
     {
         return new self($created);
     }

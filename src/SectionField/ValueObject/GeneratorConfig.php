@@ -8,9 +8,7 @@ use Tardigrades\Helper\ArrayConverter;
 
 final class GeneratorConfig
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $sectionGeneratorConfig;
 
     private function __construct(array $sectionGeneratorConfig)
@@ -30,7 +28,7 @@ final class GeneratorConfig
         return ArrayConverter::recursive($this->sectionGeneratorConfig['generator']);
     }
 
-    public static function create(array $sectionGeneratorConfig): self
+    public static function fromArray(array $sectionGeneratorConfig): self
     {
         return new self($sectionGeneratorConfig);
     }

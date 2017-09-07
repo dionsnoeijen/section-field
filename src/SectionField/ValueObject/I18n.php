@@ -7,9 +7,7 @@ use Assert\Assertion;
 
 final class I18n
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $i18n;
 
     private function __construct(string $i18n)
@@ -24,7 +22,7 @@ final class I18n
         return $this->i18n;
     }
 
-    public static function create(string $i18n): self
+    public static function fromString(string $i18n): self
     {
         return new self($i18n);
     }

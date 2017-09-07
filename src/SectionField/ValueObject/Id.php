@@ -7,12 +7,10 @@ use Assert\Assertion;
 
 final class Id
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    public function __construct(int $id)
+    private function __construct(int $id)
     {
         Assertion::integerish($id, 'For the id we need an integer');
         $this->id = $id;
@@ -33,7 +31,7 @@ final class Id
         return $this->toInt();
     }
 
-    public static function create(int $id): self
+    public static function fromInt(int $id): self
     {
         return new self($id);
     }

@@ -46,7 +46,7 @@ final class FieldTranslationTest extends TestCase
     {
         $this->fieldTranslation->setId(10);
 
-        $this->assertEquals(Id::create(10), $this->fieldTranslation->getIdValueObject());
+        $this->assertEquals(Id::fromInt(10), $this->fieldTranslation->getIdValueObject());
     }
 
     /**
@@ -65,7 +65,7 @@ final class FieldTranslationTest extends TestCase
      */
     public function it_should_set_and_get_name()
     {
-        $name = Name::create('someHandleINeed');
+        $name = Name::fromString('someHandleINeed');
         $fieldTranslation = $this->fieldTranslation->setName((string) $name);
 
         $this->assertEquals($this->fieldTranslation, $fieldTranslation);

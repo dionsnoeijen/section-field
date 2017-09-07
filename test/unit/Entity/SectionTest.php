@@ -61,7 +61,7 @@ final class SectionTest extends TestCase
     {
         $this->section->setId(10);
 
-        $this->assertEquals(Id::create(10), $this->section->getIdValueObject());
+        $this->assertEquals(Id::fromInt(10), $this->section->getIdValueObject());
     }
 
     /**
@@ -80,7 +80,7 @@ final class SectionTest extends TestCase
      */
     public function it_should_set_and_get_name()
     {
-        $name = Name::create('I have a name');
+        $name = Name::fromString('I have a name');
         $section = $this->section->setName((string) $name);
 
         $this->assertSame($this->section, $section);
@@ -94,7 +94,7 @@ final class SectionTest extends TestCase
      */
     public function it_should_set_and_get_handle()
     {
-        $handle = Handle::create('someHandleINeed');
+        $handle = Handle::fromString('someHandleINeed');
         $section = $this->section->setHandle((string) $handle);
 
         $this->assertSame($this->section, $section);
@@ -200,7 +200,7 @@ final class SectionTest extends TestCase
 
         $section = $this->section->setConfig($config);
 
-        $this->assertEquals($this->section->getConfig(), SectionConfig::create($config));
+        $this->assertEquals($this->section->getConfig(), SectionConfig::fromArray($config));
         $this->assertSame($this->section, $section);
     }
 

@@ -12,7 +12,7 @@ final class Label
      */
     private $label;
 
-    public function __construct(string $label)
+    private function __construct(string $label)
     {
         Assertion::string($label, 'The label has to be a string');
 
@@ -24,7 +24,7 @@ final class Label
         return $this->label;
     }
 
-    public static function create(string $label): self
+    public static function fromString(string $label): self
     {
         return new self($label);
     }

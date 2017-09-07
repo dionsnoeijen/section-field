@@ -45,12 +45,12 @@ class ReadOptions
         }
 
         if (is_string($this->options['section'])) {
-            $sectionEntities = [FullyQualifiedClassName::create($this->options['section'])];
+            $sectionEntities = [FullyQualifiedClassName::fromString($this->options['section'])];
         }
 
         if (is_array($this->options['section'])) {
             foreach ($this->options['section'] as $section) {
-                $sectionEntities[] = FullyQualifiedClassName::create((string) $section);
+                $sectionEntities[] = FullyQualifiedClassName::fromString((string) $section);
             }
         }
 

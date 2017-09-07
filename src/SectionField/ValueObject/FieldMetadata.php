@@ -30,7 +30,7 @@ final class FieldMetadata
         return ArrayConverter::recursive($this->metadata);
     }
 
-    public static function create(array $metadata): self
+    public static function fromArray(array $metadata): self
     {
         return new self($metadata);
     }

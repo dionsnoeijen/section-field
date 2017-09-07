@@ -68,7 +68,7 @@ final class LanguageManagerTest extends TestCase
     public function it_should_read_and_return_a_language()
     {
         $entity = new Language();
-        $id = Id::create(1);
+        $id = Id::fromInt(1);
         $languageRepository = Mockery::mock(ObjectRepository::class);
 
         $this->entityManager
@@ -94,7 +94,7 @@ final class LanguageManagerTest extends TestCase
      */
     public function it_should_read_and_throw_an_exception()
     {
-        $id = Id::create(20);
+        $id = Id::fromInt(20);
         $applicationRepository = Mockery::mock(ObjectRepository::class);
 
         $this->entityManager
@@ -202,7 +202,7 @@ final class LanguageManagerTest extends TestCase
      */
     public function it_should_read_by_i18n()
     {
-        $i18n = I18n::create('nl_NL');
+        $i18n = I18n::fromString('nl_NL');
 
         $languageRepository = Mockery::mock(ObjectRepository::class);
 

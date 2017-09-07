@@ -155,7 +155,7 @@ class DoctrineFieldManager implements FieldManager
         $translations = $this->getTranslations($fieldConfig, $field);
 
         $fieldConfig = $fieldConfig->toArray();
-        $fieldType = $this->fieldTypeManager->readByType(Type::create($fieldConfig['field']['type']));
+        $fieldType = $this->fieldTypeManager->readByType(Type::fromString($fieldConfig['field']['type']));
 
         foreach ($translations as $translation) {
             $field->removeFieldTranslation($translation);

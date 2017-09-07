@@ -49,7 +49,7 @@ class Language implements LanguageInterface
 
     public function getIdValueObject(): Id
     {
-        return Id::create($this->id);
+        return Id::fromInt($this->id);
     }
 
     public function setI18n(string $i18n): LanguageInterface
@@ -61,7 +61,7 @@ class Language implements LanguageInterface
 
     public function getI18n(): I18n
     {
-        return I18n::create($this->i18n);
+        return I18n::fromString($this->i18n);
     }
 
     public function addApplication(Application $application): LanguageInterface
@@ -103,7 +103,7 @@ class Language implements LanguageInterface
 
     public function getCreatedValueObject(): Created
     {
-        return Created::create($this->created);
+        return Created::fromDateTime($this->created);
     }
 
     public function setUpdated(\DateTime $updated): LanguageInterface
@@ -120,7 +120,7 @@ class Language implements LanguageInterface
 
     public function getUpdatedValueObject(): Updated
     {
-        return Updated::create($this->updated);
+        return Updated::fromDateTime($this->updated);
     }
 
     public function onPrePersist(): void

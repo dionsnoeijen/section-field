@@ -88,7 +88,7 @@ final class FieldManagerTest extends TestCase
     public function it_should_read_and_return_a_field()
     {
         $entity = new Field();
-        $id = Id::create(1);
+        $id = Id::fromInt(1);
         $fieldRepository = Mockery::mock(ObjectRepository::class);
         $this->entityManager
             ->shouldReceive('getRepository')
@@ -112,7 +112,7 @@ final class FieldManagerTest extends TestCase
      */
     public function it_should_read_and_throw_an_exception()
     {
-        $id = Id::create(20);
+        $id = Id::fromInt(20);
         $fieldRepository = Mockery::mock(ObjectRepository::class);
 
         $this->entityManager
@@ -211,7 +211,7 @@ final class FieldManagerTest extends TestCase
      */
     public function it_should_create_by_config()
     {
-        $fieldConfig = FieldConfig::create([
+        $fieldConfig = FieldConfig::fromArray([
             'field' => [
                 'name' => [
                     ['en_EN' => 'This is my name'],
@@ -259,7 +259,7 @@ final class FieldManagerTest extends TestCase
      */
     public function it_should_update_by_config()
     {
-        $fieldConfig = FieldConfig::create([
+        $fieldConfig = FieldConfig::fromArray([
             'field' => [
                 'name' => [
                     ['en_EN' => 'This is my other name'],

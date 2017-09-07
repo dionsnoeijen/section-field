@@ -43,7 +43,7 @@ class CreateFieldCommand extends FieldCommand
             if (file_exists($config)) {
                 $parsed = Yaml::parse(file_get_contents($config));
                 if (is_array($parsed)) {
-                    $fieldConfig = FieldConfig::create($parsed);
+                    $fieldConfig = FieldConfig::fromArray($parsed);
                     $this->fieldManager->createByConfig($fieldConfig);
                     $output->writeln('<info>Field created!</info>');
                     return;

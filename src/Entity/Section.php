@@ -63,12 +63,12 @@ class Section implements SectionInterface
 
     public function getIdValueObject(): Id
     {
-        return Id::create($this->id);
+        return Id::fromInt($this->id);
     }
 
     public function getName(): Name
     {
-        return Name::create($this->name);
+        return Name::fromString($this->name);
     }
 
     public function setName(string $name): SectionInterface
@@ -80,7 +80,7 @@ class Section implements SectionInterface
 
     public function getHandle(): Handle
     {
-        return Handle::create($this->handle);
+        return Handle::fromString($this->handle);
     }
 
     public function setHandle(string $handle): SectionInterface
@@ -125,7 +125,7 @@ class Section implements SectionInterface
 
     public function getConfig(): SectionConfig
     {
-        return SectionConfig::create($this->config);
+        return SectionConfig::fromArray($this->config);
     }
 
     public function addApplication(Application $application): SectionInterface
@@ -168,7 +168,7 @@ class Section implements SectionInterface
 
     public function getCreatedValueObject(): Created
     {
-        return Created::create($this->created);
+        return Created::fromDateTime($this->created);
     }
 
     public function setUpdated(\DateTime $updated): SectionInterface
@@ -185,7 +185,7 @@ class Section implements SectionInterface
 
     public function getUpdatedValueObject(): Updated
     {
-        return Updated::create($this->updated);
+        return Updated::fromDateTime($this->updated);
     }
 
     public function onPrePersist(): void

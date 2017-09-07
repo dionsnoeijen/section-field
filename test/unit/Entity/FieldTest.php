@@ -61,7 +61,7 @@ final class FieldTest extends TestCase
     {
         $field = $this->field->setId(10);
 
-        $this->assertEquals(Id::create(10), $this->field->getIdValueObject());
+        $this->assertEquals(Id::fromInt(10), $this->field->getIdValueObject());
     }
 
     /**
@@ -80,7 +80,7 @@ final class FieldTest extends TestCase
      */
     public function it_should_set_and_get_handle()
     {
-        $handle = Handle::create('someHandleINeed');
+        $handle = Handle::fromString('someHandleINeed');
         $field = $this->field->setHandle((string) $handle);
 
         $this->assertEquals($this->field, $field);
@@ -245,7 +245,7 @@ final class FieldTest extends TestCase
 
         $field = $this->field->setConfig($config);
 
-        $this->assertEquals($this->field->getConfig(), FieldConfig::create($config));
+        $this->assertEquals($this->field->getConfig(), FieldConfig::fromArray($config));
         $this->assertSame($this->field, $field);
     }
 

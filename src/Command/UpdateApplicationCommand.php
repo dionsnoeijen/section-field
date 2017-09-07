@@ -63,7 +63,7 @@ class UpdateApplicationCommand extends ApplicationCommand
         $question = new Question('<question>What record do you want to update?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->applicationManager->read(Id::create((int) $id));
+                return $this->applicationManager->read(Id::fromInt((int) $id));
             } catch (SectionNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
@@ -78,7 +78,7 @@ class UpdateApplicationCommand extends ApplicationCommand
         $config = $input->getArgument('config');
 
         try {
-            $applicationConfig = ApplicationConfig::create(
+            $applicationConfig = ApplicationConfig::fromArray(
                 Yaml::parse(
                     file_get_contents($config)
                 )

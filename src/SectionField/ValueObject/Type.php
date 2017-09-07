@@ -12,7 +12,7 @@ final class Type
      */
     private $type;
 
-    public function __construct(string $type)
+    private function __construct(string $type)
     {
         Assertion::string($type, 'The type has to be a string');
 
@@ -24,7 +24,7 @@ final class Type
         return $this->type;
     }
 
-    public static function create(string $type): self
+    public static function fromString(string $type): self
     {
         return new self($type);
     }

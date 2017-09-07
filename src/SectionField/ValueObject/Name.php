@@ -24,7 +24,7 @@ final class Name
         return $this->name;
     }
 
-    public static function create(string $name): self
+    public static function fromString(string $name): self
     {
         return new self($name);
     }

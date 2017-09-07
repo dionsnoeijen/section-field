@@ -66,7 +66,7 @@ class UpdateFieldTypeCommand extends FieldTypeCommand
         $question = new Question('<question>What record do you want to update?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->fieldTypeManager->read(Id::create((int) $id));
+                return $this->fieldTypeManager->read(Id::fromInt((int) $id));
             } catch (FieldTypeNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
@@ -81,7 +81,7 @@ class UpdateFieldTypeCommand extends FieldTypeCommand
         $updateQuestion = new Question('<question>Give a new fully qualified class name</question> (old: ' . $fieldType->getFullyQualifiedClassName() . '): ');
         $updateQuestion->setValidator(function ($fullyQualifiedClassName) use ($output) {
             try {
-                return FullyQualifiedClassName::create($fullyQualifiedClassName);
+                return FullyQualifiedClassName::fromString($fullyQualifiedClassName);
             } catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }

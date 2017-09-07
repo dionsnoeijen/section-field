@@ -41,7 +41,7 @@ class UpdateSectionCommand extends SectionCommand
         $config = $input->getArgument('config');
 
         try {
-            $sectionConfig = SectionConfig::create(
+            $sectionConfig = SectionConfig::fromArray(
                 Yaml::parse(
                     file_get_contents($config)
                 )

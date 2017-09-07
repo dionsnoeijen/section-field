@@ -58,7 +58,7 @@ final class ApplicationTest extends TestCase
     {
         $application = $this->application->setId(10);
 
-        $this->assertEquals(Id::create(10), $this->application->getIdValueObject());
+        $this->assertEquals(Id::fromInt(10), $this->application->getIdValueObject());
     }
 
     /**
@@ -77,7 +77,7 @@ final class ApplicationTest extends TestCase
      */
     public function it_should_set_and_get_handle()
     {
-        $handle = Handle::create('someHandleINeed');
+        $handle = Handle::fromString('someHandleINeed');
         $application = $this->application->setHandle((string)$handle);
 
         $this->assertEquals($this->application, $application);

@@ -63,7 +63,7 @@ class SectionFormTwigExtension extends Twig_Extension
         $sectionFormOptions = SectionFormOptions::fromArray($sectionFormOptions);
 
         $form = $this->form->buildFormForSection(
-            FullyQualifiedClassName::create($forHandle),
+            FullyQualifiedClassName::fromString($forHandle),
             $sectionFormOptions
         );
         $form->handleRequest();
@@ -105,8 +105,8 @@ class SectionFormTwigExtension extends Twig_Extension
                 if (is_string($data)) {
                     $relationship = explode(':', $data);
                     $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
-                        FullyQualifiedClassName::create($relationship[0]),
-                        Id::create((int)$relationship[1])
+                        FullyQualifiedClassName::fromString($relationship[0]),
+                        Id::fromInt((int)$relationship[1])
                     );
                     $relationships[] = $relationship;
                 }
@@ -115,8 +115,8 @@ class SectionFormTwigExtension extends Twig_Extension
                     foreach ($data as $value) {
                         $relationship = explode(':', $value);
                         $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
-                            FullyQualifiedClassName::create($relationship[0]),
-                            Id::create((int)$relationship[1])
+                            FullyQualifiedClassName::fromString($relationship[0]),
+                            Id::fromInt((int)$relationship[1])
                         );
                         $relationships[] = $relationship;
                     }

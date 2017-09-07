@@ -4,12 +4,11 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
+use Tardigrades\Helper\ArrayConverter;
 
 final class LanguageConfig
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $languageConfig;
 
     private function __construct(array $languageConfig)
@@ -27,15 +26,10 @@ final class LanguageConfig
 
     public function __toString(): string
     {
-        $config = '';
-        foreach ($this->languageConfig['language'] as $value) {
-            $config .= $value . "\n";
-        }
-
-        return $config;
+        return ArrayConverter::recursive($this->languageConfig['language']);
     }
 
-    public static function create(array $languageConfig): self
+    public static function fromArray(array $languageConfig): self
     {
         return new self($languageConfig);
     }

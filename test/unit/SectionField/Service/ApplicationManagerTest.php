@@ -75,7 +75,7 @@ final class ApplicationManagerTest extends TestCase
     public function it_should_read_and_return_an_application()
     {
         $entity = new Application();
-        $id = Id::create(1);
+        $id = Id::fromInt(1);
         $applicationRepository = Mockery::mock(ObjectRepository::class);
 
         $this->entityManager
@@ -101,7 +101,7 @@ final class ApplicationManagerTest extends TestCase
      */
     public function it_should_read_and_throw_an_exception()
     {
-        $id = Id::create(20);
+        $id = Id::fromInt(20);
         $applicationRepository = Mockery::mock(ObjectRepository::class);
 
         $this->entityManager

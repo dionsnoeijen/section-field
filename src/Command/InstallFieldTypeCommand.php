@@ -37,7 +37,7 @@ class InstallFieldTypeCommand extends FieldTypeCommand
     {
         $namespace = $input->getArgument('namespace');
         $fieldType = $this->fieldTypeManager->createWithFullyQualifiedClassName(
-            FullyQualifiedClassName::create($namespace)
+            FullyQualifiedClassName::fromString($namespace)
         );
 
         $this->renderTable($output, [$fieldType], 'FieldType installed!');

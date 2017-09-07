@@ -76,7 +76,7 @@ final class SectionManagerTest extends TestCase
     public function it_should_read_and_return_a_section()
     {
         $entity = new Section();
-        $id = Id::create(1);
+        $id = Id::fromInt(1);
         $fieldRepository = Mockery::mock(ObjectRepository::class);
         $this->entityManager
             ->shouldReceive('getRepository')
@@ -100,7 +100,7 @@ final class SectionManagerTest extends TestCase
      */
     public function it_should_read_and_throw_an_exception()
     {
-        $id = Id::create(20);
+        $id = Id::fromInt(20);
         $sectionRepository = Mockery::mock(ObjectRepository::class);
 
         $this->entityManager
@@ -202,7 +202,7 @@ final class SectionManagerTest extends TestCase
      */
     public function it_should_create_by_config()
     {
-        $sectionConfig = SectionConfig::create([
+        $sectionConfig = SectionConfig::fromArray([
             'section' => [
                 'name' => 'Super Section',
                 'handle' => 'superSection',
@@ -243,7 +243,7 @@ final class SectionManagerTest extends TestCase
      */
     public function it_should_update_by_config()
     {
-        $sectionConfig = SectionConfig::create([
+        $sectionConfig = SectionConfig::fromArray([
             'section' => [
                 'name' => 'Super Section',
                 'handle' => 'superSection',

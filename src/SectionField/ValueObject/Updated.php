@@ -5,12 +5,10 @@ namespace Tardigrades\SectionField\ValueObject;
 
 final class Updated
 {
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     private $updated;
 
-    public function __construct(\DateTime $updated)
+    private function __construct(\DateTime $updated)
     {
         $this->updated = $updated;
     }
@@ -25,7 +23,7 @@ final class Updated
         return $this->updated;
     }
 
-    public static function create(\DateTime $updated): self
+    public static function fromDateTime(\DateTime $updated): self
     {
         return new self($updated);
     }

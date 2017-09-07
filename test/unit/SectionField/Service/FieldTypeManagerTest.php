@@ -67,7 +67,7 @@ final class FieldTypeManagerTest extends TestCase
     public function it_should_read_and_return_a_field_type()
     {
         $entity = new FieldType();
-        $id = Id::create(1);
+        $id = Id::fromInt(1);
         $fieldRepository = Mockery::mock(ObjectRepository::class);
         $this->entityManager
             ->shouldReceive('getRepository')
@@ -91,7 +91,7 @@ final class FieldTypeManagerTest extends TestCase
      */
     public function it_should_read_and_throw_an_exception()
     {
-        $id = Id::create(20);
+        $id = Id::fromInt(20);
         $fieldRepository = Mockery::mock(ObjectRepository::class);
 
         $this->entityManager
@@ -190,7 +190,7 @@ final class FieldTypeManagerTest extends TestCase
      */
     public function it_should_create_with_fully_qualified_class_name()
     {
-        $fullyQualifiedClassName = FullyQualifiedClassName::create(
+        $fullyQualifiedClassName = FullyQualifiedClassName::fromString(
             'There\\Are\\ClassNames\\That\\Are\\Fully\\Qualified'
         );
 
@@ -220,7 +220,7 @@ final class FieldTypeManagerTest extends TestCase
     {
         $fieldTypeRepository = Mockery::mock(ObjectRepository::class);
 
-        $type = Type::create('TextArea');
+        $type = Type::fromString('TextArea');
 
         $fieldType = new FieldType();
 

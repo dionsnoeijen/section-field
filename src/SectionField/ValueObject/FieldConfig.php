@@ -33,17 +33,17 @@ final class FieldConfig
 
     public function getName(): Name
     {
-        return Name::create($this->fieldConfig['field']['name']);
+        return Name::fromString($this->fieldConfig['field']['name']);
     }
 
     public function getHandle(): Handle
     {
-        return Handle::create($this->fieldConfig['field']['handle']);
+        return Handle::fromString($this->fieldConfig['field']['handle']);
     }
 
     public function getMethodName(): MethodName
     {
-        return MethodName::create($this->fieldConfig['field']['handle']);
+        return MethodName::fromString($this->fieldConfig['field']['handle']);
     }
 
     public function getRelationshipKind(): string
@@ -75,7 +75,7 @@ final class FieldConfig
 
     public function getPropertyName(): PropertyName
     {
-        return PropertyName::create($this->fieldConfig['field']['handle']);
+        return PropertyName::fromString($this->fieldConfig['field']['handle']);
     }
 
     public function getEntityEvents(): array
@@ -96,12 +96,12 @@ final class FieldConfig
 
     public function getGeneratorConfig(): GeneratorConfig
     {
-        return GeneratorConfig::create($this->fieldConfig['field']);
+        return GeneratorConfig::fromArray($this->fieldConfig['field']);
     }
 
     public function getMetadata(): FieldMetadata
     {
-        return FieldMetadata::create($this->fieldConfig['metadata']);
+        return FieldMetadata::fromArray($this->fieldConfig['metadata']);
     }
 
     public function __toString(): string
@@ -109,7 +109,7 @@ final class FieldConfig
         return ArrayConverter::recursive($this->fieldConfig['field']);
     }
 
-    public static function create(array $fieldConfig): self
+    public static function fromArray(array $fieldConfig): self
     {
         return new self($fieldConfig);
     }

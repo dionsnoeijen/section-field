@@ -37,7 +37,7 @@ class CreateApplicationCommand extends ApplicationCommand
         $config = $input->getArgument('config');
 
         try {
-            $applicationConfig = ApplicationConfig::create(
+            $applicationConfig = ApplicationConfig::fromArray(
                 Yaml::parse(file_get_contents($config))
             );
             $this->applicationManager->createByConfig($applicationConfig);

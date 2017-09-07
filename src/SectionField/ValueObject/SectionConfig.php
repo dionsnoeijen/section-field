@@ -44,12 +44,12 @@ final class SectionConfig
 
     public function getName(): Name
     {
-        return Name::create($this->sectionConfig['section']['name']);
+        return Name::fromString($this->sectionConfig['section']['name']);
     }
 
     public function getHandle(): Handle
     {
-        return Handle::create($this->sectionConfig['section']['handle']);
+        return Handle::fromString($this->sectionConfig['section']['handle']);
     }
 
     public function getClassName(): ClassName
@@ -68,7 +68,7 @@ final class SectionConfig
 
     public function getGeneratorConfig(): GeneratorConfig
     {
-        return GeneratorConfig::create($this->sectionConfig['section']);
+        return GeneratorConfig::fromArray($this->sectionConfig['section']);
     }
 
     public function getDefault(): string
@@ -94,7 +94,7 @@ final class SectionConfig
         return ArrayConverter::recursive($this->sectionConfig['section']);
     }
 
-    public static function create(array $sectionConfig): self
+    public static function fromArray(array $sectionConfig): self
     {
         return new self($sectionConfig);
     }

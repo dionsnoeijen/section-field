@@ -62,7 +62,7 @@ abstract class SectionCommand extends Command
 
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->sectionManager->read(Id::create((int) $id));
+                return $this->sectionManager->read(Id::fromInt((int) $id));
             } catch (SectionNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }

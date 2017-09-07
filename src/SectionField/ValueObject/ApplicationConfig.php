@@ -8,9 +8,7 @@ use Tardigrades\Helper\ArrayConverter;
 
 final class ApplicationConfig
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $applicationConfig;
 
     private function __construct(array $applicationConfig)
@@ -31,10 +29,10 @@ final class ApplicationConfig
 
     public function __toString(): string
     {
-        return ArrayConverter::recursive($this->applicationConfig['generator']);
+        return ArrayConverter::recursive($this->applicationConfig);
     }
 
-    public static function create(array $applicationConfig): self
+    public static function fromArray(array $applicationConfig): self
     {
         return new self($applicationConfig);
     }

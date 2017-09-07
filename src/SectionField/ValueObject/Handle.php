@@ -22,7 +22,7 @@ final class Handle
         return $this->handle;
     }
 
-    public static function create(string $handle): self
+    public static function fromString(string $handle): self
     {
         return new self($handle);
     }

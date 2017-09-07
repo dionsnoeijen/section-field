@@ -36,7 +36,7 @@ class CreateLanguageCommand extends LanguageCommand
         $config = $input->getArgument('config');
 
         try {
-            $languageConfig = LanguageConfig::create(
+            $languageConfig = LanguageConfig::fromArray(
                 Yaml::parse(file_get_contents($config))
             );
             $this->languageManager->createByConfig($languageConfig);

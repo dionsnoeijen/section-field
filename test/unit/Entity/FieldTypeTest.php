@@ -60,7 +60,7 @@ final class FieldTypeTest extends TestCase
     {
         $field = $this->fieldType->setId(10);
 
-        $this->assertEquals(Id::create(10), $this->fieldType->getIdValueObject());
+        $this->assertEquals(Id::fromInt(10), $this->fieldType->getIdValueObject());
     }
 
     /**
@@ -78,7 +78,7 @@ final class FieldTypeTest extends TestCase
      */
     public function it_should_set_and_get_type()
     {
-        $type = Type::create('SuperFieldType');
+        $type = Type::fromString('SuperFieldType');
         $fieldType = $this->fieldType->setType((string) $type);
 
         $this->assertSame($this->fieldType, $fieldType);
@@ -91,7 +91,7 @@ final class FieldTypeTest extends TestCase
      */
     public function it_should_set_and_get_fully_qualified_class_name()
     {
-        $fullyQualifiedClassName = FullyQualifiedClassName::create('This\\Is\\A\\Fully\\Qualified\\Class\\Name');
+        $fullyQualifiedClassName = FullyQualifiedClassName::fromString('This\\Is\\A\\Fully\\Qualified\\Class\\Name');
         $fieldType = $this->fieldType->setFullyQualifiedClassName((string) $fullyQualifiedClassName);
 
         $this->assertSame($this->fieldType, $fieldType);

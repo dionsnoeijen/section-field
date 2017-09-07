@@ -60,7 +60,7 @@ class DeleteLanguageCommand extends LanguageCommand
         $question = new Question('<question>What record do you want to delete?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {
             try {
-                return $this->languageManager->read(Id::create((int) $id));
+                return $this->languageManager->read(Id::fromInt((int) $id));
             } catch (LanguageNotFoundException $exception) {
                 $output->writeln("<error>{$exception->getMessage()}</error>");
             }

@@ -25,7 +25,7 @@ final class MethodName
         return $this->methodName;
     }
 
-    public static function create(string $methodName): self
+    public static function fromString(string $methodName): self
     {
         $methodName = Inflector::camelize($methodName);
 
