@@ -99,6 +99,11 @@ final class FieldConfig
         return GeneratorConfig::create($this->fieldConfig['field']);
     }
 
+    public function getMetadata(): FieldMetadata
+    {
+        return FieldMetadata::create($this->fieldConfig['metadata']);
+    }
+
     public function __toString(): string
     {
         return ArrayConverter::recursive($this->fieldConfig['field']);

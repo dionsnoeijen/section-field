@@ -20,3 +20,8 @@ field:
           max: 255
     doctrine:
       length: 255
+  metadata:
+    you: can
+    add: metadata
+    as: much
+    asyou: like
