@@ -7,9 +7,10 @@ class XmlFormatter
 {
     public static function format(string $string): string
     {
-        $xml = simplexml_load_string($string);
-        $dom = dom_import_simplexml($xml)->ownerDocument;
+        $dom = new \DOMDocument();
         $dom->formatOutput = true;
+        $dom->preserveWhiteSpace = false;
+        $dom->loadXML($string);
         return $dom->saveXML();
     }
 }
