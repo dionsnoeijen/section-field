@@ -18,7 +18,7 @@ class EntityPreUpdateGenerator implements Generator
 
             $asString = (string) TemplateLoader::load(
                 $field->getFieldType()->getInstance()->directory() .
-                '/GeneratorTemplate/preupdate.php.template'
+                '/GeneratorTemplate/entity.preupdate.php.template'
             );
 
             $asString = str_replace(

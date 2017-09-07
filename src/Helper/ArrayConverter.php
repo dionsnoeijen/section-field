@@ -10,7 +10,6 @@ class ArrayConverter
     public static function recursive(array $array, int $level = 1): string
     {
         if ($level === 1) {
-            print_r($array);
             self::$value = '';
         }
 
@@ -25,7 +24,7 @@ class ArrayConverter
                 self::$value .=
                     str_repeat('-', $level - 1) .
                     (($level-1 > 0 ) ? ' ' : '') .
-                    $key . ': ' . $value . PHP_EOL;
+                    $key . ':' . $value . PHP_EOL;
             }
         }
 

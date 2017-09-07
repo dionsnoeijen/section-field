@@ -17,7 +17,7 @@ class EntityPrePersistGenerator implements Generator
     {
         $template = PrePersistTemplate::create(
             TemplateLoader::load(
-                __DIR__ . '/../GeneratorTemplate/prepersist.php.template'
+                __DIR__ . '/../GeneratorTemplate/entity.prepersist.php.template'
             )
         );
 

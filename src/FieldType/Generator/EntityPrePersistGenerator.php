@@ -17,7 +17,7 @@ class EntityPrePersistGenerator implements Generator
         if (in_array('prePersist', $field->getConfig()->getEntityEvents())) {
             $asString = (string)TemplateLoader::load(
                 $field->getFieldType()->getInstance()->directory()
-                . '/GeneratorTemplate/prepersist.php.template'
+                . '/GeneratorTemplate/entity.prepersist.php.template'
             );
 
             $asString = str_replace(

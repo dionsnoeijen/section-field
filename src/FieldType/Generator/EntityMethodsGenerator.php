@@ -17,7 +17,7 @@ class EntityMethodsGenerator implements Generator
             $field->getFieldType()
                 ->getInstance()
                 ->directory() .
-            '/GeneratorTemplate/entitymethods.php.template'
+            '/GeneratorTemplate/entity.methods.php.template'
         );
 
         $asString = str_replace(
