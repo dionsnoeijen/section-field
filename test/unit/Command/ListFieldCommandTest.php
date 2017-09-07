@@ -147,7 +147,7 @@ YML;
         );
 
         $this->assertRegExp(
-            '/-label/',
+            '/- 0:label/',
             $commandTester->getDisplay()
         );
 

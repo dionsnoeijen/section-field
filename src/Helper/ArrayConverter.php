@@ -18,7 +18,7 @@ class ArrayConverter
                 self::$value .=
                     str_repeat('-', $level - 1) .
                     (($level-1 > 0 ) ? ' ' : '') .
-                    $key . PHP_EOL;
+                    $key . ':' . PHP_EOL;
                 self::recursive($value, $level + 1);
             } else {
                 self::$value .=
