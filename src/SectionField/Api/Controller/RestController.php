@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Api\Controller;
 
 use JMS\Serializer\SerializerBuilder;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
 
 class RestController
@@ -31,6 +31,17 @@ class RestController
         $this->readSection = $readSection;
         $this->createSection = $createSection;
         $this->form = $form;
+    }
+
+    /**
+     * OPTIONS (get) information about the section
+     * @param string $sectionHandle
+     * @return Response
+     */
+    public function getSectionInfo(string $sectionHandle): Response
+    {
+        header('Content-Type: application/json');
+        return new Response('{"implement":"that for ' . $sectionHandle . '"}');
     }
 
     /**
@@ -79,6 +90,7 @@ class RestController
 
     /**
      * GET Multiple entries
+     * @todo: I might want to make the offset, limit, orderby ans sort GET parameters.
      * @param string $sectionHandle
      * @param string $offset
      * @param string $limit
@@ -118,21 +130,36 @@ class RestController
     /**
      * POST a new entry
      * @param string $sectionHandle
-     * @return Response
+     * @return JsonResponse
      */
-    public function createEntry(string $sectionHandle): Response
+    public function createEntry(string $sectionHandle): JsonResponse
     {
+        $response = [];
         $form = $this->form->buildFormForSection(
-            $sectionHandle
+            $sectionHandle,
+            null,
+            false
         );
         $form->handleRequest();
-
+        $responseCode = 200;
         if ($form->isValid()) {
             $data = $form->getData();
+            $request = $this->requestStack->getCurrentRequest();
+            $relationships = $this->form->hasRelationship($request->get('form'));
+            try {
+                $this->createSection->save($data, $relationships);
+                $response['success'] = true;
+                $response['errors'] = false;
+            } catch (\Exception $exception) {
+                $responseCode = 500;
+                $response['exception'] = $exception->getMessage();
+            }
+        } else {
+            $responseCode = 400;
+            $response['errors'] = $this->getFormErrors($form);
         }
 
-        header('Content-Type: application/json');
-        return new Response(['created' => 'valid']);
+        return new JsonResponse($response, $responseCode);
     }
 
     /**
@@ -173,5 +200,24 @@ class RestController
     public function deleteEntryBy(string $fieldHandle, string $value)
     {
 
+    }
+
+    private function getFormErrors(FormInterface $form): array
+    {
+        $errors = [];
+        foreach ($form->getErrors(true, true) as $field=>$formError) {
+            $errors[] = $formError->getMessage();
+        }
+
+        /** @var FormInterface $child */
+        foreach ($form as $child) {
+            if (!$child->isValid()) {
+                foreach ($child->getErrors() as $error) {
+                    $errors[$child->getName()][] = $error->getMessage();
+                }
+            }
+        }
+
+        return $errors;
     }
 }

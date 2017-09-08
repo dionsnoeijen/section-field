@@ -25,7 +25,7 @@
         
 
         
-<many-to-many field="blogs" mapped-by="authors" target-entity="Example\Blog\Entity\Blog"/>
+<many-to-many field="blogs" fetch="EXTRA_LAZY" mapped-by="authors" target-entity="Example\Blog\Entity\Blog"/>
 
 
     </entity>

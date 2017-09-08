@@ -11,6 +11,9 @@ interface Form
 {
     public function buildFormForSection(
         string $forHandle,
-        SectionFormOptions $sectionFormOptions = null
+        SectionFormOptions $sectionFormOptions = null,
+        bool $csrfProtection = true
     ): FormInterface;
+
+    public function hasRelationship(array $formData): array;
 }

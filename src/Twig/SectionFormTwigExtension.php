@@ -75,7 +75,7 @@ class SectionFormTwigExtension extends Twig_Extension
         ) {
             $data = $form->getData();
             $request = $this->requestStack->getCurrentRequest();
-            $relationships = $this->hasRelationship($request->get('form'));
+            $relationships = $this->form->hasRelationship($request->get('form'));
             $this->createSection->save($data, $relationships);
 
             try {
@@ -97,35 +97,5 @@ class SectionFormTwigExtension extends Twig_Extension
     public function formJavascript()
     {
 
-    }
-
-    private function hasRelationship($formData): array
-    {
-        $relationships = [];
-        foreach ($formData as $key=>$data) {
-            if (strpos($key, '_id')) {
-                if (is_string($data)) {
-                    $relationship = explode(':', $data);
-                    $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
-                        FullyQualifiedClassName::fromString($relationship[0]),
-                        Id::fromInt((int)$relationship[1])
-                    );
-                    $relationships[] = $relationship;
-                }
-
-                if (is_array($data)) {
-                    foreach ($data as $value) {
-                        $relationship = explode(':', $value);
-                        $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
-                            FullyQualifiedClassName::fromString($relationship[0]),
-                            Id::fromInt((int)$relationship[1])
-                        );
-                        $relationships[] = $relationship;
-                    }
-                }
-            }
-        }
-
-        return $relationships;
     }
 }

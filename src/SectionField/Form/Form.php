@@ -24,6 +24,8 @@ use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\SectionFieldInterface\Form as SectionFormInterface;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
+use Tardigrades\SectionField\ValueObject\Id;
+use Tardigrades\SectionField\ValueObject\JitRelationship;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
@@ -51,19 +53,27 @@ class Form implements SectionFormInterface
 
     public function buildFormForSection(
         string $forHandle,
-        SectionFormOptions $sectionFormOptions = null
+        SectionFormOptions $sectionFormOptions = null,
+        bool $csrfProtection = true
     ): FormInterface {
 
         $sectionConfig = $this->getSectionConfig($forHandle);
         $section = $this->getSection($sectionConfig->getFullyQualifiedClassName());
 
-        try {
-            $slug = $sectionFormOptions->getSlug();
-        } catch (\Exception $exception) {
-            $slug = null;
+        $slug = null;
+        if ($sectionFormOptions !== null) {
+            try {
+                $slug = $sectionFormOptions->getSlug();
+            } catch (\Exception $exception) {
+                $slug = null;
+            }
         }
 
-        $sectionEntity = $this->getSectionEntity($sectionConfig->getFullyQualifiedClassName(), $section, $slug);
+        $sectionEntity = $this->getSectionEntity(
+            $sectionConfig->getFullyQualifiedClassName(),
+            $section,
+            $slug
+        );
         $factory = $this->getFormFactory();
 
         $form = $factory
@@ -75,10 +85,10 @@ class Form implements SectionFormInterface
                     'attr' => [
                         'novalidate' => 'novalidate'
                     ],
-                    'csrf_protection' => true,
-                    'csrf_field_name' => '_token',
-                    // a unique key to help generate the secret token
-                    'csrf_token_id'   => 'tardigrades'
+                    'csrf_protection' => $csrfProtection,
+                    'csrf_field_name' => 'token',
+                    'csrf_token_id'   => 'tardigrades',
+                    'allow_extra_fields' => true // This is required for jit relationships.
                 ]
             );
 
@@ -101,6 +111,36 @@ class Form implements SectionFormInterface
 
         $form->add('save', SubmitType::class);
         return $form->getForm();
+    }
+
+    public function hasRelationship(array $formData): array
+    {
+        $relationships = [];
+        foreach ($formData as $key=>$data) {
+            if (strpos($key, '_id')) {
+                if (is_string($data)) {
+                    $relationship = explode(':', $data);
+                    $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
+                        FullyQualifiedClassName::fromString($relationship[0]),
+                        Id::fromInt((int)$relationship[1])
+                    );
+                    $relationships[] = $relationship;
+                }
+
+                if (is_array($data)) {
+                    foreach ($data as $value) {
+                        $relationship = explode(':', $value);
+                        $relationship = JitRelationship::fromFullyQualifiedClassNameAndId(
+                            FullyQualifiedClassName::fromString($relationship[0]),
+                            Id::fromInt((int)$relationship[1])
+                        );
+                        $relationships[] = $relationship;
+                    }
+                }
+            }
+        }
+
+        return $relationships;
     }
 
     /**

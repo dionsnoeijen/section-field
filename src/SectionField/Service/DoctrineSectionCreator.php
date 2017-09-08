@@ -22,16 +22,9 @@ class DoctrineSectionCreator implements CreateSection
 
     public function save($data, array $jitRelationships = null)
     {
-        try {
-            $this->setReferencesForJitRelationships($data, $jitRelationships);
-            $this->entityManager->persist($data);
-            $this->entityManager->flush();
-        } catch (\Exception $exception) {
-            // @todo: Those kind of messages are valuable to return to the user.
-            // I might want to emit an event here.
-            echo $exception->getMessage();
-            exit;
-        }
+        $this->setReferencesForJitRelationships($data, $jitRelationships);
+        $this->entityManager->persist($data);
+        $this->entityManager->flush();
     }
 
     /**
