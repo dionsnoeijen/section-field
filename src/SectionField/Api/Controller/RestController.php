@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
+use Tardigrades\SectionField\SectionFieldInterface\DeleteSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
@@ -33,6 +34,9 @@ class RestController
     /** @var RequestStack */
     private $requestStack;
 
+    /** @var DeleteSection */
+    private $deleteSection;
+
     /**
      * RestController constructor.
      * @param CreateSection $createSection
@@ -44,12 +48,14 @@ class RestController
     public function __construct(
         CreateSection $createSection,
         ReadSection $readSection,
+        DeleteSection $deleteSection,
         Form $form,
         SectionManager $sectionManager,
         RequestStack $requestStack
     ) {
         $this->readSection = $readSection;
         $this->createSection = $createSection;
+        $this->deleteSection = $deleteSection;
         $this->form = $form;
         $this->sectionManager = $sectionManager;
         $this->requestStack = $requestStack;
@@ -113,8 +119,8 @@ class RestController
     public function getEntryBySlug(string $sectionHandle, string $slug): Response
     {
         $readOptions = ReadOptions::fromArray([
-            'section' => $sectionHandle,
-            'slug' => $slug
+            ReadOptions::SECTION => $sectionHandle,
+            ReadOptions::SLUG => $slug
         ]);
 
         $entry = $this->readSection->read($readOptions)[0];
@@ -142,7 +148,7 @@ class RestController
         string $limit,
         string $orderBy,
         string $sort
-    ) {
+    ): Response {
         $readOptions = [
             ReadOptions::SECTION => $sectionHandle,
             ReadOptions::OFFSET => $offset,
@@ -203,7 +209,7 @@ class RestController
         $form = $this->form->buildFormForSection(
             $sectionHandle,
             SectionFormOptions::fromArray([
-                'id' => $id
+                ReadOptions::ID => $id
             ]),
             false
         );
@@ -233,7 +239,7 @@ class RestController
         $form = $this->form->buildFormForSection(
             $sectionHandle,
             SectionFormOptions::fromArray([
-                'slug' => $slug
+                ReadOptions::SLUG => $slug
             ]),
             false
         );
@@ -250,12 +256,20 @@ class RestController
 
     /**
      * DELETE an entry by it's id
+     * @param string $sectionHandle
      * @param int $id
      * @return JsonResponse
      */
-    public function deleteEntryById(int $id): JsonResponse
+    public function deleteEntryById(string $sectionHandle, int $id): JsonResponse
     {
+        $readOptions = ReadOptions::fromArray([
+            ReadOptions::SECTION => $sectionHandle,
+            ReadOptions::ID => (int) $id
+        ]);
 
+        $entry = $this->readSection->read($readOptions)[0];
+
+        $this->deleteSection->delete($entry);
     }
 
     /**
@@ -266,7 +280,14 @@ class RestController
      */
     public function deleteEntryBySlug(string $sectionHandle, string $slug): JsonResponse
     {
+        $readOptions = ReadOptions::fromArray([
+            ReadOptions::SECTION => $sectionHandle,
+            ReadOptions::SLUG => $slug
+        ]);
 
+        $entry = $this->readSection->read($readOptions)[0];
+
+        $this->deleteSection->delete($entry);
     }
 
     /**

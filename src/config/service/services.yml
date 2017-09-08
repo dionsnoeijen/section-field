@@ -65,6 +65,11 @@ services:
     arguments:
       - '@doctrine.orm.entity_manager'
 
+  section_field.doctrine.delete.section:
+    class: Tardigrades\SectionField\Service\DoctrineSectionDeleter
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
   section_field.create.section:
     class: Tardigrades\SectionField\Service\CreateSection
     arguments:
@@ -77,6 +82,12 @@ services:
       -
         - '@section_field.doctrine.read.section'
       - '@section_field.manager.doctrine.section_manager'
+
+  section_field.delete.section:
+    class: Tardigrades\SectionField\Service\DeleteSection
+    arguments:
+      -
+        - '@section_field.doctrine.delete.section'
 
   section_field.twig.section:
     class: Tardigrades\Twig\SectionTwigExtension
