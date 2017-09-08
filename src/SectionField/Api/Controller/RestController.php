@@ -142,7 +142,6 @@ class RestController
 
     /**
      * GET Multiple entries
-     * @todo: I might want to make the offset, limit, orderby ans sort GET parameters.
      * @param string $sectionHandle
      * @return Response
      */
