@@ -280,7 +280,7 @@ class RestController
 
         return new JsonResponse([
             'success' => $success,
-        ], !$success ? 404 : 200);
+        ], $success ? 200 : 404);
     }
 
     /**
@@ -301,7 +301,7 @@ class RestController
 
         return new JsonResponse([
             'success' => $success,
-        ], !$success ? 404 : 200);
+        ], $success ? 200 : 404);
     }
 
     /**
