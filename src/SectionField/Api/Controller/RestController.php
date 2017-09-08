@@ -17,6 +17,13 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
+/**
+ * Class RestController
+ *
+ * The REST Controller provides a simple REST implementation for Sections.
+ *
+ * @package Tardigrades\SectionField\Api\Controller
+ */
 class RestController
 {
     /** @var ReadSection */
