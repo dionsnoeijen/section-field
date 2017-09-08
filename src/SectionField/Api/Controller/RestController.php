@@ -8,9 +8,11 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Tardigrades\Entity\EntityInterface\Field;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
+use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
 
 class RestController
@@ -24,30 +26,59 @@ class RestController
     /** @var Form */
     private $form;
 
+    /** @var SectionManager */
+    private $sectionManager;
+
     /** @var RequestStack */
     private $requestStack;
 
+    /**
+     * RestController constructor.
+     * @param CreateSection $createSection
+     * @param ReadSection $readSection
+     * @param Form $form
+     * @param SectionManager $sectionManager
+     * @param RequestStack $requestStack
+     */
     public function __construct(
         CreateSection $createSection,
         ReadSection $readSection,
         Form $form,
+        SectionManager $sectionManager,
         RequestStack $requestStack
     ) {
         $this->readSection = $readSection;
         $this->createSection = $createSection;
         $this->form = $form;
+        $this->sectionManager = $sectionManager;
         $this->requestStack = $requestStack;
     }
 
     /**
-     * OPTIONS (get) information about the section
+     * OPTIONS (get) information about the section so you can build
+     * awesome forms in your spa, or whatever you need it for.
      * @param string $sectionHandle
-     * @return Response
+     * @return JsonResponse
      */
-    public function getSectionInfo(string $sectionHandle): Response
+    public function getSectionInfo(string $sectionHandle): JsonResponse
     {
+        $response = [];
+
+        $section = $this->sectionManager->readByHandle($sectionHandle);
+
+        $response['name'] = (string) $section->getName();
+        $response['handle'] = (string) $section->getHandle();
+
+        /** @var Field $field */
+        foreach ($section->getFields() as $field) {
+            $fieldInfo = [
+                (string) $field->getHandle() => $field->getConfig()->toArray()['field']
+            ];
+            $response['fields'][] = $fieldInfo;
+        }
+
         header('Content-Type: application/json');
-        return new Response('{"implement":"that for ' . $sectionHandle . '"}');
+        return new JsonResponse($response);
     }
 
     /**

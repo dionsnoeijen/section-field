@@ -5,4 +5,5 @@ services:
       - '@section_field.create.section'
       - '@section_field.read.section'
       - '@section_field.form'
+      - '@section_field.manager.doctrine.section_manager'
       - '@request_stack'
