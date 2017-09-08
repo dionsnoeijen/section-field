@@ -268,10 +268,11 @@ class RestController
         ]);
 
         $entry = $this->readSection->read($readOptions)[0];
+        $success = $this->deleteSection->delete($entry);
 
         return new JsonResponse([
-            'success' => $this->deleteSection->delete($entry)
-        ]);
+            'success' => $success,
+        ], !$success ? 404 : 200);
     }
 
     /**
@@ -288,10 +289,11 @@ class RestController
         ]);
 
         $entry = $this->readSection->read($readOptions)[0];
+        $success = $this->deleteSection->delete($entry);
 
         return new JsonResponse([
-            'success' => $this->deleteSection->delete($entry)
-        ]);
+            'success' => $success,
+        ], !$success ? 404 : 200);
     }
 
     /**
