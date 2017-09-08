@@ -6,6 +6,7 @@ namespace Tardigrades\SectionField\Api\Controller;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
@@ -23,14 +24,19 @@ class RestController
     /** @var Form */
     private $form;
 
+    /** @var RequestStack */
+    private $requestStack;
+
     public function __construct(
         CreateSection $createSection,
         ReadSection $readSection,
-        Form $form
+        Form $form,
+        RequestStack $requestStack
     ) {
         $this->readSection = $readSection;
         $this->createSection = $createSection;
         $this->form = $form;
+        $this->requestStack = $requestStack;
     }
 
     /**
