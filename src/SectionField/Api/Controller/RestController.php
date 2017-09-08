@@ -48,6 +48,7 @@ class RestController
      * RestController constructor.
      * @param CreateSection $createSection
      * @param ReadSection $readSection
+     * @param DeleteSection $deleteSection
      * @param Form $form
      * @param SectionManager $sectionManager
      * @param RequestStack $requestStack
