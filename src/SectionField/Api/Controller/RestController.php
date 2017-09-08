@@ -32,6 +32,9 @@ class RestController
     /** @var CreateSection */
     private $createSection;
 
+    /** @var DeleteSection */
+    private $deleteSection;
+
     /** @var Form */
     private $form;
 
@@ -40,9 +43,6 @@ class RestController
 
     /** @var RequestStack */
     private $requestStack;
-
-    /** @var DeleteSection */
-    private $deleteSection;
 
     /**
      * RestController constructor.
@@ -144,19 +144,19 @@ class RestController
      * GET Multiple entries
      * @todo: I might want to make the offset, limit, orderby ans sort GET parameters.
      * @param string $sectionHandle
-     * @param string $offset
-     * @param string $limit
-     * @param string $orderBy
-     * @param string $sort
      * @return Response
      */
     public function getEntries(
-        string $sectionHandle,
-        string $offset,
-        string $limit,
-        string $orderBy,
-        string $sort
+        string $sectionHandle
     ): Response {
+
+        $request = $this->requestStack->getCurrentRequest();
+
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 10);
+        $orderBy = $request->get('orderBy', '');
+        $sort = $request->get('sort', 'DESC');
+
         $readOptions = [
             ReadOptions::SECTION => $sectionHandle,
             ReadOptions::OFFSET => $offset,

@@ -1,9 +1,6 @@
 rest.section.all:
   path: /v1/section/{sectionHandle}/{offset}/{limit}/{orderBy}/{sort}
-  defaults: { _controller: 'rest.controller:getEntries', offset: '0', limit: '10', orderBy: '', sort: 'DESC' }
-  requirements:
-    offset: '\d+'
-    limit: '\d+'
+  defaults: { _controller: 'rest.controller:getEntries' }
   methods: [GET]
 
 rest.section.info:
@@ -37,3 +34,13 @@ rest.section.update.slug:
   path: /v1/section/{sectionHandle}/slug/{slug}
   defaults: { _controller: 'rest.controller:updateEntryBySlug' }
   methods: [PUT]
+
+rest.section.delete.id:
+  path: /v1/section/{sectionHandle}/id/{id}
+  defaults: { _controller: 'rest.controller:deleteEntryById' }
+  methods: [DETELE]
+
+rest.section.delete.slug:
+  path: /v1/section/{sectionHandle}/slug/{slug}
+  defaults: { _controller: 'rest.controller:deleteEntryById' }
+  methods: [DETELE]
