@@ -14,6 +14,7 @@ use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 class RestController
 {
@@ -180,17 +181,7 @@ class RestController
         $form->handleRequest();
         $responseCode = 200;
         if ($form->isValid()) {
-            $data = $form->getData();
-            $request = $this->requestStack->getCurrentRequest();
-            $relationships = $this->form->hasRelationship($request->get('form'));
-            try {
-                $this->createSection->save($data, $relationships);
-                $response['success'] = true;
-                $response['errors'] = false;
-            } catch (\Exception $exception) {
-                $responseCode = 500;
-                $response['exception'] = $exception->getMessage();
-            }
+            $response = $this->save($form);
         } else {
             $responseCode = 400;
             $response['errors'] = $this->getFormErrors($form);
@@ -201,44 +192,112 @@ class RestController
 
     /**
      * PUT (Update) an entry by it's id
+     *
+     * @param string $sectionHandle
      * @param int $id
+     * @return JsonResponse
      */
-    public function updateEntryById(int $id)
+    public function updateEntryById(string $sectionHandle, int $id): JsonResponse
     {
+        $response = [];
 
+        $form = $this->form->buildFormForSection(
+            $sectionHandle,
+            SectionFormOptions::fromArray([
+                'id' => $id
+            ]),
+            false
+        );
+        $form->handleRequest();
+        $responseCode = 200;
+        if ($form->isValid()) {
+            $response = $this->save($form);
+        } else {
+            $responseCode = 400;
+            $response['errors'] = $this->getFormErrors($form);
+        }
+
+        return new JsonResponse($response, $responseCode);
     }
 
     /**
      * PUT (Update) an entry by one of it's field values
      * Use this with a slug
      *
-     * @param string $fieldHandle
-     * @param string $value
+     * @param string $sectionHandle
+     * @param string $slug
+     * @return JsonResponse
      */
-    public function updateEntryBy(string $fieldHandle, string $value)
+    public function updateEntryBySlug(string $sectionHandle, string $slug): JsonResponse
     {
+        $response = [];
 
+        $form = $this->form->buildFormForSection(
+            $sectionHandle,
+            SectionFormOptions::fromArray([
+                'slug' => $slug
+            ]),
+            false
+        );
+        $form->handleRequest();
+        $responseCode = 200;
+        if ($form->isValid()) {
+            $response = $this->save($form);
+        } else {
+            $responseCode = 400;
+            $response['errors'] = $this->getFormErrors($form);
+        }
+
+        return new JsonResponse($response, $responseCode);
     }
 
     /**
      * DELETE an entry by it's id
      * @param int $id
+     * @return JsonResponse
      */
-    public function deleteEntryById(int $id)
+    public function deleteEntryById(int $id): JsonResponse
+    {
+        
+    }
+
+    /**
+     * DELETE an entry by it's slug
+     * @param string $sectionHandle
+     * @param string $slug
+     * @return JsonResponse
+     */
+    public function deleteEntryBySlug(string $sectionHandle, string $slug): JsonResponse
     {
 
     }
 
     /**
-     * DELETE an entry by it's slug
-     * @param string $fieldHandle
-     * @param string $value
+     * @param FormInterface $form
+     * @return array
      */
-    public function deleteEntryBy(string $fieldHandle, string $value)
+    private function save(FormInterface $form): array
     {
+        $response = [];
+        $data = $form->getData();
+        $request = $this->requestStack->getCurrentRequest();
+        $relationships = $this->form->hasRelationship($request->get('form'));
+        try {
+            $this->createSection->save($data, $relationships);
+            $response['success'] = true;
+            $response['errors'] = false;
+        } catch (\Exception $exception) {
+            $responseCode = 500;
+            $response['exception'] = $exception->getMessage();
+        }
 
+        return $response;
     }
 
+    /**
+     * @param FormInterface $form
+     * @return array
+     */
     private function getFormErrors(FormInterface $form): array
     {
         $errors = [];

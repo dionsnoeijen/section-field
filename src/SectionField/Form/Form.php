@@ -60,6 +60,8 @@ class Form implements SectionFormInterface
         $sectionConfig = $this->getSectionConfig($forHandle);
         $section = $this->getSection($sectionConfig->getFullyQualifiedClassName());
 
+        // If we have a slug, it means we are updating something.
+        // Prep so we can get the correct $sectionEntity
         $slug = null;
         if ($sectionFormOptions !== null) {
             try {
@@ -69,10 +71,22 @@ class Form implements SectionFormInterface
             }
         }
 
+        // If we hava an id, it means we are updating something.
+        // Prep so we can get the correct $sectionEntity
+        $id = null;
+        if ($sectionFormOptions !== null) {
+            try {
+                $id = $sectionFormOptions->getId();
+            } catch (\Exception $exception) {
+                $id = null;
+            }
+        }
+
         $sectionEntity = $this->getSectionEntity(
             $sectionConfig->getFullyQualifiedClassName(),
             $section,
-            $slug
+            $slug,
+            $id
         );
         $factory = $this->getFormFactory();
 
@@ -195,13 +209,21 @@ class Form implements SectionFormInterface
     private function getSectionEntity(
         FullyQualifiedClassName $forHandle,
         Section $section,
-        Slug $slug = null
+        Slug $slug = null,
+        Id $id = null
     ) {
         if (!empty($slug)) {
             $sectionEntity = $this->readSection->read(ReadOptions::fromArray([
-                'section' => $forHandle,
-                'slug' => $slug
+                ReadOptions::SECTION => $forHandle,
+                ReadOptions::SLUG => $slug
             ]))->current();
+        }
+
+        if (!empty($id)) {
+            $sectionEntity = $this->readSection->read(ReadOptions::fromArray([
+                ReadOptions::SECTION => $forHandle,
+                ReadOptions::ID => $id
+            ]));
         }
 
         if (empty($sectionEntity)) {

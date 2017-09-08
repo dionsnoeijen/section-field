@@ -16,6 +16,14 @@ final class SectionFormOptions
         $this->options = $options;
     }
 
+    public function getId(): Id
+    {
+        Assertion::keyIsset($this->options, 'id', 'The id is not set');
+        Assertion::digit($this->options['id'], 'The id must be a digit');
+
+        return Id::fromInt((int) $this->options['id']);
+    }
+
     public function getSlug(): Slug
     {
         Assertion::keyIsset($this->options, 'slug', 'The slug is not set');
