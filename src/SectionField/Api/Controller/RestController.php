@@ -269,7 +269,9 @@ class RestController
 
         $entry = $this->readSection->read($readOptions)[0];
 
-        $this->deleteSection->delete($entry);
+        return new JsonResponse([
+            'success' => $this->deleteSection->delete($entry)
+        ]);
     }
 
     /**
@@ -287,7 +289,9 @@ class RestController
 
         $entry = $this->readSection->read($readOptions)[0];
 
-        $this->deleteSection->delete($entry);
+        return new JsonResponse([
+            'success' => $this->deleteSection->delete($entry)
+        ]);
     }
 
     /**
