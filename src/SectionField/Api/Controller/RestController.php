@@ -179,15 +179,14 @@ class RestController
             false
         );
         $form->handleRequest();
-        $responseCode = 200;
         if ($form->isValid()) {
             $response = $this->save($form);
         } else {
-            $responseCode = 400;
             $response['errors'] = $this->getFormErrors($form);
+            $response['code'] = 400;
         }
 
-        return new JsonResponse($response, $responseCode);
+        return new JsonResponse($response, $response['code']);
     }
 
     /**
@@ -209,15 +208,14 @@ class RestController
             false
         );
         $form->handleRequest();
-        $responseCode = 200;
         if ($form->isValid()) {
             $response = $this->save($form);
         } else {
-            $responseCode = 400;
             $response['errors'] = $this->getFormErrors($form);
+            $response['code'] = 400;
         }
 
-        return new JsonResponse($response, $responseCode);
+        return new JsonResponse($response, $response['code']);
     }
 
     /**
@@ -240,15 +238,14 @@ class RestController
             false
         );
         $form->handleRequest();
-        $responseCode = 200;
         if ($form->isValid()) {
             $response = $this->save($form);
         } else {
-            $responseCode = 400;
             $response['errors'] = $this->getFormErrors($form);
+            $response['code'] = 400;
         }
 
-        return new JsonResponse($response, $responseCode);
+        return new JsonResponse($response, $response['code']);
     }
 
     /**
@@ -258,7 +255,7 @@ class RestController
      */
     public function deleteEntryById(int $id): JsonResponse
     {
-        
+
     }
 
     /**
@@ -286,8 +283,9 @@ class RestController
             $this->createSection->save($data, $relationships);
             $response['success'] = true;
             $response['errors'] = false;
+            $response['code'] = 200;
         } catch (\Exception $exception) {
-            $responseCode = 500;
+            $response['code'] = 500;
             $response['exception'] = $exception->getMessage();
         }
 
