@@ -1,5 +1,5 @@
 rest.section.all:
-  path: /v1/section/{sectionHandle}/{offset}/{limit}/{orderBy}/{sort}
+  path: /v1/section/{sectionHandle}
   defaults: { _controller: 'rest.controller:getEntries' }
   methods: [GET]
 
