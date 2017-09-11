@@ -97,7 +97,7 @@ class DoctrineSectionManager implements SectionManager
 
     public function updateByConfig(SectionConfig $sectionConfig, Section $section): Section
     {
-        $fields = $this->fieldManager->readFieldsByHandles($sectionConfig->getFields());
+        $fields = $this->fieldManager->readByHandles($sectionConfig->getFields());
 
         $section->setName((string) $sectionConfig->getName());
         $section->setHandle((string) $sectionConfig->getHandle());
@@ -150,7 +150,7 @@ class DoctrineSectionManager implements SectionManager
         $sections = $this->readAll();
         /** @var Section $section */
         foreach ($sections as $section) {
-            $fields = $this->fieldManager->readFieldsByHandles($section->getConfig()->getFields());
+            $fields = $this->fieldManager->readByHandles($section->getConfig()->getFields());
 
             $sectionHandle = (string) $section->getHandle();
             if (!isset($relationships[$sectionHandle])) {

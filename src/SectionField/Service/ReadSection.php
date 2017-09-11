@@ -27,8 +27,8 @@ class ReadSection implements ReadSectionInterface
 
     public function read(
         ReadOptions $options,
-        SectionConfig $sectionConfig = null): \ArrayIterator
-    {
+        SectionConfig $sectionConfig = null
+    ): \ArrayIterator {
         $sectionData = new \ArrayIterator();
 
         if ($sectionConfig === null) {
@@ -41,10 +41,6 @@ class ReadSection implements ReadSectionInterface
 
         /** @var ReadSectionInterface $reader */
         foreach ($this->readers as $reader) {
-            // @todo: Don't just append... merge!! Probably
-            // use the key to merge data. As mentioned, we probably need
-            // to configure the priority of readers to know which one determines
-            // the final state.
             foreach ($reader->read($options, $sectionConfig) as $entry) {
                 $sectionData->append($entry);
             }

@@ -14,5 +14,5 @@ interface FieldManager
     public function createByConfig(FieldConfig $fieldConfig): Field;
     public function updateByConfig(FieldConfig $fieldConfig, Field $field): Field;
     public function readByHandle(string $handle): Field;
-    public function readFieldsByHandles(array $fields): array;
+    public function readByHandles(array $fields): array;
 }

@@ -220,7 +220,7 @@ final class SectionManagerTest extends TestCase
         $section = $this->givenASection();
 
         $this->fieldManager
-            ->shouldReceive('readFieldsByHandles')
+            ->shouldReceive('readByHandles')
             ->once();
 
         $this->entityManager
@@ -261,7 +261,7 @@ final class SectionManagerTest extends TestCase
         $section = $this->givenASection();
 
         $this->fieldManager
-            ->shouldReceive('readFieldsByHandles')
+            ->shouldReceive('readByHandles')
             ->once();
 
         $this->entityManager

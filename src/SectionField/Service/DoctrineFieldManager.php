@@ -182,14 +182,7 @@ class DoctrineFieldManager implements FieldManager
         return $field[0];
     }
 
-    /**
-     * @todo change name to readByHandles
-     *
-     * @param array $handles
-     * @return array
-     * @throws FieldNotFoundException
-     */
-    public function readFieldsByHandles(array $handles): array
+    public function readByHandles(array $handles): array
     {
         $fieldHandles = [];
         foreach ($handles as $handle) {

@@ -213,15 +213,22 @@ class ReadOptions
         return (string) $this->options[self::SEARCH];
     }
 
-    public function field(): ?Handle
+    public function field(): ?array
     {
         try {
-            $handle = Handle::fromString($this->options[self::FIELD]);
+            Assertion::isArray(
+                $this->options[self::FIELD],
+                'The field option must be an array. "fieldHandle" => "value"'
+            );
+            $field = [
+                Handle::fromString(key($this->options[self::FIELD])),
+                $this->options[self::FIELD][key($this->options[self::FIELD])]
+            ];
         } catch (InvalidArgumentException $exception) {
             return null;
         }
 
-        return $handle;
+        return $field;
     }
 
     public function getId(): ?Id

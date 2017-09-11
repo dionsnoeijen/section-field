@@ -296,7 +296,7 @@ final class FieldManagerTest extends TestCase
 
     /**
      * @test
-     * @covers ::readFieldsByHandles
+     * @covers ::readByHandles
      */
     public function it_should_read_fields_by_handles()
     {
@@ -318,14 +318,14 @@ final class FieldManagerTest extends TestCase
                 new Field()
             ]);
 
-        $fields = $this->fieldManager->readFieldsByHandles($handles);
+        $fields = $this->fieldManager->readByHandles($handles);
 
         $this->assertEquals(count($fields), 2);
     }
 
     /**
      * @test
-     * @covers ::readFieldsByHandles
+     * @covers ::readByHandles
      */
     public function it_make_exception_when_read_fields_by_handles()
     {
@@ -347,7 +347,7 @@ final class FieldManagerTest extends TestCase
 
         $this->expectException(FieldNotFoundException::class);
 
-        $this->fieldManager->readFieldsByHandles($handles);
+        $this->fieldManager->readByHandles($handles);
     }
 
     private function givenAField()

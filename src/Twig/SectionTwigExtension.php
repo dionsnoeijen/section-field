@@ -54,7 +54,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function sectionId(int $sectionId): SectionTwigExtension
     {
-        // @todo: Implement sectionId
+        $this->options[ReadOptions::SECTION_ID] = $sectionId;
+
         return $this;
     }
 
@@ -107,7 +108,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function sort(string $sort): SectionTwigExtension
     {
-        // @todo implement sort
+        $this->options[ReadOptions::SORT] = $sort;
+
         return $this;
     }
 
@@ -119,9 +121,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function before(string $before): SectionTwigExtension
     {
-        $before = new \DateTime($before);
+        $this->options[ReadOptions::BEFORE] = new \DateTime($before);
 
-        // @todo: Implement before
         return $this;
     }
 
@@ -133,9 +134,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function after(string $after): SectionTwigExtension
     {
-        $after = new \DateTime($after);
+        $this->options[ReadOptions::AFTER] = new \DateTime($after);
 
-        // @todo: Implement after
         return $this;
     }
 
@@ -147,7 +147,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function localeEnabled(bool $enabled = true): SectionTwigExtension
     {
-        // @todo: Implement localeEnabled
+        $this->options[ReadOptions::LOCALE_ENABLED] = $enabled;
+
         return $this;
     }
 
@@ -159,7 +160,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function locale(string $locale): SectionTwigExtension
     {
-        // @todo: Implement locale
+        $this->options[ReadOptions::LOCALE] = $locale;
+
         return $this;
     }
 
@@ -200,7 +202,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function search(string $searchQuery): SectionTwigExtension
     {
-        // @todo Implement search
+        $this->options[ReadOptions::SEARCH] = $searchQuery;
+
         return $this;
     }
 
@@ -214,7 +217,8 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function field(string $fieldHandle, string $value): SectionTwigExtension
     {
-        // @todo: Implement query by specific field and it's value.
+        $this->options[ReadOptions::FIELD] = [$fieldHandle=>$value];
+
         return $this;
     }
 
