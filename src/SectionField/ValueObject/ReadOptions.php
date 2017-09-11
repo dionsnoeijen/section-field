@@ -5,10 +5,9 @@ namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
-use JMS\Serializer\Tests\Fixtures\Order;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
 
-class ReadOptions
+final class ReadOptions
 {
     const ID = 'id';
     const SLUG = 'slug';
