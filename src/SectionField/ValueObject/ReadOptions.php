@@ -5,6 +5,7 @@ namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
+use JMS\Serializer\Tests\Fixtures\Order;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
 
 class ReadOptions
@@ -17,8 +18,6 @@ class ReadOptions
     const OFFSET = 'offset';
     const ORDER_BY = 'orderBy';
     const SORT = 'sort';
-    const SORT_ASC = 'ASC';
-    const SORT_DESC = 'DESC';
     const BEFORE = 'before';
     const AFTER = 'after';
     const LOCALE_ENABLED = 'localeEnabled';
@@ -74,7 +73,7 @@ class ReadOptions
         return $sectionEntities;
     }
 
-    public function getSectionId(): ?int
+    public function getSectionId(): ?Id
     {
         try {
             Assertion::keyIsset($this->options, self::SECTION_ID,
@@ -87,10 +86,10 @@ class ReadOptions
             return null;
         }
 
-        return (int) $this->options[self::SECTION_ID];
+        return Id::fromInt($this->options[self::SECTION_ID]);
     }
 
-    public function getOffset(): ?int
+    public function getOffset(): ?Offset
     {
         try {
             Assertion::keyIsset($this->options, self::OFFSET,
@@ -103,10 +102,10 @@ class ReadOptions
             return null;
         }
 
-        return (int) $this->options[self::OFFSET];
+        return Offset::fromInt($this->options[self::OFFSET]);
     }
 
-    public function getLimit(): ?int
+    public function getLimit(): ?Limit
     {
         try {
             Assertion::keyIsset($this->options, self::LIMIT,
@@ -119,10 +118,10 @@ class ReadOptions
             return null;
         }
 
-        return (int) $this->options[self::LIMIT];
+        return Limit::fromInt($this->options[self::LIMIT]);
     }
 
-    public function getOrderBy(): ?array
+    public function getOrderBy(): ?OrderBy
     {
         try {
             Assertion::keyIsset($this->options, self::ORDER_BY,
@@ -131,29 +130,17 @@ class ReadOptions
             Assertion::isArray($this->options[self::ORDER_BY],
                 'Order by needs to be an array. Example: (["some" => "ASC"])'
             );
+            $handle = Handle::fromString(key($this->options[self::ORDER_BY]));
+            $sort = Sort::fromString(array_values($this->options[self::ORDER_BY])[0]);
+            $orderBy = OrderBy::fromHandleAndSort($handle, $sort);
         } catch (InvalidArgumentException $exception) {
             return null;
         }
 
-        return (array) $this->options[self::ORDER_BY];
+        return $orderBy;
     }
 
-    /**
-     * @todo: Probably unnecessary method
-     * @return null|string
-     */
-    public function getSort(): ?string
-    {
-        try {
-            Assertion::choice($this->options[self::SORT], [self::SORT_ASC, self::SORT_DESC], 'Sort option incorrect');
-        } catch (InvalidArgumentException $exception) {
-            return null;
-        }
-
-        return (string) $this->options[self::SORT];
-    }
-
-    public function getBefore(): ?\DateTime
+    public function getBefore(): ?Before
     {
         try {
             Assertion::keyIsset($this->options, self::BEFORE, 'Before is not defined');
@@ -162,10 +149,10 @@ class ReadOptions
             return null;
         }
 
-        return new \DateTime($this->options[self::BEFORE]);
+        return Before::fromString($this->options[self::BEFORE]);
     }
 
-    public function getAfter(): ?\DateTime
+    public function getAfter(): ?After
     {
         try {
             Assertion::keyIsset($this->options, self::AFTER, 'After is not defined');
@@ -174,7 +161,7 @@ class ReadOptions
             return null;
         }
 
-        return new \DateTime($this->options[self::AFTER]);
+        return After::fromString($this->options[self::AFTER]);
     }
 
     public function getLocaleEnabled(): ?bool

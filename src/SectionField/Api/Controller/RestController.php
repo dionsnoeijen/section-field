@@ -162,7 +162,7 @@ class RestController
             ReadOptions::LIMIT => $limit
         ];
 
-        if (!empty($orderBy) && !empty($sort)) {
+        if (!empty($orderBy)) {
             $readOptions[ReadOptions::ORDER_BY] = [$orderBy => $sort];
         }
 

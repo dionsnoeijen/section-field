@@ -7,9 +7,7 @@ use Assert\Assertion;
 
 final class Label
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $label;
 
     private function __construct(string $label)
