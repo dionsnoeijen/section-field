@@ -3,27 +3,37 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\ValueObject;
 
-use Assert\Assertion;
-
 final class OrderBy
 {
-    /** @var array */
-    private $orderBy;
+    /** @var Handle */
+    private $handle;
 
-    private function __construct(array $orderBy)
+    /** @var Sort */
+    private $sort;
+
+    private function __construct(Handle $handle, Sort $sort)
     {
-        Assertion::isArray($orderBy, 'OrderBy should be an array ["fieldHandle"=>"ASC|DESC"]');
-
-        $this->orderBy = $orderBy;
+        $this->handle = $handle;
+        $this->sort = $sort;
     }
 
     public function toArray(): array
     {
-        return $this->orderBy;
+        return [(string) $this->handle => (string) $this->sort];
+    }
+
+    public function getHandle(): Handle
+    {
+        return $this->handle;
+    }
+
+    public function getSort(): Sort
+    {
+        return $this->sort;
     }
 
     public static function fromHandleAndSort(Handle $handle, Sort $sort): self
     {
-        return new self([(string) $handle => (string) $sort]);
+        return new self($handle, $sort);
     }
 }

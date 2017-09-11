@@ -187,7 +187,7 @@ final class ReadOptions
         return (string) $this->options[self::LOCALE];
     }
 
-    public function getSearch(): ?string
+    public function getSearch(): ?Search
     {
         try {
             Assertion::keyIsset($this->options, self::SEARCH, 'No search defined');
@@ -196,7 +196,7 @@ final class ReadOptions
             return null;
         }
 
-        return (string) $this->options[self::SEARCH];
+        return Search::fromString($this->options[self::SEARCH]);
     }
 
     public function getField(): ?array

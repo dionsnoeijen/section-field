@@ -7,12 +7,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
+use Tardigrades\SectionField\ValueObject\After;
+use Tardigrades\SectionField\ValueObject\Before;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Limit;
 use Tardigrades\SectionField\ValueObject\Offset;
+use Tardigrades\SectionField\ValueObject\OrderBy;
 use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\ValueObject\Search;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class DoctrineSectionReader implements ReadSection
@@ -106,37 +110,37 @@ class DoctrineSectionReader implements ReadSection
 
     }
 
-    private function addOrderByToQuery(array $orderBy): void
+    private function addOrderByToQuery(OrderBy $orderBy): void
     {
 
     }
 
-    private function addBeforeToQuery(): string
+    private function addBeforeToQuery(Before $before): void
     {
 
     }
 
-    private function addAfterToQuery(): string
+    private function addAfterToQuery(After $after): void
     {
 
     }
 
-    private function addLocaleEnabledToQuery(): string
+//    private function addLocaleEnabledToQuery(): string
+//    {
+//
+//    }
+//
+//    private function addLocaleToQuery(): string
+//    {
+//
+//    }
+
+    private function addSearchToQuery(Search $search): void
     {
 
     }
 
-    private function addLocaleToQuery(): string
-    {
-
-    }
-
-    private function addSearchToQuery(): string
-    {
-
-    }
-
-    private function addFieldToQuery(): string
+    private function addFieldToQuery(): void
     {
 
     }
