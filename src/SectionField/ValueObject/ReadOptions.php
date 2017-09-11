@@ -178,7 +178,7 @@ final class ReadOptions
     public function getLocale(): ?string
     {
         try {
-            Assertion::keyIsset($this->options, self::LOCAlE, 'No locale defined');
+            Assertion::keyIsset($this->options, self::LOCALE, 'No locale defined');
             Assertion::string($this->options, 'Locale is supposed to be a string like en_EN');
         } catch (InvalidArgumentException $exception) {
             return null;
@@ -199,7 +199,7 @@ final class ReadOptions
         return (string) $this->options[self::SEARCH];
     }
 
-    public function field(): ?array
+    public function getField(): ?array
     {
         try {
             Assertion::isArray(
@@ -246,6 +246,8 @@ final class ReadOptions
 
     public static function fromArray(array $options): self
     {
+        Assertion::isArray($options, 'Options must be an array');
+
         return new self($options);
     }
 }
