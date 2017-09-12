@@ -28,6 +28,8 @@ rest.section.create:
 rest.section.update.id:
   path: /v1/section/{sectionHandle}/id/{id}
   defaults: { _controller: 'rest.controller:updateEntryById' }
+  requirements:
+    id: '\d+'
   methods: [PUT]
 
 rest.section.update.slug:
@@ -38,6 +40,8 @@ rest.section.update.slug:
 rest.section.delete.id:
   path: /v1/section/{sectionHandle}/id/{id}
   defaults: { _controller: 'rest.controller:deleteEntryById' }
+  requirements:
+    id: '\d+'
   methods: [DELETE]
 
 rest.section.delete.slug:
