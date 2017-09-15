@@ -5,17 +5,16 @@ namespace Tardigrades\FieldType\DateTime;
 
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\FieldType\DateTime\DateTimeInterface\DateTimeFieldType;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
-class DateTimeField extends FieldType implements DateTimeFieldType
+class DateTimeField extends FieldType
 {
     public function addToForm(
         FormBuilderInterface $formBuilder,
-        Section $section,
+        SectionInterface $section,
         $sectionEntity,
         SectionManager $sectionManager,
         ReadSection $readSection

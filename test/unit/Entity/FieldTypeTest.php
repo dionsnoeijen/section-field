@@ -16,7 +16,7 @@ use Tardigrades\SectionField\ValueObject\Type;
 use Tardigrades\SectionField\ValueObject\Updated;
 
 /**
- * @coversDefaultClass Tardigrades\Entity\FieldType
+ * @coversDefaultClass Tardigrades\Entity\FieldTypeInterface
  * @covers ::__construct
  * @covers ::<private>
  */

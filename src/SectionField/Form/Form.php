@@ -15,9 +15,7 @@ use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Form\Forms;
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\FieldType\FieldTypeInterface\FieldType;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
@@ -111,7 +109,7 @@ class Form implements SectionFormInterface
             $fieldTypeFullyQualifiedClassName = (string) $field
                 ->getFieldType()
                 ->getFullyQualifiedClassName();
-            /** @var FieldType $fieldType */
+            /** @var FieldTypeInterface $fieldType */
             $fieldType = new $fieldTypeFullyQualifiedClassName;
             $fieldType->setConfig($field->getConfig());
             $fieldType->addToForm(
@@ -200,7 +198,7 @@ class Form implements SectionFormInterface
 
     private function getSection(
         FullyQualifiedClassName $forHandle
-    ): Section {
+    ): SectionInterface {
         return $this->sectionManager->readByHandle(
             FullyQualifiedClassNameConverter::toHandle($forHandle)
         );

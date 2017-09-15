@@ -5,9 +5,6 @@ namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Tardigrades\Entity\EntityInterface\Application as ApplicationInterface;
-use Tardigrades\Entity\EntityInterface\Language;
-use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Name;
@@ -91,7 +88,7 @@ class Application implements ApplicationInterface
         return $this->languages;
     }
 
-    public function addLanguage(Language $language): ApplicationInterface
+    public function addLanguage(LanguageInterface $language): ApplicationInterface
     {
         if ($this->languages->contains($language)) {
             return $this;
@@ -101,7 +98,7 @@ class Application implements ApplicationInterface
         return $this;
     }
 
-    public function removeLanguage(Language $language): ApplicationInterface
+    public function removeLanguage(LanguageInterface $language): ApplicationInterface
     {
         if (!$this->languages->contains($language)) {
             return $this;
@@ -116,7 +113,7 @@ class Application implements ApplicationInterface
         return $this->sections;
     }
 
-    public function addSection(Section $section): ApplicationInterface
+    public function addSection(SectionInterface $section): ApplicationInterface
     {
         if ($this->sections->contains($section)) {
             return $this;
@@ -126,7 +123,7 @@ class Application implements ApplicationInterface
         return $this;
     }
 
-    public function removeSection(Section $section): ApplicationInterface
+    public function removeSection(SectionInterface $section): ApplicationInterface
     {
         if (!$this->sections->contains($section)) {
             return $this;

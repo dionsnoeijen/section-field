@@ -74,7 +74,7 @@ final class InstallFieldTypeCommandTest extends TestCase
         );
 
         $this->assertRegExp(
-            '/FieldType installed!/',
+            '/FieldTypeInterface installed!/',
             $commandTester->getDisplay()
         );
     }

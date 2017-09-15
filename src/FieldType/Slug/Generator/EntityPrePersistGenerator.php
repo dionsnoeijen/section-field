@@ -4,16 +4,16 @@ declare (strict_types=1);
 namespace Tardigrades\FieldType\Slug\Generator;
 
 use Doctrine\Common\Util\Inflector;
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\FieldType\FieldTypeInterface\Generator;
+use Tardigrades\Entity\FieldInterface;
+use Tardigrades\FieldType\Generator\GeneratorInterface;
 use Tardigrades\FieldType\ValueObject\PrePersistTemplate;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\FieldType\Slug\ValueObject\Slug as SlugValueObject;
 
-class EntityPrePersistGenerator implements Generator
+class EntityPrePersistGenerator implements GeneratorInterface
 {
-    public static function generate(Field $field): Template
+    public static function generate(FieldInterface $field): Template
     {
         $template = PrePersistTemplate::create(
             TemplateLoader::load(

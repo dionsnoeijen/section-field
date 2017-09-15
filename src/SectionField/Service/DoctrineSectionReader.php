@@ -6,7 +6,6 @@ namespace Tardigrades\SectionField\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\ValueObject\After;
 use Tardigrades\SectionField\ValueObject\Before;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
@@ -17,7 +16,7 @@ use Tardigrades\SectionField\ValueObject\OrderBy;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SlugField;
 
-class DoctrineSectionReader implements ReadSection
+class DoctrineSectionReader implements ReadSectionInterface
 {
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -31,7 +30,7 @@ class DoctrineSectionReader implements ReadSection
         $this->entityManager = $entityManager;
     }
 
-    public function read(ReadOptions $readOptions, SectionConfig $sectionConfig = null): \ArrayIterator
+    public function read(ReadOptionsInterface $readOptions, SectionConfig $sectionConfig = null): \ArrayIterator
     {
         $this->queryBuilder = $this->entityManager->createQueryBuilder();
 

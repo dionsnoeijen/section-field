@@ -3,16 +3,13 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\Generator;
 
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\FieldType\FieldTypeInterface\Generator;
+use Tardigrades\Entity\FieldInterface;
 use Tardigrades\FieldType\ValueObject\Template;
-use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 
-class EntityPrePersistGenerator implements Generator
+class EntityPrePersistGenerator implements GeneratorInterface
 {
-
-    public static function generate(Field $field): Template
+    public static function generate(FieldInterface $field): Template
     {
         if (in_array('prePersist', $field->getConfig()->getEntityEvents())) {
             $asString = (string)TemplateLoader::load(

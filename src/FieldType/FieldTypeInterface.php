@@ -1,21 +1,21 @@
 <?php
 declare (strict_types=1);
 
-namespace Tardigrades\FieldType\FieldTypeInterface;
+namespace Tardigrades\FieldType;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Tardigrades\Entity\EntityInterface\Section;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
-interface FieldType
+interface FieldTypeInterface
 {
-    public function setConfig(FieldConfig $fieldConfig): FieldType;
+    public function setConfig(FieldConfig $fieldConfig): FieldTypeInterface;
     public function getConfig(): FieldConfig;
     public function addToForm(
         FormBuilderInterface $formBuilder,
-        Section $section,
+        SectionInterface $section,
         $sectionEntity, // This can be any entity generated for a section
         SectionManager $sectionManager,
         ReadSection $readSection

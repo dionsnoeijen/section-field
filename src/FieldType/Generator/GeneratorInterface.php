@@ -6,10 +6,7 @@ namespace Tardigrades\FieldType\Generator;
 use Tardigrades\Entity\FieldInterface;
 use Tardigrades\FieldType\ValueObject\Template;
 
-class EntityConstructorGenerator implements GeneratorInterface
+interface GeneratorInterface
 {
-    public static function generate(FieldInterface $field): Template
-    {
-
-    }
+    public static function generate(FieldInterface $field): Template;
 }

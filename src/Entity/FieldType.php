@@ -5,9 +5,7 @@ namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
-use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
-use Tardigrades\FieldType\FieldTypeInterface\FieldType as FieldTypeInstance;
+use Tardigrades\FieldType\FieldTypeInterface as FieldTypeInstance;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -41,7 +39,7 @@ class FieldType implements FieldTypeInterface
         $this->fields = is_null($fields) ? new ArrayCollection() : $fields;
     }
 
-    public function setId(int $id): FieldType
+    public function setId(int $id): FieldTypeInterface
     {
         $this->id = $id;
 
@@ -63,14 +61,14 @@ class FieldType implements FieldTypeInterface
         return Type::fromString($this->type);
     }
 
-    public function setType(string $type): FieldType
+    public function setType(string $type): FieldTypeInterface
     {
         $this->type = $type;
 
         return $this;
     }
 
-    public function addField(FieldInterface $field): FieldType
+    public function addField(FieldInterface $field): FieldTypeInterface
     {
         if ($this->fields->contains($field)) {
             return $this;
@@ -81,7 +79,7 @@ class FieldType implements FieldTypeInterface
         return $this;
     }
 
-    public function removeField(FieldInterface $field): FieldType
+    public function removeField(FieldInterface $field): FieldTypeInterface
     {
         if (!$this->fields->contains($field)) {
             return $this;
@@ -96,7 +94,7 @@ class FieldType implements FieldTypeInterface
         return $this->fields;
     }
 
-    public function setFullyQualifiedClassName(string $fullyQualifiedClassName): FieldType
+    public function setFullyQualifiedClassName(string $fullyQualifiedClassName): FieldTypeInterface
     {
         $this->fullyQualifiedClassName = $fullyQualifiedClassName;
 
@@ -113,14 +111,14 @@ class FieldType implements FieldTypeInterface
         return Name::fromString($this->type);
     }
 
-    public function setName(string $name): FieldType
+    public function setName(string $name): FieldTypeInterface
     {
         $this->type = $name;
 
         return $this;
     }
 
-    public function setCreated(\DateTime $created): FieldType
+    public function setCreated(\DateTime $created): FieldTypeInterface
     {
         $this->created = $created;
 
@@ -137,7 +135,7 @@ class FieldType implements FieldTypeInterface
         return Created::fromDateTime($this->created);
     }
 
-    public function setUpdated(\DateTime $updated): FieldType
+    public function setUpdated(\DateTime $updated): FieldTypeInterface
     {
         $this->updated = $updated;
 

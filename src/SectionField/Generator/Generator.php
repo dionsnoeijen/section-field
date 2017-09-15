@@ -3,23 +3,22 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Generator;
 
-use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\Entity\Field as FieldEntity;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\Generator\Writer\Writable;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
-use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
+use Tardigrades\SectionField\Service\FieldManagerInterface;
+use Tardigrades\SectionField\Service\FieldTypeManagerInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 abstract class Generator implements GeneratorInterface
 {
-    /** @var FieldManager */
+    /** @var FieldManagerInterface */
     protected $fieldManager;
 
-    /** @var FieldTypeManager */
+    /** @var FieldTypeManagerInterface */
     protected $fieldTypeManager;
 
-    /** @var SectionManager */
+    /** @var SectionManagerInterface */
     protected $sectionManager;
 
     /** @var array */
@@ -29,9 +28,9 @@ abstract class Generator implements GeneratorInterface
     protected $buildMessages = [];
 
     public function __construct(
-        FieldManager $fieldManager,
-        FieldTypeManager $fieldTypeManager,
-        SectionManager $sectionManager
+        FieldManagerInterface $fieldManager,
+        FieldTypeManagerInterface $fieldTypeManager,
+        SectionManagerInterface $sectionManager
     ) {
         $this->fieldManager = $fieldManager;
         $this->fieldTypeManager = $fieldTypeManager;
@@ -40,7 +39,7 @@ abstract class Generator implements GeneratorInterface
         $this->relationships = [];
     }
 
-    protected function addOpposingRelationships(Section $section, array $fields): array
+    protected function addOpposingRelationships(SectionInterface $section, array $fields): array
     {
         $this->relationships = $this->sectionManager->getRelationshipsOfAll();
         foreach ($this->relationships[(string) $section->getHandle()] as $fieldHandle=>$relationship) {
@@ -86,5 +85,5 @@ abstract class Generator implements GeneratorInterface
         return $this->buildMessages;
     }
 
-    abstract public function generateBySection(Section $section): Writable;
+    abstract public function generateBySection(SectionInterface $section): Writable;
 }

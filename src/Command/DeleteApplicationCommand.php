@@ -3,26 +3,20 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Tardigrades\Entity\EntityInterface\Application;
-use Tardigrades\Entity\EntityInterface\Language;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
+use Tardigrades\Entity\ApplicationInterface;
+use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 use Tardigrades\SectionField\Service\ApplicationNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
 class DeleteApplicationCommand extends ApplicationCommand
 {
     /**
-     * @var ApplicationManager
+     * @var ApplicationManagerInterface
      */
     private $applicationManager;
 
@@ -32,7 +26,7 @@ class DeleteApplicationCommand extends ApplicationCommand
     private $questionHelper;
 
     public function __construct(
-        ApplicationManager $applicationManager
+        ApplicationManagerInterface $applicationManager
     ) {
         $this->applicationManager = $applicationManager;
 
@@ -61,7 +55,7 @@ class DeleteApplicationCommand extends ApplicationCommand
         $this->deleteWhatRecord($input, $output);
     }
 
-    private function getApplicationRecord(InputInterface $input, OutputInterface $output): Application
+    private function getApplicationRecord(InputInterface $input, OutputInterface $output): ApplicationInterface
     {
         $question = new Question('<question>What record do you want to delete?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {

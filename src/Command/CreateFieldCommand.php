@@ -8,18 +8,16 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\Service\FieldManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 class CreateFieldCommand extends FieldCommand
 {
-    /**
-     * @var FieldManager
-     */
+    /** @var FieldManagerInterface */
     private $fieldManager;
 
     public function __construct(
-        FieldManager $fieldManager
+        FieldManagerInterface $fieldManager
     ) {
         $this->fieldManager = $fieldManager;
 

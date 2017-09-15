@@ -3,8 +3,6 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Tardigrades\SectionField\SectionFieldInterface\DeleteSection as DeleteSectionInterface;
-
 class DeleteSection implements DeleteSectionInterface
 {
     /** @var array */

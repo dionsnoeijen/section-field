@@ -5,17 +5,16 @@ namespace Tardigrades\FieldType\RichTextArea;
 
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Tardigrades\Entity\EntityInterface\Section;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
-use Tardigrades\FieldType\RichTextArea\RichTextAreaInterface\RichTextArea as RichTextAreaInterface;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
-class RichTextArea extends FieldType implements RichTextAreaInterface
+class RichTextArea extends FieldType
 {
     public function addToForm(
         FormBuilderInterface $formBuilder,
-        Section $section,
+        SectionInterface $section,
         $sectionEntity,
         SectionManager $sectionManager,
         ReadSection $readSection

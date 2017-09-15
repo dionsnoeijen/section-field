@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Service;
 
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection as ReadSectionInterface;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class ReadSection implements ReadSectionInterface
@@ -13,12 +11,12 @@ class ReadSection implements ReadSectionInterface
     /** @var array */
     private $readers;
 
-    /** @var SectionManager */
+    /** @var SectionManagerInterface */
     private $sectionManager;
 
     public function __construct(
         array $readers,
-        SectionManager $sectionManager
+        SectionManagerInterface $sectionManager
     ) {
         $this->readers = $readers;
         $this->sectionManager = $sectionManager;
@@ -27,12 +25,12 @@ class ReadSection implements ReadSectionInterface
     /**
      * Read from one or more data-sources
      *
-     * @param ReadOptions $options
+     * @param ReadOptionsInterface $options
      * @param SectionConfig|null $sectionConfig
      * @return \ArrayIterator
      */
     public function read(
-        ReadOptions $options,
+        ReadOptionsInterface $options,
         SectionConfig $sectionConfig = null
     ): \ArrayIterator {
         $sectionData = new \ArrayIterator();

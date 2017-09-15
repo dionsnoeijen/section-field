@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Tardigrades\FieldType\Relationship\Generator;
 
 use Doctrine\Common\Util\Inflector;
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\FieldType\FieldTypeInterface\Generator;
+use Tardigrades\Entity\FieldInterface;
+use Tardigrades\Entity\SectionInterface;
+use Tardigrades\FieldType\Generator\GeneratorInterface;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
@@ -22,13 +22,13 @@ use Tardigrades\SectionField\ValueObject\SectionConfig;
  * opposing side get's the correct opposing field added. With type
  * bidirectional.
  *
- * @package Tardigrades\FieldType\Relationship\Generator
+ * @package Tardigrades\FieldTypeInterface\Relationship\Generator
  */
-class DoctrineOneToOneGenerator implements Generator
+class DoctrineOneToOneGenerator implements GeneratorInterface
 {
     const KIND = 'one-to-one';
 
-    public static function generate(Field $field, ...$options): Template
+    public static function generate(FieldInterface $field, ...$options): Template
     {
         $fieldConfig = $field->getConfig()->toArray();
 
@@ -40,7 +40,7 @@ class DoctrineOneToOneGenerator implements Generator
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
-            /** @var Section $target */
+            /** @var SectionInterface $target */
             $target = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
             return Template::create(

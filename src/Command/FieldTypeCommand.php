@@ -8,7 +8,7 @@ use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\Entity\EntityInterface\FieldType;
+use Tardigrades\Entity\FieldTypeInterface;
 
 abstract class FieldTypeCommand extends Command
 {
@@ -17,7 +17,7 @@ abstract class FieldTypeCommand extends Command
         $table = new Table($output);
 
         $rows = [];
-        /** @var FieldType $fieldType */
+        /** @var FieldTypeInterface $fieldType */
         foreach ($fieldTypes as $fieldType) {
             $rows[] = [
                 $fieldType->getId(),

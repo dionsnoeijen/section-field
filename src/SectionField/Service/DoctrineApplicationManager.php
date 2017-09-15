@@ -3,15 +3,13 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
 use Tardigrades\Entity\Application;
-use Tardigrades\Entity\EntityInterface\Application as ApplicationInterface;
+use Tardigrades\Entity\ApplicationInterface;
 use Tardigrades\SectionField\ValueObject\ApplicationConfig;
 use Tardigrades\SectionField\ValueObject\Id;
 use Doctrine\ORM\EntityManagerInterface;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 
-class DoctrineApplicationManager implements ApplicationManager
+class DoctrineApplicationManager implements ApplicationManagerInterface
 {
     /**
      * @var EntityManagerInterface
@@ -19,13 +17,13 @@ class DoctrineApplicationManager implements ApplicationManager
     private $entityManager;
 
     /**
-     * @var LanguageManager
+     * @var LanguageManagerInterface
      */
     private $languageManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        LanguageManager $languageManager
+        LanguageManagerInterface $languageManager
     ) {
         $this->entityManager = $entityManager;
         $this->languageManager = $languageManager;

@@ -4,16 +4,15 @@ declare (strict_types=1);
 namespace Tardigrades\FieldType\Relationship\Generator;
 
 use Doctrine\Common\Util\Inflector;
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\FieldType\FieldTypeInterface\Generator;
+use Tardigrades\Entity\FieldInterface;
+use Tardigrades\FieldType\Generator\GeneratorInterface;
 use Tardigrades\FieldType\ValueObject\Template;
-use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class EntityMethodsGenerator implements Generator
+class EntityMethodsGenerator implements GeneratorInterface
 {
-    public static function generate(Field $field, ...$options): Template
+    public static function generate(FieldInterface $field, ...$options): Template
     {
         $fieldConfig = $field->getConfig()->toArray();
 

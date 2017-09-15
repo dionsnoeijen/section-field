@@ -1,21 +1,22 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\Service\FieldManagerInterface;
 use Tardigrades\SectionField\Service\FieldNotFoundException;
 
 class ListFieldCommand extends FieldCommand
 {
     /**
-     * @var FieldManager
+     * @var FieldManagerInterface
      */
     private $fieldManager;
 
     public function __construct(
-        FieldManager $fieldManager
+        FieldManagerInterface $fieldManager
     ) {
         $this->fieldManager = $fieldManager;
 

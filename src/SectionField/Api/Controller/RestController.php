@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Tardigrades\Entity\EntityInterface\Field;
+use Tardigrades\Entity\FieldInterface;
 use Tardigrades\SectionField\Api\Serializer\FieldsExclusionStrategy;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\SectionFieldInterface\DeleteSection;
@@ -87,7 +87,7 @@ class RestController
         $response['name'] = (string) $section->getName();
         $response['handle'] = (string) $section->getHandle();
 
-        /** @var Field $field */
+        /** @var FieldInterface $field */
         foreach ($section->getFields() as $field) {
             $fieldInfo = [
                 (string) $field->getHandle() => $field->getConfig()->toArray()['field']

@@ -3,9 +3,6 @@ declare (strict_types=1);
 
 namespace Tardigrades\Entity;
 
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\Entity\EntityInterface\Language;
-use Tardigrades\Entity\EntityInterface\FieldTranslation as FieldTranslationInterface;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Label;
 use Tardigrades\SectionField\ValueObject\Name;
@@ -76,19 +73,19 @@ class FieldTranslation implements FieldTranslationInterface
         return $this;
     }
 
-    public function getField(): Field
+    public function getField(): FieldInterface
     {
         return $this->field;
     }
 
-    public function setField(Field $field): FieldTranslationInterface
+    public function setField(FieldInterface $field): FieldTranslationInterface
     {
         $this->field = $field;
 
         return $this;
     }
 
-    public function removeField(Field $field): FieldTranslationInterface
+    public function removeField(FieldInterface $field): FieldTranslationInterface
     {
         if ($this->field === $field) {
             $this->field = null;
@@ -97,14 +94,14 @@ class FieldTranslation implements FieldTranslationInterface
         return $this;
     }
 
-    public function setLanguage(Language $language): FieldTranslationInterface
+    public function setLanguage(LanguageInterface $language): FieldTranslationInterface
     {
         $this->language = $language;
 
         return $this;
     }
 
-    public function getLanguage(): Language
+    public function getLanguage(): LanguageInterface
     {
         return $this->language;
     }

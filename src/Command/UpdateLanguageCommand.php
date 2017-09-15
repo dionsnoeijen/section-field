@@ -8,23 +8,19 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
+use Tardigrades\SectionField\Service\LanguageManagerInterface;
 use Tardigrades\SectionField\ValueObject\LanguageConfig;
 
 class UpdateLanguageCommand extends LanguageCommand
 {
-    /**
-     * @var QuestionHelper
-     */
+    /** @var QuestionHelper */
     private $questionHelper;
 
-    /**
-     * @var LanguageManager
-     */
+    /** @var LanguageManagerInterface */
     private $languageManager;
 
     public function __construct(
-        LanguageManager $languageManager
+        LanguageManagerInterface $languageManager
     ) {
         $this->languageManager = $languageManager;
 

@@ -5,43 +5,35 @@ namespace Tardigrades\SectionField\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Field;
+use Tardigrades\Entity\FieldInterface;
 use Tardigrades\Entity\FieldTranslation;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 
-class DoctrineFieldManager implements FieldManager
+class DoctrineFieldManager implements FieldManagerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManager;
 
-    /**
-     * @var FieldTypeManager
-     */
+    /** @var FieldTypeManagerInterface */
     private $fieldTypeManager;
 
-    /**
-     * @var LanguageManager
-     */
+    /** @var LanguageManagerInterface */
     private $languageManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        FieldTypeManager $fieldTypeManager,
-        LanguageManager $languageManager
+        FieldTypeManagerInterface $fieldTypeManager,
+        LanguageManagerInterface $languageManager
     ) {
         $this->entityManager = $entityManager;
         $this->fieldTypeManager = $fieldTypeManager;
         $this->languageManager = $languageManager;
     }
 
-    public function create(Field $entity): Field
+    public function create(FieldInterface$entity): FieldInterface
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -49,7 +41,7 @@ class DoctrineFieldManager implements FieldManager
         return $entity;
     }
 
-    public function read(Id $id): Field
+    public function read(Id $id): FieldInterface
     {
         $fieldRepository = $this->entityManager->getRepository(Field::class);
 
@@ -80,13 +72,13 @@ class DoctrineFieldManager implements FieldManager
         $this->entityManager->flush();
     }
 
-    public function delete(Field $entity): void
+    public function delete(FieldInterface $entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
 
-    public function createByConfig(FieldConfig $fieldConfig): Field
+    public function createByConfig(FieldConfig $fieldConfig): FieldInterface
     {
         $field = $this->setUpFieldByConfig($fieldConfig, new Field());
 
@@ -96,7 +88,7 @@ class DoctrineFieldManager implements FieldManager
         return $field;
     }
 
-    public function updateByConfig(FieldConfig $fieldConfig, Field $field): Field
+    public function updateByConfig(FieldConfig $fieldConfig, FieldInterface $field): FieldInterface
     {
         $field = $this->setUpFieldByConfig($fieldConfig, $field);
 
@@ -151,7 +143,7 @@ class DoctrineFieldManager implements FieldManager
         return $fieldTranslations;
     }
 
-    private function setUpFieldByConfig(FieldConfig $fieldConfig, Field $field): Field
+    private function setUpFieldByConfig(FieldConfig $fieldConfig, FieldInterface $field): FieldInterface
     {
         $translations = $this->getTranslations($fieldConfig, $field);
 
@@ -170,7 +162,7 @@ class DoctrineFieldManager implements FieldManager
         return $field;
     }
 
-    public function readByHandle(Handle $handle): Field
+    public function readByHandle(Handle $handle): FieldInterface
     {
         $fieldRepository = $this->entityManager->getRepository(Field::class);
 

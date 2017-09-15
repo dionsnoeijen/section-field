@@ -5,7 +5,7 @@ namespace Tardigrades\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
+use Tardigrades\SectionField\Service\LanguageManagerInterface;
 use Tardigrades\SectionField\Service\LanguageNotFoundException;
 
 class ListLanguageCommand extends LanguageCommand
@@ -13,7 +13,7 @@ class ListLanguageCommand extends LanguageCommand
     private $languageManager;
 
     public function __construct(
-        LanguageManager $languageManager
+        LanguageManagerInterface $languageManager
     ) {
         $this->languageManager = $languageManager;
 

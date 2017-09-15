@@ -5,17 +5,14 @@ namespace Tardigrades\SectionField\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\FieldType;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
-use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
+use Tardigrades\Entity\FieldTypeInterface;
 
-class DoctrineFieldTypeManager implements FieldTypeManager
+class DoctrineFieldTypeManager implements FieldTypeManagerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)

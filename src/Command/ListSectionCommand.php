@@ -5,13 +5,13 @@ namespace Tardigrades\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\Service\SectionNotFoundException;
 
 class ListSectionCommand extends SectionCommand
 {
     public function __construct(
-        SectionManager $sectionManager
+        SectionManagerInterface $sectionManager
     ) {
         parent::__construct($sectionManager, 'sf:list-section');
     }

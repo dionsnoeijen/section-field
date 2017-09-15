@@ -3,9 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Generator;
 
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
-use Tardigrades\SectionField\SectionFieldInterface\Generators as GeneratorsInterface;
+use Tardigrades\Entity\SectionInterface;
 
 class Generators implements GeneratorsInterface
 {
@@ -23,7 +21,7 @@ class Generators implements GeneratorsInterface
         $this->generators = $generators;
     }
 
-    public function generateBySection(Section $section): array
+    public function generateBySection(SectionInterface $section): array
     {
         $writables = [];
 

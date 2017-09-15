@@ -1,7 +1,7 @@
 <?php
 declare (strict_types=1);
 
-namespace Tardigrades\Entity\EntityInterface;
+namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Tardigrades\SectionField\ValueObject\Created;
@@ -11,26 +11,26 @@ use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\Updated;
 
-interface Section
+interface SectionInterface
 {
     public function getId(): ?int;
     public function getIdValueObject(): Id;
     public function getName(): Name;
-    public function setName(string $name): Section;
+    public function setName(string $name): SectionInterface;
     public function getHandle(): Handle;
-    public function setHandle(string $handle): Section;
-    public function addField(Field $field): Section;
-    public function removeField(Field $field): Section;
+    public function setHandle(string $handle): SectionInterface;
+    public function addField(FieldInterface $field): SectionInterface;
+    public function removeField(FieldInterface $field): SectionInterface;
     public function getFields(): Collection;
-    public function addApplication(Application $application): Section;
-    public function removeApplication(Application $application): Section;
+    public function addApplication(ApplicationInterface $application): SectionInterface;
+    public function removeApplication(ApplicationInterface $application): SectionInterface;
     public function getApplications(): Collection;
-    public function setConfig(array $config): Section;
+    public function setConfig(array $config): SectionInterface;
     public function getConfig(): SectionConfig;
-    public function setCreated(\DateTime $created): Section;
+    public function setCreated(\DateTime $created): SectionInterface;
     public function getCreated(): \DateTime;
     public function getCreatedValueObject(): Created;
-    public function setUpdated(\DateTime $updated): Section;
+    public function setUpdated(\DateTime $updated): SectionInterface;
     public function getUpdated(): \DateTime;
     public function getUpdatedValueObject(): Updated;
     public function onPrePersist(): void;

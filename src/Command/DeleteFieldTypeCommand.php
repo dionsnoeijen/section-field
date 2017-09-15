@@ -9,7 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Tardigrades\Entity\FieldType;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
+use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\Service\FieldTypeManagerInterface;
+use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
 class DeleteFieldTypeCommand extends FieldTypeCommand
@@ -20,12 +22,12 @@ class DeleteFieldTypeCommand extends FieldTypeCommand
     private $questionHelper;
 
     /**
-     * @var FieldTypeManager
+     * @var FieldTypeManagerInterface
      */
     private $fieldTypeManager;
 
     public function __construct(
-        FieldTypeManager $fieldTypeManager
+        FieldTypeManagerInterface $fieldTypeManager
     ) {
         $this->fieldTypeManager = $fieldTypeManager;
 

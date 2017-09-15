@@ -7,13 +7,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class UpdateSectionCommand extends SectionCommand
 {
     public function __construct(
-        SectionManager $sectionManager
+        SectionManagerInterface $sectionManager
     ) {
         parent::__construct($sectionManager, 'sf:update-section');
     }

@@ -6,18 +6,16 @@ namespace Tardigrades\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\Service\FieldTypeManagerInterface;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 
 class InstallFieldTypeCommand extends FieldTypeCommand
 {
-    /**
-     * @var FieldTypeManager
-     */
+    /** @var FieldTypeManagerInterface */
     private $fieldTypeManager;
 
     public function __construct(
-        FieldTypeManager $fieldTypeManager
+        FieldTypeManagerInterface $fieldTypeManager
     ) {
         $this->fieldTypeManager = $fieldTypeManager;
 
@@ -40,6 +38,6 @@ class InstallFieldTypeCommand extends FieldTypeCommand
             FullyQualifiedClassName::fromString($namespace)
         );
 
-        $this->renderTable($output, [$fieldType], 'FieldType installed!');
+        $this->renderTable($output, [$fieldType], 'FieldTypeInterface installed!');
     }
 }

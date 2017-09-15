@@ -10,18 +10,18 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\Entity\SectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\Service\SectionNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
 abstract class SectionCommand extends Command
 {
-    /** @var SectionManager */
+    /** @var SectionManagerInterface */
     protected $sectionManager;
 
     public function __construct(
-        SectionManager $sectionManager,
+        SectionManagerInterface $sectionManager,
         string $name
     ) {
         $this->sectionManager = $sectionManager;
@@ -56,7 +56,7 @@ abstract class SectionCommand extends Command
         $table->render();
     }
 
-    protected function getSection(InputInterface $input, OutputInterface $output): Section
+    protected function getSection(InputInterface $input, OutputInterface $output): SectionInterface
     {
         $question = new Question('<question>Choose record.</question> (#id): ');
 

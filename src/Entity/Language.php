@@ -5,8 +5,6 @@ namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Tardigrades\Entity\EntityInterface\Application;
-use Tardigrades\Entity\EntityInterface\Language as LanguageInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\I18n;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -64,7 +62,7 @@ class Language implements LanguageInterface
         return I18n::fromString($this->i18n);
     }
 
-    public function addApplication(Application $application): LanguageInterface
+    public function addApplication(ApplicationInterface $application): LanguageInterface
     {
         if ($this->applications->contains($application)) {
             return $this;
@@ -79,7 +77,7 @@ class Language implements LanguageInterface
         return $this->applications;
     }
 
-    public function removeApplication(Application $application): LanguageInterface
+    public function removeApplication(ApplicationInterface $application): LanguageInterface
     {
         if (!$this->applications->contains($application)) {
             return $this;

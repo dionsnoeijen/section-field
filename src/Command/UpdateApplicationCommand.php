@@ -9,8 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\Entity\EntityInterface\Application;
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
+use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 use Tardigrades\SectionField\Service\SectionNotFoundException;
 use Tardigrades\SectionField\ValueObject\ApplicationConfig;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -23,12 +22,12 @@ class UpdateApplicationCommand extends ApplicationCommand
     private $questionHelper;
 
     /**
-     * @var ApplicationManager
+     * @var ApplicationManagerInterface
      */
     private $applicationManager;
 
     public function __construct(
-        ApplicationManager $applicationManager
+        ApplicationManagerInterface $applicationManager
     ) {
         $this->applicationManager = $applicationManager;
 

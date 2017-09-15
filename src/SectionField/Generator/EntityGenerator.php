@@ -6,15 +6,11 @@ namespace Tardigrades\SectionField\Generator;
 use Assert\Assertion;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\FieldType\FieldTypeInterface\FieldType;
-use Tardigrades\FieldType\Generator\EntityValidatorMetadataGenerator;
+use Tardigrades\Entity\FieldInterface;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\ValueObject\Template;
-use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\Generator\Writer\Writable;
-use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SlugField;
@@ -37,7 +33,7 @@ class EntityGenerator extends Generator implements GeneratorInterface
     const GENERATE_FOR = 'entity';
 
     public function generateBySection(
-        Section $section
+        SectionInterface $section
     ): Writable {
 
         $this->sectionConfig = $section->getConfig();
@@ -55,7 +51,7 @@ class EntityGenerator extends Generator implements GeneratorInterface
 
     private function generateElements(array $fields): void
     {
-        /** @var Field $field */
+        /** @var FieldInterface $field */
         foreach ($fields as $field) {
 
             $yml = $field->getFieldType()->getInstance()->directory() . '/config/config.yml';
@@ -82,7 +78,7 @@ class EntityGenerator extends Generator implements GeneratorInterface
 
             /**
              * @var string $item
-             * @var \Tardigrades\FieldType\FieldTypeInterface\Generator $generator
+             * @var \Tardigrades\FieldType\Generator\GeneratorInterface $generator
              */
             foreach ($parsed['generator'][self::GENERATE_FOR] as $item=>$generator) {
                 if (!key_exists($item, $this->templates)) {
@@ -91,10 +87,10 @@ class EntityGenerator extends Generator implements GeneratorInterface
                 if (class_exists($generator)) {
                     $interfaces = class_implements($generator);
                 } else {
-                    $this->buildMessages[] = 'Generators ' . $generator . ': Generators not found.';
+                    $this->buildMessages[] = 'Generators ' . get_class($generator) . ': Generators not found.';
                     break;
                 }
-                if (key($interfaces) === \Tardigrades\FieldType\FieldTypeInterface\Generator::class) {
+                if (key($interfaces) === \Tardigrades\FieldType\Generator\GeneratorInterface::class) {
                     try {
                         $reflector = new ReflectionClass($generator);
                         $method = $reflector->getMethod('generate');

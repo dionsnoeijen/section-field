@@ -10,25 +10,21 @@ use Tardigrades\Entity\Field;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\Service\FieldManagerInterface;
 use Tardigrades\SectionField\Service\FieldNotFoundException;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Id;
 
 class UpdateFieldCommand extends FieldCommand
 {
-    /**
-     * @var QuestionHelper
-     */
+    /** @var QuestionHelper */
     private $questionHelper;
 
-    /**
-     * @var FieldManager
-     */
+    /** @var FieldManagerInterface */
     private $fieldManager;
 
     public function __construct(
-        FieldManager $fieldManager
+        FieldManagerInterface $fieldManager
     ) {
         $this->fieldManager = $fieldManager;
 

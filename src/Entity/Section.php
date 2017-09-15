@@ -5,9 +5,6 @@ namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Tardigrades\Entity\EntityInterface\Application;
-use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
-use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -128,7 +125,7 @@ class Section implements SectionInterface
         return SectionConfig::fromArray($this->config);
     }
 
-    public function addApplication(Application $application): SectionInterface
+    public function addApplication(ApplicationInterface $application): SectionInterface
     {
         if ($this->applications->contains($application)) {
             return $this;
@@ -144,7 +141,7 @@ class Section implements SectionInterface
         return $this->applications;
     }
 
-    public function removeApplication(Application $application): SectionInterface
+    public function removeApplication(ApplicationInterface $application): SectionInterface
     {
         if (!$this->applications->contains($application)) {
             return $this;

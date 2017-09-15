@@ -1,9 +1,9 @@
 <?php
 declare (strict_types=1);
 
-namespace Tardigrades\SectionField\SectionFieldInterface;
+namespace Tardigrades\SectionField\Service;
 
-interface CreateSection
+interface CreateSectionInterface
 {
     public function save($data, array $jitRelationships = null);
 }

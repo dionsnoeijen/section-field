@@ -6,12 +6,12 @@ namespace Tardigrades\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 class DeleteSectionCommand extends SectionCommand
 {
     public function __construct(
-        SectionManager $sectionManager
+        SectionManagerInterface $sectionManager
     ) {
         parent::__construct($sectionManager, 'sf:delete-section');
     }

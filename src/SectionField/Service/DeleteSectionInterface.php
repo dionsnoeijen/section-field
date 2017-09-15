@@ -1,9 +1,9 @@
 <?php
 declare (strict_types=1);
 
-namespace Tardigrades\SectionField\SectionFieldInterface;
+namespace Tardigrades\SectionField\Service;
 
-interface DeleteSection
+interface DeleteSectionInterface
 {
     public function delete($sectionEntryEntity): bool;
 }

@@ -6,10 +6,9 @@ namespace Tardigrades\SectionField\Service;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
-use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\ValueObject\JitRelationship;
 
-class DoctrineSectionCreator implements CreateSection
+class DoctrineSectionCreator implements CreateSectionInterface
 {
     /** @var EntityManagerInterface */
     private $entityManager;

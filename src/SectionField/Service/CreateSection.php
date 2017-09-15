@@ -3,8 +3,6 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Tardigrades\SectionField\SectionFieldInterface\CreateSection as CreateSectionInterface;
-
 class CreateSection implements CreateSectionInterface
 {
     /** @var array */

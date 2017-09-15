@@ -4,9 +4,8 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Tardigrades\SectionField\SectionFieldInterface\DeleteSection;
 
-class DoctrineSectionDeleter implements DeleteSection
+class DoctrineSectionDeleter implements DeleteSectionInterface
 {
     /** @var EntityManagerInterface */
     private $entityManager;

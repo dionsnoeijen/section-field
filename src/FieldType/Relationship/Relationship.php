@@ -6,20 +6,18 @@ namespace Tardigrades\FieldType\Relationship;
 use Doctrine\Common\Util\Inflector;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Tardigrades\Entity\EntityInterface\Section;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
-use Tardigrades\FieldType\Relationship\RelationshipInterface\Relationship as RelationshipInterface;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\Service\ReadOptions;
 use Tardigrades\SectionField\ValueObject\Handle;
 
-class Relationship extends FieldType implements RelationshipInterface
+class Relationship extends FieldType
 {
-
     public function addToForm(
         FormBuilderInterface $formBuilder,
-        Section $section,
+        SectionInterface $section,
         $sectionEntity,
         SectionManager $sectionManager,
         ReadSection $readSection
@@ -44,7 +42,7 @@ class Relationship extends FieldType implements RelationshipInterface
         ReadSection $readSection,
         SectionManager $sectionManager,
         $sectionEntity,
-        Section $section
+        SectionInterface $section
     ): FormBuilderInterface {
 
         $fieldConfig = $this->getConfig()->toArray();

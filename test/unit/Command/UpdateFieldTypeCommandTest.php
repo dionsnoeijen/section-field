@@ -93,7 +93,7 @@ final class UpdateFieldTypeCommandTest extends TestCase
         );
 
         $this->assertRegExp(
-            '/FieldType Updated!/',
+            '/FieldTypeInterface Updated!/',
             $commandTester->getDisplay()
         );
     }

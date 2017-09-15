@@ -3,20 +3,20 @@ declare (strict_types=1);
 
 namespace Tardigrades\Twig;
 
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\Service\ReadOptions;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
 use Twig_Extension;
 use Twig_Function;
 
 class SectionTwigExtension extends Twig_Extension
 {
-    /** @var ReadSection */
+    /** @var ReadSectionInterface */
     private $readSection;
 
     /** @var array */
     private $options;
 
-    public function __construct(ReadSection $readSection)
+    public function __construct(ReadSectionInterface $readSection)
     {
         $this->readSection = $readSection;
     }

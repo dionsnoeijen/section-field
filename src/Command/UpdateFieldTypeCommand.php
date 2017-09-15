@@ -4,16 +4,12 @@ declare (strict_types=1);
 namespace Tardigrades\Command;
 
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Tardigrades\Entity\FieldType;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\Service\FieldTypeManagerInterface;
 use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -26,12 +22,12 @@ class UpdateFieldTypeCommand extends FieldTypeCommand
     private $questionHelper;
 
     /**
-     * @var FieldTypeManager
+     * @var FieldTypeManagerInterface
      */
     private $fieldTypeManager;
 
     public function __construct(
-        FieldTypeManager $fieldTypeManager
+        FieldTypeManagerInterface $fieldTypeManager
     ) {
         $this->fieldTypeManager = $fieldTypeManager;
 
@@ -114,7 +110,7 @@ class UpdateFieldTypeCommand extends FieldTypeCommand
         $this->fieldTypeManager->update();
         $this->renderTable($output, [$fieldType], 'The * column is what can be updated, type is updated automatically.');
 
-        $output->writeln('<info>FieldType Updated!</info>');
+        $output->writeln('<info>FieldTypeInterface Updated!</info>');
     }
 
 }

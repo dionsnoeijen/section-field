@@ -5,10 +5,6 @@ namespace Tardigrades\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
-use Tardigrades\Entity\EntityInterface\FieldTranslation;
-use Tardigrades\Entity\EntityInterface\FieldType as FieldTypeInterface;
-use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Handle;
@@ -110,7 +106,7 @@ class Field implements FieldInterface
         return $this->fieldTranslations;
     }
 
-    public function addFieldTranslation(FieldTranslation $fieldTranslation): FieldInterface
+    public function addFieldTranslation(FieldTranslationInterface $fieldTranslation): FieldInterface
     {
         if ($this->fieldTranslations->contains($fieldTranslation)) {
             return $this;
@@ -121,7 +117,7 @@ class Field implements FieldInterface
         return $this;
     }
 
-    public function removeFieldTranslation(FieldTranslation $fieldTranslation): FieldInterface
+    public function removeFieldTranslation(FieldTranslationInterface $fieldTranslation): FieldInterface
     {
         if (!$this->fieldTranslations->contains($fieldTranslation)) {
             return $this;

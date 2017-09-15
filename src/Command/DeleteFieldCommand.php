@@ -10,6 +10,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Tardigrades\Entity\Field;
 use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\Service\FieldManagerInterface;
 use Tardigrades\SectionField\Service\FieldNotFoundException;
 use Tardigrades\SectionField\ValueObject\Id;
 
@@ -21,12 +22,12 @@ class DeleteFieldCommand extends FieldCommand
     private $questionHelper;
 
     /**
-     * @var FieldManager
+     * @var FieldManagerInterface
      */
     private $fieldManager;
 
     public function __construct(
-        FieldManager $fieldManager
+        FieldManagerInterface $fieldManager
     ) {
         $this->fieldManager = $fieldManager;
 

@@ -1,21 +1,19 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\FieldType\Slug;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Tardigrades\Entity\EntityInterface\Section;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
-use Tardigrades\FieldType\Slug\SlugInterface\SlugFieldType;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
-
-class Slug extends FieldType implements SlugFieldType
+class Slug extends FieldType
 {
     public function addToForm(
         FormBuilderInterface $formBuilder,
-        Section $section,
+        SectionInterface $section,
         $sectionEntity,
         SectionManager $sectionManager,
         ReadSection $readSection

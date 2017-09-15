@@ -3,17 +3,14 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Service;
 
-use Tardigrades\Entity\EntityInterface\Field;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Section as SectionEntity;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-class DoctrineSectionManager implements SectionManager
+class DoctrineSectionManager implements SectionManagerInterface
 {
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -36,13 +33,13 @@ class DoctrineSectionManager implements SectionManager
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        FieldManager $fieldManager
+        FieldManagerInterface $fieldManager
     ) {
         $this->entityManager = $entityManager;
         $this->fieldManager = $fieldManager;
     }
 
-    public function create(Section $entity): Section
+    public function create(SectionInterface $entity): SectionInterface
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -50,11 +47,11 @@ class DoctrineSectionManager implements SectionManager
         return $entity;
     }
 
-    public function read(Id $id): Section
+    public function read(Id $id): SectionInterface
     {
         $sectionRepository = $this->entityManager->getRepository(SectionEntity::class);
 
-        /** @var $section Section */
+        /** @var $section SectionInterface */
         $section = $sectionRepository->find($id->toInt());
 
         if (empty($section)) {
@@ -76,19 +73,19 @@ class DoctrineSectionManager implements SectionManager
         return $sections;
     }
 
-    public function update(Section $entity): void
+    public function update(SectionInterface $entity): void
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
     }
 
-    public function delete(Section $entity): void
+    public function delete(SectionInterface $entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
 
-    public function createByConfig(SectionConfig $sectionConfig): Section
+    public function createByConfig(SectionConfig $sectionConfig): SectionInterface
     {
         $section = new SectionEntity();
         $this->updateByConfig($sectionConfig, $section);
@@ -96,7 +93,7 @@ class DoctrineSectionManager implements SectionManager
         return $section;
     }
 
-    public function updateByConfig(SectionConfig $sectionConfig, Section $section): Section
+    public function updateByConfig(SectionConfig $sectionConfig, SectionInterface $section): SectionInterface
     {
         $fields = $this->fieldManager->readByHandles($sectionConfig->getFields());
 
@@ -113,7 +110,7 @@ class DoctrineSectionManager implements SectionManager
         return $section;
     }
 
-    public function readByHandle(Handle $handle): Section
+    public function readByHandle(Handle $handle): SectionInterface
     {
         $sectionRepository = $this->entityManager->getRepository(SectionEntity::class);
 

@@ -3,21 +3,20 @@ declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
+use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 use Tardigrades\SectionField\ValueObject\ApplicationConfig;
 
 class CreateApplicationCommand extends ApplicationCommand
 {
-    /** @var ApplicationManager */
+    /** @var ApplicationManagerInterface */
     private $applicationManager;
 
     public function __construct(
-        ApplicationManager $applicationManager
+        ApplicationManagerInterface $applicationManager
     ) {
         $this->applicationManager = $applicationManager;
 
