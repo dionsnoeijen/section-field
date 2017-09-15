@@ -15,6 +15,7 @@ use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\Generator\Writer\Writable;
 use Tardigrades\SectionField\SectionFieldInterface\Generator as GeneratorInterface;
+use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SlugField;
 
@@ -225,7 +226,7 @@ EOT;
         $metadata = '';
         foreach ($generatorConfig['entity'] as $handle => $options) {
 
-            $field = $this->fieldManager->readByHandle($handle);
+            $field = $this->fieldManager->readByHandle(Handle::fromString($handle));
 
             foreach ($options as $assertion => $assertionOptions) {
                 try {
