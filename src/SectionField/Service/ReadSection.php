@@ -25,7 +25,7 @@ class ReadSection implements ReadSectionInterface
     }
 
     /**
-     *
+     * Read from one or more data-sources
      *
      * @param ReadOptions $options
      * @param SectionConfig|null $sectionConfig
@@ -44,9 +44,11 @@ class ReadSection implements ReadSectionInterface
                 )
             )->getConfig();
         }
-        
+
+        // Make sure we are passing the fully qualified class name as the section
         $optionsArray = $options->toArray();
         $optionsArray[ReadOptions::SECTION] = (string) $sectionConfig->getFullyQualifiedClassName();
+        // For now, we call DoctrineRead options, this will of course be fixed in a later release.
         $options = ReadOptions::fromArray($optionsArray);
 
         /** @var ReadSectionInterface $reader */

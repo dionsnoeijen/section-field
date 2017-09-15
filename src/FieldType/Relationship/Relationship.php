@@ -11,7 +11,7 @@ use Tardigrades\FieldType\FieldType;
 use Tardigrades\FieldType\Relationship\RelationshipInterface\Relationship as RelationshipInterface;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
-use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\Service\ReadOptions;
 
 class Relationship extends FieldType implements RelationshipInterface
 {

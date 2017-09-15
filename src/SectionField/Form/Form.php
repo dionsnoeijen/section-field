@@ -26,7 +26,7 @@ use Tardigrades\SectionField\SectionFieldInterface\Form as SectionFormInterface;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\JitRelationship;
-use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\Service\ReadOptions;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
