@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Tardigrades\Twig;
 
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\Service\DoctrineReadOptions; // This will change later on, to use a more flexible method to have read options tied to specific data sources.
 use Twig_Extension;
 use Twig_Function;
 
@@ -41,20 +41,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function section(string $section): SectionTwigExtension
     {
-        $this->options[ReadOptions::SECTION] = $section;
-
-        return $this;
-    }
-
-    /**
-     * Returns entries that belong to a specific section by a section ID.
-     *
-     * @param int $sectionId
-     * @return SectionTwigExtension
-     */
-    public function sectionId(int $sectionId): SectionTwigExtension
-    {
-        $this->options[ReadOptions::SECTION_ID] = $sectionId;
+        $this->options[DoctrineReadOptions::SECTION] = $section;
 
         return $this;
     }
@@ -67,7 +54,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function limit(int $limit): SectionTwigExtension
     {
-        $this->options[ReadOptions::LIMIT] = $limit;
+        $this->options[DoctrineReadOptions::LIMIT] = $limit;
 
         return $this;
     }
@@ -80,7 +67,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function offset(int $offset): SectionTwigExtension
     {
-        $this->options[ReadOptions::OFFSET] = $offset;
+        $this->options[DoctrineReadOptions::OFFSET] = $offset;
 
         return $this;
     }
@@ -93,7 +80,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function orderBy(array $orderBy): SectionTwigExtension
     {
-        $this->options[ReadOptions::ORDER_BY] = $orderBy;
+        $this->options[DoctrineReadOptions::ORDER_BY] = $orderBy;
 
         return $this;
     }
@@ -108,7 +95,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function sort(string $sort): SectionTwigExtension
     {
-        $this->options[ReadOptions::SORT] = $sort;
+        $this->options[DoctrineReadOptions::SORT] = $sort;
 
         return $this;
     }
@@ -121,7 +108,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function before(string $before): SectionTwigExtension
     {
-        $this->options[ReadOptions::BEFORE] = new \DateTime($before);
+        $this->options[DoctrineReadOptions::BEFORE] = new \DateTime($before);
 
         return $this;
     }
@@ -134,7 +121,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function after(string $after): SectionTwigExtension
     {
-        $this->options[ReadOptions::AFTER] = new \DateTime($after);
+        $this->options[DoctrineReadOptions::AFTER] = new \DateTime($after);
 
         return $this;
     }
@@ -147,7 +134,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function localeEnabled(bool $enabled = true): SectionTwigExtension
     {
-        $this->options[ReadOptions::LOCALE_ENABLED] = $enabled;
+        $this->options[DoctrineReadOptions::LOCALE_ENABLED] = $enabled;
 
         return $this;
     }
@@ -160,7 +147,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function locale(string $locale): SectionTwigExtension
     {
-        $this->options[ReadOptions::LOCALE] = $locale;
+        $this->options[DoctrineReadOptions::LOCALE] = $locale;
 
         return $this;
     }
@@ -173,7 +160,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function id(int $id): SectionTwigExtension
     {
-        $this->options[ReadOptions::ID] = $id;
+        $this->options[DoctrineReadOptions::ID] = $id;
 
         return $this;
     }
@@ -186,7 +173,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function slug(string $slug): SectionTwigExtension
     {
-        $this->options[ReadOptions::SLUG] = $slug;
+        $this->options[DoctrineReadOptions::SLUG] = $slug;
 
         return $this;
     }
@@ -202,7 +189,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function search(string $searchQuery): SectionTwigExtension
     {
-        $this->options[ReadOptions::SEARCH] = $searchQuery;
+        $this->options[DoctrineReadOptions::SEARCH] = $searchQuery;
 
         return $this;
     }
@@ -217,7 +204,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function field(string $fieldHandle, string $value): SectionTwigExtension
     {
-        $this->options[ReadOptions::FIELD] = [$fieldHandle=>$value];
+        $this->options[DoctrineReadOptions::FIELD] = [$fieldHandle=>$value];
 
         return $this;
     }
@@ -230,6 +217,6 @@ class SectionTwigExtension extends Twig_Extension
     {
         $options = array_merge($this->options, $options);
 
-        return $this->readSection->read(ReadOptions::fromArray($options));
+        return $this->readSection->read(DoctrineReadOptions::fromArray($options));
     }
 }

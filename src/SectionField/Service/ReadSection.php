@@ -6,7 +6,6 @@ namespace Tardigrades\SectionField\Service;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection as ReadSectionInterface;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
-use Tardigrades\SectionField\ValueObject\ReadOptions;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class ReadSection implements ReadSectionInterface
@@ -25,6 +24,13 @@ class ReadSection implements ReadSectionInterface
         $this->sectionManager = $sectionManager;
     }
 
+    /**
+     *
+     *
+     * @param ReadOptions $options
+     * @param SectionConfig|null $sectionConfig
+     * @return \ArrayIterator
+     */
     public function read(
         ReadOptions $options,
         SectionConfig $sectionConfig = null
@@ -38,6 +44,10 @@ class ReadSection implements ReadSectionInterface
                 )
             )->getConfig();
         }
+        
+        $optionsArray = $options->toArray();
+        $optionsArray[ReadOptions::SECTION] = (string) $sectionConfig->getFullyQualifiedClassName();
+        $options = ReadOptions::fromArray($optionsArray);
 
         /** @var ReadSectionInterface $reader */
         foreach ($this->readers as $reader) {

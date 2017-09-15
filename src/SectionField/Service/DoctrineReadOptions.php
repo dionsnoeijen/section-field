@@ -1,36 +1,29 @@
 <?php
 declare (strict_types=1);
 
-namespace Tardigrades\SectionField\ValueObject;
+namespace Tardigrades\SectionField\Service;
 
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
+use Tardigrades\SectionField\ValueObject\After;
+use Tardigrades\SectionField\ValueObject\Before;
+use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
+use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\Id;
+use Tardigrades\SectionField\ValueObject\Limit;
+use Tardigrades\SectionField\ValueObject\Offset;
+use Tardigrades\SectionField\ValueObject\OrderBy;
+use Tardigrades\SectionField\ValueObject\Search;
 
-final class ReadOptions
+final class DoctrineReadOptions extends ReadOptions
 {
-    const ID = 'id';
-    const SLUG = 'slug';
-    const SECTION = 'section';
-    const SECTION_ID = 'sectionId';
-    const LIMIT = 'limit';
-    const OFFSET = 'offset';
-    const ORDER_BY = 'orderBy';
-    const SORT = 'sort';
-    const BEFORE = 'before';
-    const AFTER = 'after';
-    const LOCALE_ENABLED = 'localeEnabled';
-    const LOCALE = 'locale';
-    const SEARCH = 'search';
-    const FIELD = 'field';
-
     /** @var array */
     private $options;
 
     private function __construct(
         array $options
     ) {
-
         $valid = false;
         if (is_array($options[self::SECTION])) {
             $valid = true;
@@ -244,10 +237,15 @@ final class ReadOptions
         }
     }
 
-    public static function fromArray(array $options): self
+    public static function fromArray(array $options): ReadOptions
     {
         Assertion::isArray($options, 'Options must be an array');
 
         return new self($options);
+    }
+
+    public function toArray(): array
+    {
+        return $this->options;
     }
 }
