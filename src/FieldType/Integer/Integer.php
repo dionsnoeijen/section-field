@@ -10,8 +10,8 @@ use Tardigrades\FieldType\FieldType;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
-class Integer extends FieldType {
-
+class Integer extends FieldType
+{
     public function addToForm(
         FormBuilderInterface $formBuilder,
         Section $section,
