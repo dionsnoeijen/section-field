@@ -3,18 +3,20 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\Api\Controller;
 
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Tardigrades\Entity\EntityInterface\Field;
+use Tardigrades\SectionField\Api\Serializer\FieldsExclusionStrategy;
 use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
 use Tardigrades\SectionField\SectionFieldInterface\DeleteSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
-use Tardigrades\SectionField\ValueObject\ReadOptions;
+use Tardigrades\SectionField\Service\DoctrineReadOptions as ReadOptions;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 /**
@@ -112,7 +114,7 @@ class RestController
         $entry = $this->readSection->read($readOptions)[0];
 
         $serializer = SerializerBuilder::create()->build();
-        $jsonContent = $serializer->serialize($entry, 'json');
+        $jsonContent = $serializer->serialize($entry, 'json', $this->getContext());
 
         header('Content-Type: application/json');
         return new Response($jsonContent);
@@ -132,9 +134,8 @@ class RestController
         ]);
 
         $entry = $this->readSection->read($readOptions)[0];
-
         $serializer = SerializerBuilder::create()->build();
-        $jsonContent = $serializer->serialize($entry, 'json');
+        $jsonContent = $serializer->serialize($entry, 'json', $this->getContext());
 
         header('Content-Type: application/json');
         return new Response($jsonContent);
@@ -171,7 +172,7 @@ class RestController
 
         $result = [];
         foreach ($entries as $entry) {
-            $result[] = $serializer->serialize($entry, 'json');
+            $result[] = $serializer->serialize($entry, 'json', $this->getContext());
         }
 
         header('Content-Type: application/json');
@@ -301,6 +302,21 @@ class RestController
         return new JsonResponse([
             'success' => $success,
         ], $success ? 200 : 404);
+    }
+
+    private function getContext(): SerializationContext
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $fields = $request->get('fields', ['id']);
+
+        if (is_string($fields)) {
+            $fields = explode(',', $fields);
+        }
+
+        $context = new SerializationContext();
+        $context->addExclusionStrategy(new FieldsExclusionStrategy($fields));
+
+        return $context;
     }
 
     /**
