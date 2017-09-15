@@ -10,6 +10,7 @@ use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
+use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Type;
 
@@ -169,7 +170,7 @@ class DoctrineFieldManager implements FieldManager
         return $field;
     }
 
-    public function readByHandle(string $handle): Field
+    public function readByHandle(Handle $handle): Field
     {
         $fieldRepository = $this->entityManager->getRepository(Field::class);
 

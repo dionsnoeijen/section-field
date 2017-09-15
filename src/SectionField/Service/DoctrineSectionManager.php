@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Tardigrades\Entity\Section as SectionEntity;
 use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
@@ -112,7 +113,7 @@ class DoctrineSectionManager implements SectionManager
         return $section;
     }
 
-    public function readByHandle(string $handle): Section
+    public function readByHandle(Handle $handle): Section
     {
         $sectionRepository = $this->entityManager->getRepository(SectionEntity::class);
 

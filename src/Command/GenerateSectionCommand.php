@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Tardigrades\SectionField\Generator\Writer\GeneratorFileWriter;
+use Tardigrades\SectionField\Generator\Writer\Writable;
 use Tardigrades\SectionField\SectionFieldInterface\Generators;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 
