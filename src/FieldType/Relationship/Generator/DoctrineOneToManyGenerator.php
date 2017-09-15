@@ -10,6 +10,7 @@ use Tardigrades\FieldType\FieldTypeInterface\Generator;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\ValueObject\Handle;
 
 class DoctrineOneToManyGenerator implements Generator
 {
@@ -25,7 +26,7 @@ class DoctrineOneToManyGenerator implements Generator
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
             /** @var Section $target */
-            $target = $sectionManager->readByHandle($fieldConfig['field']['to']);
+            $target = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
             return Template::create(
                 TemplateLoader::load(

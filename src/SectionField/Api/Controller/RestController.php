@@ -16,7 +16,8 @@ use Tardigrades\SectionField\SectionFieldInterface\DeleteSection;
 use Tardigrades\SectionField\SectionFieldInterface\Form;
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
-use Tardigrades\SectionField\Service\DoctrineReadOptions as ReadOptions;
+use Tardigrades\SectionField\Service\ReadOptions;
+use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 /**
@@ -81,7 +82,7 @@ class RestController
     {
         $response = [];
 
-        $section = $this->sectionManager->readByHandle($sectionHandle);
+        $section = $this->sectionManager->readByHandle(Handle::fromString($sectionHandle));
 
         $response['name'] = (string) $section->getName();
         $response['handle'] = (string) $section->getHandle();

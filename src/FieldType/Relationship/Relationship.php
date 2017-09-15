@@ -12,6 +12,7 @@ use Tardigrades\FieldType\Relationship\RelationshipInterface\Relationship as Rel
 use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
 use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\Service\ReadOptions;
+use Tardigrades\SectionField\ValueObject\Handle;
 
 class Relationship extends FieldType implements RelationshipInterface
 {
@@ -49,7 +50,7 @@ class Relationship extends FieldType implements RelationshipInterface
         $fieldConfig = $this->getConfig()->toArray();
 
         $sectionTo = $sectionManager
-            ->readByHandle($fieldConfig['field']['to']);
+            ->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
         $fullyQualifiedClassName = $sectionTo
             ->getConfig()
