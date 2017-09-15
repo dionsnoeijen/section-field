@@ -17,7 +17,7 @@ final class Before
 
     public function __toString()
     {
-        return $this->dateTime->format('D-m-y h:i');
+        return $this->dateTime->format(\DateTime::ATOM);
     }
 
     public static function fromString(string $dateTime): self
