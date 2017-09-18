@@ -138,7 +138,7 @@ try {
         case '/':
             echo $templating->render('home.html.twig');
         break;
-        case '/blog/':
+        case '/blog':
             echo $templating->render('blog.home.html.twig');
         break;
         case '/blog/create-blog':
