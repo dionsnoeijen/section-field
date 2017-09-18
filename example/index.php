@@ -61,10 +61,10 @@ $loader->load('form.xml');
 /** @var \Tardigrades\SectionField\Form\Form $form */
 $form = $container->get('section_field.form');
 
-/** @var \Tardigrades\SectionField\SectionFieldInterface\SectionManager $sectionManager */
+/** @var \Tardigrades\SectionField\Service\SectionManagerInterface $sectionManager */
 $sectionManager = $container->get('section_field.manager.doctrine.section_manager');
 
-/** @var \Tardigrades\SectionField\SectionFieldInterface\CreateSection $createSection */
+/** @var \Tardigrades\SectionField\Service\CreateSectionInterface $createSection */
 $createSection = $container->get('section_field.create.section');
 
 // -----------------------------
@@ -117,18 +117,18 @@ $templating = new \Symfony\Bridge\Twig\TwigEngine(
 $requestUri = $request->getRequestUri();
 $slug = '';
 $matched = true;
-if (strpos($requestUri, '/edit-blog') !== false) {
-    $requestUri = '/edit-blog';
+if (strpos($requestUri, '/blog/edit-blog') !== false) {
+    $requestUri = '/blog/edit-blog';
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
-if (strpos($requestUri, '/article') !== false) {
-    $requestUri = '/article';
+if (strpos($requestUri, '/blog/article') !== false) {
+    $requestUri = '/blog/article';
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
-if (strpos($requestUri, '/edit-author') !== false) {
-    $requestUri = '/edit-author';
+if (strpos($requestUri, '/blog/edit-author') !== false) {
+    $requestUri = '/blog/edit-author';
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
@@ -138,23 +138,26 @@ try {
         case '/':
             echo $templating->render('home.html.twig');
         break;
-        case '/create-blog':
+        case '/blog/':
+            echo $templating->render('blog.home.html.twig');
+        break;
+        case '/blog/create-blog':
             echo $templating->render('create-blog.html.twig');
         break;
-        case '/create-author':
+        case '/blog/create-author':
             echo $templating->render('create-author.html.twig');
         break;
-        case '/edit-blog':
+        case '/blog/edit-blog':
             echo $templating->render('edit-blog.html.twig', [
                 'slug' => $slug
             ]);
         break;
-        case '/edit-author':
+        case '/blog/edit-author':
             echo $templating->render('edit-author.html.twig', [
                 'slug' => $slug
             ]);
         break;
-        case '/article':
+        case '/blog/article':
             echo $templating->render('detail.html.twig', [
                 'slug' => $slug
             ]);

@@ -5,46 +5,13 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-12">
-                    <h2>Basic example of reading a section</h2>
-                    <pre>
-{{
-'{% for entry in section(\'Example.Blog.Entity.Blog\').limit(10).fetch() %}
-<div class="row">
-    <div class="col-md-10">
-        <h3>{{ entry.title }}</h3>
-        <h5>{{ entry.subtitle }}</h5>
-    </div>
-    <div class="col-md-2">
-        <p>By: {{ entry.author }}<br />
-        At: {{ entry.date|date(\'Y-m-d\') }}</p>
-    </div>
-</div>
-{% endfor %}'|escape
-}}
-                    </pre>
+                    <h2>Examples</h2>
+                    <ul>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/relationships">Relationships</a></li>
+                    </ul>
                 </div>
             </div>
-            {% for entry in section('Example.Blog.Entity.Blog').limit(10).fetch() %}
-            <div class="row">
-                <div class="col-md-10">
-                    <h3>{{ entry.title }}</h3>
-                    <h5>{{ entry.subtitle }}</h5>
-                    <a href="/article/{{ entry.slug }}">Lees verder</a>
-                </div>
-                <div class="col-md-2">
-                    <p>By: Dion Snoeijen<br />At: {{ entry.created|date('d-m-Y') }}</p>
-                </div>
-            </div>
-            <hr />
-            {% endfor %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h5>Create a new entry</h5>
-            <ul>
-                <li><a href="/create-blog">Create</a></li>
-            </ul>
         </div>
     </div>
 {% endblock %}

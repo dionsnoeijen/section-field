@@ -11,7 +11,7 @@
     {% include 'author-form.html.twig' with {
         form: sectionForm('Example.Blog.Entity.Author', {
             slug: slug,
-            redirect: '/author-blog/' ~ slug
+            redirect: '/blog/author-blog/' ~ slug
         })
     } %}
 {% endblock %}
