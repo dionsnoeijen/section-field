@@ -5,8 +5,8 @@ namespace Tardigrades\Twig;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Tardigrades\SectionField\Form\FormInterface;
 use Tardigrades\SectionField\Service\CreateSectionInterface;
-use Tardigrades\SectionField\Service\FormInterface;
 use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 use Twig_Extension;
@@ -17,10 +17,10 @@ class SectionFormTwigExtension extends Twig_Extension
     /** @var SectionManagerInterface */
     private $sectionManager;
 
-    /** @var Form */
+    /** @var FormInterface */
     private $form;
 
-    /** @var CreateSection */
+    /** @var CreateSectionInterface */
     private $createSection;
 
     /** @var RequestStack */
