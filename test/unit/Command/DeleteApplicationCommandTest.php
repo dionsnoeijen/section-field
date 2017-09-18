@@ -10,7 +10,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Language;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
+use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 use Tardigrades\Entity\Application as ApplicationEntity;
 
 /**
@@ -22,24 +22,18 @@ final class DeleteApplicationCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var ApplicationManager|Mockery\MockInterface
-     */
+    /** @var ApplicationManagerInterface|Mockery\MockInterface */
     private $applicationManager;
 
-    /**
-     * @var DeleteApplicationCommand
-     */
+    /** @var DeleteApplicationCommand */
     private $deleteApplicationCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
     public function setUp()
     {
-        $this->applicationManager = Mockery::mock(ApplicationManager::class);
+        $this->applicationManager = Mockery::mock(ApplicationManagerInterface::class);
         $this->deleteApplicationCommand = new DeleteApplicationCommand($this->applicationManager);
         $this->application = new Application();
         $this->application->add($this->deleteApplicationCommand);

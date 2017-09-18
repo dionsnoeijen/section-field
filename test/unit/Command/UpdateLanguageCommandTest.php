@@ -11,7 +11,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Language;
 use Tardigrades\Entity\Application as ApplicationEntity;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
+use Tardigrades\SectionField\Service\LanguageManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\UpdateLanguageCommand
@@ -22,7 +22,7 @@ final class UpdateLanguageCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var LanguageManager */
+    /** @var LanguageManagerInterface */
     private $languageManager;
 
     /** @var UpdateLanguageCommand */
@@ -38,7 +38,7 @@ final class UpdateLanguageCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->languageManager = Mockery::mock(LanguageManager::class);
+        $this->languageManager = Mockery::mock(LanguageManagerInterface::class);
         $this->updateLanguageCommand = new UpdateLanguageCommand($this->languageManager);
         $this->application = new Application();
         $this->application->add($this->updateLanguageCommand);

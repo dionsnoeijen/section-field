@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
 use PHPUnit\Framework\TestCase;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
@@ -22,25 +21,19 @@ final class SectionManagerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var DoctrineSectionManager
-     */
+    /** @var DoctrineSectionManager */
     private $sectionManager;
 
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManager;
 
-    /**
-     * @var DoctrineFieldManager
-     */
+    /** @var DoctrineFieldManager */
     private $fieldManager;
 
     public function setUp()
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
-        $this->fieldManager = Mockery::mock(FieldManager::class);
+        $this->fieldManager = Mockery::mock(FieldManagerInterface::class);
         $this->sectionManager = new DoctrineSectionManager(
             $this->entityManager,
             $this->fieldManager

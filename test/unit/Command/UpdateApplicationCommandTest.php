@@ -11,7 +11,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Language;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
+use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 use Tardigrades\Entity\Application as ApplicationEntity;
 
 /**
@@ -23,7 +23,7 @@ final class UpdateApplicationCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var ApplicationManager */
+    /** @var ApplicationManagerInterface */
     private $applicationManager;
 
     /** @var UpdateApplicationCommand */
@@ -39,7 +39,7 @@ final class UpdateApplicationCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->applicationManager = Mockery::mock(ApplicationManager::class);
+        $this->applicationManager = Mockery::mock(ApplicationManagerInterface::class);
         $this->updateApplicationCommand = new UpdateApplicationCommand($this->applicationManager);
         $this->application = new Application();
         $this->application->add($this->updateApplicationCommand);

@@ -5,22 +5,20 @@ namespace Tardigrades\FieldType\TextArea;
 
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Tardigrades\Entity\EntityInterface\Section;
-use Tardigrades\FieldType\FieldTypeInterface;
-use Tardigrades\FieldType\TextArea\TextAreaInterface\TextArea as TextAreaInterface;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\Entity\SectionInterface;
+use Tardigrades\FieldType\FieldType;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
-class TextArea extends FieldTypeInterface implements TextAreaInterface
+class TextArea extends FieldType
 {
     public function addToForm(
         FormBuilderInterface $formBuilder,
-        Section $section,
+        SectionInterface $section,
         $sectionEntity,
-        SectionManager $sectionManager,
-        ReadSection $readSection
-    ): FormBuilderInterface
-    {
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection
+    ): FormBuilderInterface {
 
         $formBuilder->add(
             (string) $this->getConfig()->getHandle(),

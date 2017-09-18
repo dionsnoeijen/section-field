@@ -11,8 +11,8 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\Generators;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Generator\GeneratorsInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\GenerateSectionCommand
@@ -23,10 +23,10 @@ final class GenerateSectionCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var SectionManager|Mockery\MockInterface */
+    /** @var SectionManagerInterface|Mockery\MockInterface */
     private $sectionManager;
 
-    /** @var Generators */
+    /** @var GeneratorsInterface */
     private $entityGenerator;
 
     /** @var GenerateSectionCommand */
@@ -42,8 +42,8 @@ final class GenerateSectionCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->sectionManager = Mockery::mock(SectionManager::class);
-        $this->entityGenerator = Mockery::mock(Generators::class);
+        $this->sectionManager = Mockery::mock(SectionManagerInterface::class);
+        $this->entityGenerator = Mockery::mock(GeneratorsInterface::class);
         $this->generateSectionCommand = new GenerateSectionCommand($this->sectionManager, $this->entityGenerator);
         $this->application = new Application();
         $this->application->add($this->generateSectionCommand);

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Yaml\Yaml;
+use Tardigrades\Entity\ApplicationInterface;
 use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 use Tardigrades\SectionField\Service\SectionNotFoundException;
 use Tardigrades\SectionField\ValueObject\ApplicationConfig;
@@ -57,7 +58,7 @@ class UpdateApplicationCommand extends ApplicationCommand
         $this->updateWhatRecord($input, $output);
     }
 
-    private function getApplicationRecord(InputInterface $input, OutputInterface $output): Application
+    private function getApplicationRecord(InputInterface $input, OutputInterface $output): ApplicationInterface
     {
         $question = new Question('<question>What record do you want to update?</question> (#id): ');
         $question->setValidator(function ($id) use ($output) {

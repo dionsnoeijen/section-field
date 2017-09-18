@@ -14,7 +14,7 @@ use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldTranslation;
 use Tardigrades\Entity\FieldType;
 use Tardigrades\Entity\Language;
-use Tardigrades\SectionField\SectionFieldInterface\FieldManager;
+use Tardigrades\SectionField\Service\FieldManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\UpdateFieldCommand
@@ -25,7 +25,7 @@ final class UpdateFieldCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var FieldManager */
+    /** @var FieldManagerInterface */
     private $fieldManager;
 
     /** @var UpdateFieldCommand */
@@ -41,7 +41,7 @@ final class UpdateFieldCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->fieldManager = Mockery::mock(FieldManager::class);
+        $this->fieldManager = Mockery::mock(FieldManagerInterface::class);
         $this->updateFieldCommand = new UpdateFieldCommand($this->fieldManager);
         $this->application = new Application();
         $this->application->add($this->updateFieldCommand);

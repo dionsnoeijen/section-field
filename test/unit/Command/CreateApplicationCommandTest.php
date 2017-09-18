@@ -9,7 +9,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
+use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\CreateApplicationCommand
@@ -20,7 +20,7 @@ final class CreateApplicationCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var ApplicationManager */
+    /** @var ApplicationManagerInterface */
     private $applicationManager;
 
     /** @var CreateApplicationCommand */
@@ -36,7 +36,7 @@ final class CreateApplicationCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->applicationManager = Mockery::mock(ApplicationManager::class);
+        $this->applicationManager = Mockery::mock(ApplicationManagerInterface::class);
         $this->createApplicationCommand = new CreateApplicationCommand($this->applicationManager);
         $this->application = new Application();
         $this->application->add($this->createApplicationCommand);

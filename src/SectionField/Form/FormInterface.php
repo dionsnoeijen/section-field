@@ -1,8 +1,9 @@
 <?php
 declare (strict_types=1);
 
-namespace Tardigrades\SectionField\Service;
+namespace Tardigrades\SectionField\Form;
 
+use Symfony\Component\Form\FormInterface as SymfonyFormInterface;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 interface FormInterface
@@ -11,7 +12,7 @@ interface FormInterface
         string $forHandle,
         SectionFormOptions $sectionFormOptions = null,
         bool $csrfProtection = true
-    ): FormInterface;
+    ): SymfonyFormInterface;
 
     public function hasRelationship(array $formData): array;
 }

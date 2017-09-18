@@ -5,8 +5,8 @@ namespace Tardigrades\FieldType;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\SectionInterface;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 interface FieldTypeInterface
@@ -17,8 +17,8 @@ interface FieldTypeInterface
         FormBuilderInterface $formBuilder,
         SectionInterface $section,
         $sectionEntity, // This can be any entity generated for a section
-        SectionManager $sectionManager,
-        ReadSection $readSection
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection
     ): FormBuilderInterface;
     public function directory(): string;
 }

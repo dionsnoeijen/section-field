@@ -5,12 +5,10 @@ namespace Tardigrades\FieldType\Integer;
 
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Tardigrades\Entity\EntityInterface\Section;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
-use Tardigrades\FieldType\FieldTypeInterface;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 class Integer extends FieldType
 {
@@ -18,8 +16,8 @@ class Integer extends FieldType
         FormBuilderInterface $formBuilder,
         SectionInterface $section,
         $sectionEntity,
-        SectionManager $sectionManager,
-        ReadSection $readSection
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection
     ): FormBuilderInterface {
         $options = $this->formOptions($sectionEntity);
 

@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Tardigrades\Entity\EntityInterface\Section as SectionInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Handle;
@@ -23,14 +22,10 @@ final class FieldTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var Field
-     */
+    /** @var Field */
     private $field;
 
-    /**
-     * @var Collection|Mockery\MockInterface
-     */
+    /** @var Collection|Mockery\MockInterface */
     private $sections;
 
     public function setUp()

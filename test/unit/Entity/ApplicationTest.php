@@ -20,14 +20,10 @@ final class ApplicationTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
-    /**
-     * @var Collection|Mockery\MockInterface
-     */
+    /** @var Collection|Mockery\MockInterface */
     private $languages;
 
     public function setUp()

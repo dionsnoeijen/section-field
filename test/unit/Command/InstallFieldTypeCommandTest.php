@@ -9,9 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\FieldType;
-use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\FieldTypeManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\InstallFieldTypeCommand
@@ -22,24 +20,18 @@ final class InstallFieldTypeCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var FieldTypeManager
-     */
+    /** @var FieldTypeManagerInterface */
     private $fieldTypeManager;
 
-    /**
-     * @var InstallFieldTypeCommand
-     */
+    /** @var InstallFieldTypeCommand */
     private $installFieldTypeCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
     public function setUp()
     {
-        $this->fieldTypeManager = Mockery::mock(FieldTypeManager::class);
+        $this->fieldTypeManager = Mockery::mock(FieldTypeManagerInterface::class);
         $this->installFieldTypeCommand = new InstallFieldTypeCommand($this->fieldTypeManager);
         $this->application = new Application();
         $this->application->add($this->installFieldTypeCommand);

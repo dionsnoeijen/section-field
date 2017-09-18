@@ -13,8 +13,6 @@ use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldTranslation;
 use Tardigrades\Entity\FieldType;
 use Tardigrades\Entity\Language;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager as FieldTypeManagerInterface;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 use Tardigrades\SectionField\ValueObject\Id;
 
@@ -27,24 +25,16 @@ final class FieldManagerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var DoctrineFieldManager
-     */
+    /** @var DoctrineFieldManager */
     private $fieldManager;
 
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface|Mockery\MockInterface */
     private $entityManager;
 
-    /**
-     * @var FieldTypeManagerInterface
-     */
+    /** @var FieldTypeManagerInterface|Mockery\MockInterface */
     private $fieldTypeManager;
 
-    /**
-     * @var LanguageManagerInterface
-     */
+    /** @var LanguageManagerInterface */
     private $languageManager;
 
     public function setUp()

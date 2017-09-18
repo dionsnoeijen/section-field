@@ -7,8 +7,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 class DateTimeField extends FieldType
 {
@@ -16,8 +16,8 @@ class DateTimeField extends FieldType
         FormBuilderInterface $formBuilder,
         SectionInterface $section,
         $sectionEntity,
-        SectionManager $sectionManager,
-        ReadSection $readSection
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection
     ): FormBuilderInterface {
 
         if (!$this->hasEntityEvent('prePersist')) {

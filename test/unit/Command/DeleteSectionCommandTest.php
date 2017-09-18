@@ -11,7 +11,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\DeleteSectionCommand
@@ -22,7 +22,7 @@ final class DeleteSectionCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var SectionManager|Mockery\MockInterface */
+    /** @var SectionManagerInterface|Mockery\MockInterface */
     private $sectionManager;
 
     /** @var DeleteSectionCommand */
@@ -38,7 +38,7 @@ final class DeleteSectionCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->sectionManager = Mockery::mock(SectionManager::class);
+        $this->sectionManager = Mockery::mock(SectionManagerInterface::class);
         $this->deleteSectionCommand = new DeleteSectionCommand($this->sectionManager);
         $this->application = new Application();
         $this->application->add($this->deleteSectionCommand);

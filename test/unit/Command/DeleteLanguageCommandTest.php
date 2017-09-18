@@ -21,19 +21,13 @@ final class DeleteLanguageCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var DoctrineLanguageManager|Mockery\MockInterface
-     */
+    /** @var DoctrineLanguageManager|Mockery\MockInterface */
     private $languageManager;
 
-    /**
-     * @var DeleteLanguageCommand
-     */
+    /** @var DeleteLanguageCommand */
     private $deleteLanguageCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
     public function setUp()

@@ -15,12 +15,14 @@ use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Form\Forms;
+use Tardigrades\Entity\FieldInterface;
 use Tardigrades\Entity\SectionInterface;
+use Tardigrades\FieldType\FieldTypeInterface;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
 use Tardigrades\Helper\FullyQualifiedClassNameConverter;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
-use Tardigrades\SectionField\SectionFieldInterface\Form as SectionFormInterface;
+use Tardigrades\SectionField\Form\FormInterface as SectionFormInterface;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\JitRelationship;
@@ -30,18 +32,18 @@ use Tardigrades\SectionField\ValueObject\SectionFormOptions;
 
 class Form implements SectionFormInterface
 {
-    /** @var SectionManager */
+    /** @var SectionManagerInterface */
     private $sectionManager;
 
     /** @var FormFactory */
     private $formFactory;
 
-    /** @var ReadSection */
+    /** @var ReadSectionInterface */
     private $readSection;
 
     public function __construct(
-        SectionManager $sectionManager,
-        ReadSection $readSection,
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection,
         FormFactory $formFactory = null
     ) {
         $this->sectionManager = $sectionManager;
@@ -49,6 +51,17 @@ class Form implements SectionFormInterface
         $this->formFactory = $formFactory;
     }
 
+    /**
+     * This method generates a form based on the section config.
+     * The for handle contains the section handle, or the FQCN of the section entity.
+     * By pasing along SectionFormOptions this method can determine of the form
+     * is meanth to update or create new data.
+     *
+     * @param string $forHandle
+     * @param SectionFormOptions|null $sectionFormOptions
+     * @param bool $csrfProtection
+     * @return FormInterface
+     */
     public function buildFormForSection(
         string $forHandle,
         SectionFormOptions $sectionFormOptions = null,
@@ -104,7 +117,7 @@ class Form implements SectionFormInterface
                 ]
             );
 
-        /** @var Field $field */
+        /** @var FieldInterface $field */
         foreach ($section->getFields() as $field) {
             $fieldTypeFullyQualifiedClassName = (string) $field
                 ->getFieldType()
@@ -206,7 +219,7 @@ class Form implements SectionFormInterface
 
     private function getSectionEntity(
         FullyQualifiedClassName $forHandle,
-        Section $section,
+        SectionInterface $section,
         Slug $slug = null,
         Id $id = null
     ) {

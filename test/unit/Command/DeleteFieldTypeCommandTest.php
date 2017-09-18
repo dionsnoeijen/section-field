@@ -1,4 +1,5 @@
 <?php
+declare (strict_types=1);
 
 namespace Tardigrades\Command;
 
@@ -7,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\FieldType;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\Service\FieldTypeManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\DeleteFieldTypeCommand
@@ -16,24 +17,18 @@ use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
  */
 final class DeleteFieldTypeCommandTest extends TestCase
 {
-    /**
-     * @var FieldTypeManager
-     */
+    /** @var FieldTypeManagerInterface */
     private $fieldTypeManager;
 
-    /**
-     * @var DeleteFieldTypeCommand
-     */
+    /** @var DeleteFieldTypeCommand */
     private $deleteFieldTypeCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
     public function setUp()
     {
-        $this->fieldTypeManager = Mockery::mock(FieldTypeManager::class);
+        $this->fieldTypeManager = Mockery::mock(FieldTypeManagerInterface::class);
         $this->deleteFieldTypeCommand = new DeleteFieldTypeCommand($this->fieldTypeManager);
         $this->application = new Application();
         $this->application->add($this->deleteFieldTypeCommand);

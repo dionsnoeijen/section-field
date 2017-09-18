@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Language;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
+use Tardigrades\SectionField\Service\LanguageManagerInterface;
 use Tardigrades\Entity\Application as ApplicationEntity;
 
 /**
@@ -19,24 +19,18 @@ use Tardigrades\Entity\Application as ApplicationEntity;
  */
 final class ListLanguageCommandTest extends TestCase
 {
-    /**
-     * @var LanguageManager
-     */
+    /** @var LanguageManagerInterface */
     private $languageManager;
 
-    /**
-     * @var ListLanguageCommand
-     */
+    /** @var ListLanguageCommand */
     private $listLanguageCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
     public function setUp()
     {
-        $this->languageManager = Mockery::mock(LanguageManager::class);
+        $this->languageManager = Mockery::mock(LanguageManagerInterface::class);
         $this->listLanguageCommand = new ListLanguageCommand($this->languageManager);
         $this->application = new Application();
         $this->application->add($this->listLanguageCommand);

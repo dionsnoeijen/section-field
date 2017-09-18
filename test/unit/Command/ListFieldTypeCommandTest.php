@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\FieldType;
-use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
+use Tardigrades\SectionField\Service\FieldTypeManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\ListFieldTypeCommand
@@ -19,7 +19,7 @@ use Tardigrades\SectionField\SectionFieldInterface\FieldTypeManager;
 final class ListFieldTypeCommandTest extends TestCase
 {
     /**
-     * @var FieldTypeManager
+     * @var FieldTypeManagerInterface
      */
     private $fieldTypeManager;
 
@@ -35,7 +35,7 @@ final class ListFieldTypeCommandTest extends TestCase
 
     public function setUp()
     {
-        $this->fieldTypeManager = Mockery::mock(FieldTypeManager::class);
+        $this->fieldTypeManager = Mockery::mock(FieldTypeManagerInterface::class);
         $this->listFieldTypeCommand = new ListFieldTypeCommand($this->fieldTypeManager);
         $this->application = new Application();
         $this->application->add($this->listFieldTypeCommand);

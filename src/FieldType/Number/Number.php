@@ -7,8 +7,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 class Number extends FieldType
 {
@@ -16,8 +16,8 @@ class Number extends FieldType
         FormBuilderInterface $formBuilder,
         SectionInterface $section,
         $sectionEntity,
-        SectionManager $sectionManager,
-        ReadSection $readSection
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection
     ): FormBuilderInterface {
         $options = $this->formOptions($sectionEntity);
 

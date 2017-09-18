@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Tardigrades\Entity\Application;
 use Tardigrades\SectionField\ValueObject\Id;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager as LanguageManagerInterface;
+use Tardigrades\SectionField\Service\LanguageManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\SectionField\Service\DoctrineApplicationManager
@@ -21,19 +21,13 @@ final class ApplicationManagerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var DoctrineApplicationManager
-     */
+    /** @var DoctrineApplicationManager */
     private $applicationManager;
 
-    /**
-     * @var EntityManagerInterface|Mockery\MockInterface
-     */
+    /** @var EntityManagerInterface|Mockery\MockInterface */
     private $entityManager;
 
-    /**
-     * @var LanguageManagerInterface|Mockery\MockInterface
-     */
+    /** @var LanguageManagerInterface|Mockery\MockInterface */
     private $languageManager;
 
     public function setUp()

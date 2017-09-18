@@ -10,7 +10,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\ListSectionCommand
@@ -20,7 +20,7 @@ use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
  */
 final class ListSectionCommandTest extends TestCase
 {
-    /** @var SectionManager */
+    /** @var SectionManagerInterface */
     private $sectionManager;
 
     /** @var ListSectionCommand */
@@ -36,7 +36,7 @@ final class ListSectionCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->sectionManager = Mockery::mock(SectionManager::class);
+        $this->sectionManager = Mockery::mock(SectionManagerInterface::class);
         $this->listSectionCommand = new ListSectionCommand($this->sectionManager);
         $this->application = new Application();
         $this->application->add($this->listSectionCommand);

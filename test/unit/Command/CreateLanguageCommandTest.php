@@ -9,7 +9,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tardigrades\SectionField\SectionFieldInterface\LanguageManager;
+use Tardigrades\SectionField\Service\LanguageManagerInterface;
 
 /**
  * @coversDefaultClass Tardigrades\Command\CreateLanguageCommand
@@ -20,7 +20,7 @@ final class CreateLanguageCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var LanguageManager */
+    /** @var LanguageManagerInterface */
     private $languageManager;
 
     /** @var CreateLanguageCommand */
@@ -36,7 +36,7 @@ final class CreateLanguageCommandTest extends TestCase
     {
         vfsStream::setup('home');
         $this->file = vfsStream::url('home/some-config-file.yml');
-        $this->languageManager = Mockery::mock(LanguageManager::class);
+        $this->languageManager = Mockery::mock(LanguageManagerInterface::class);
         $this->createLanguageCommand = new CreateLanguageCommand($this->languageManager);
         $this->application = new Application();
         $this->application->add($this->createLanguageCommand);

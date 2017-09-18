@@ -6,8 +6,8 @@ namespace Tardigrades\FieldType;
 use ReflectionClass;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\SectionInterface;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\FieldConfig;
 
 abstract class FieldType implements FieldTypeInterface
@@ -65,7 +65,7 @@ abstract class FieldType implements FieldTypeInterface
         FormBuilderInterface $formBuilder,
         SectionInterface $section,
         $sectionEntity,
-        SectionManager $sectionManager,
-        ReadSection $readSection
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection
     ): FormBuilderInterface;
 }

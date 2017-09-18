@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use Tardigrades\Entity\EntityInterface\Field as FieldInterface;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -16,7 +15,7 @@ use Tardigrades\SectionField\ValueObject\Type;
 use Tardigrades\SectionField\ValueObject\Updated;
 
 /**
- * @coversDefaultClass Tardigrades\Entity\FieldTypeInterface
+ * @coversDefaultClass Tardigrades\Entity\FieldType
  * @covers ::__construct
  * @covers ::<private>
  */
@@ -24,14 +23,10 @@ final class FieldTypeTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var Collection
-     */
+    /** @var Collection */
     private $fields;
 
-    /**
-     * @var FieldType
-     */
+    /** @var FieldType */
     private $fieldType;
 
     public function setUp()
@@ -43,6 +38,7 @@ final class FieldTypeTest extends TestCase
     /**
      * @test
      * @covers ::setId
+     * @covers ::getId
      */
     public function it_should_set_and_get_an_id()
     {

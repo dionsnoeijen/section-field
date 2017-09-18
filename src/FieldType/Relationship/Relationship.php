@@ -8,9 +8,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\FieldType;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
 use Tardigrades\SectionField\Service\ReadOptions;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 
 class Relationship extends FieldType
@@ -19,8 +19,8 @@ class Relationship extends FieldType
         FormBuilderInterface $formBuilder,
         SectionInterface $section,
         $sectionEntity,
-        SectionManager $sectionManager,
-        ReadSection $readSection
+        SectionManagerInterface $sectionManager,
+        ReadSectionInterface $readSection
     ): FormBuilderInterface {
         switch ($this->getConfig()->getKind()) {
             case 'many-to-many':
@@ -39,8 +39,8 @@ class Relationship extends FieldType
 
     private function addManyToManyToForm(
         FormBuilderInterface $formBuilder,
-        ReadSection $readSection,
-        SectionManager $sectionManager,
+        ReadSectionInterface $readSection,
+        SectionManagerInterface $sectionManager,
         $sectionEntity,
         SectionInterface $section
     ): FormBuilderInterface {

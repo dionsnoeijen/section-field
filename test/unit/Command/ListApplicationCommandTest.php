@@ -10,7 +10,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tardigrades\Entity\Language;
 use Tardigrades\Entity\Section;
-use Tardigrades\SectionField\SectionFieldInterface\ApplicationManager;
+use Tardigrades\SectionField\Service\ApplicationManagerInterface;
 use Tardigrades\Entity\Application as ApplicationEntity;
 
 /**
@@ -23,24 +23,18 @@ final class ListApplicationCommandTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var ApplicationManager|Mockery\MockInterface
-     */
+    /** @var ApplicationManagerInterface|Mockery\MockInterface */
     private $applicationManager;
 
-    /**
-     * @var ListApplicationCommand
-     */
+    /** @var ListApplicationCommand */
     private $listApplicationCommand;
 
-    /**
-     * @var Application
-     */
+    /** @var Application */
     private $application;
 
     public function setUp()
     {
-        $this->applicationManager = Mockery::mock(ApplicationManager::class);
+        $this->applicationManager = Mockery::mock(ApplicationManagerInterface::class);
         $this->listApplicationCommand = new ListApplicationCommand($this->applicationManager);
         $this->application = new Application();
         $this->application->add($this->listApplicationCommand);
