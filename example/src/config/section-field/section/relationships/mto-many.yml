@@ -1,0 +1,15 @@
+section:
+  name: Many to One - Many
+  handle: mtoMany
+  fields:
+    - title
+    - slug
+    - manyToOne
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~

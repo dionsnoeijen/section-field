@@ -46,7 +46,6 @@ $container
     ]);
 $container->set('request_stack', $requestStack);
 
-
 $sectionFieldExtension = new \Tardigrades\DependencyInjection\SectionFieldExtension();
 $sectionFieldExtension->load([], $container);
 
@@ -137,34 +136,49 @@ try {
     switch ($requestUri) {
         case '/':
             echo $templating->render('home.html.twig');
-        break;
+            break;
+        case '/relationships':
+            echo $templating->render('relationships.html.twig');
+            break;
+        case '/relationships/one-to-many':
+            echo $templating->render('one-to-many.html.twig');
+            break;
+        case '/relationships/many-to-one':
+            echo $templating->render('many-to-one.html.twig');
+            break;
+        case '/relationships/many-to-many':
+            echo $templating->render('many-to-many.html.twig');
+            break;
+        case '/relationships/one-to-one':
+            echo $templating->render('one-to-one.html.twig');
+            break;
         case '/blog':
             echo $templating->render('blog.home.html.twig');
-        break;
+            break;
         case '/blog/create-blog':
             echo $templating->render('create-blog.html.twig');
-        break;
+            break;
         case '/blog/create-author':
             echo $templating->render('create-author.html.twig');
-        break;
+            break;
         case '/blog/edit-blog':
             echo $templating->render('edit-blog.html.twig', [
                 'slug' => $slug
             ]);
-        break;
+            break;
         case '/blog/edit-author':
             echo $templating->render('edit-author.html.twig', [
                 'slug' => $slug
             ]);
-        break;
+            break;
         case '/blog/article':
             echo $templating->render('detail.html.twig', [
                 'slug' => $slug
             ]);
-        break;
+            break;
         default:
             $matched = false;
-        break;
+            break;
     }
 } catch (\Exception $exception) {
     header("HTTP/1.0 404 Not Found");

@@ -1,0 +1,12 @@
+field:
+  name:
+    - nl_NL: Many to One
+    - en_EN: Many to One
+  handle: manyToOne
+  label:
+    - nl_NL: Relatie many to one
+    - en_EN: Relationship many to one
+  type: Relationship
+  variant: select
+  kind: many-to-one
+  to: mtoOne

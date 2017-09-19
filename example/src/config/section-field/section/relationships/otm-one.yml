@@ -1,0 +1,14 @@
+section:
+  name: One to Many - One
+  handle: otmOne
+  fields:
+    - title
+    - slug
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~
