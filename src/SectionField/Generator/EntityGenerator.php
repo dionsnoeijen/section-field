@@ -220,6 +220,7 @@ EOT;
     {
         $generatorConfig = $this->sectionConfig->getGeneratorConfig()->toArray();
         $metadata = '';
+
         foreach ($generatorConfig['entity'] as $handle => $options) {
 
             $field = $this->fieldManager->readByHandle(Handle::fromString($handle));
@@ -237,6 +238,7 @@ EOT;
                         $field->getHandle(),
                         $asString
                     );
+
                     $asString = str_replace(
                         '{{ assertion }}',
                         $assertion,

@@ -134,11 +134,10 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
 
         $asString = str_replace(
             '{{ fullyQualifiedClassName }}',
-            (string) $this->sectionConfig->getNamespace() . '\\Entity\\' . ucfirst(
-                Inflector::camelize((string) $this->sectionConfig->getName())
-            ),
+            (string) $this->sectionConfig->getFullyQualifiedClassName(),
             $asString
         );
+
         $asString = str_replace(
             '{{ handle }}',
             (string) $this->sectionConfig->getHandle(),
