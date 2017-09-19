@@ -18,35 +18,37 @@ class EntityValidatorMetadataGenerator implements GeneratorInterface
             )
         );
 
-        $asString = str_replace(
-            '{{ propertyName }}',
-            $field->getConfig()->getPropertyName(),
-            $asString
-        );
-
         $generatorConfig = $field->getConfig()->getGeneratorConfig()->toArray();
 
-        foreach ($generatorConfig['entity']['validator'] as $assertion => $assertionOptions) {
+        if (!empty($generatorConfig['entity']['validator'])) {
             $asString = str_replace(
-                '{{ assertion }}',
-                $assertion,
+                '{{ propertyName }}',
+                $field->getConfig()->getPropertyName(),
                 $asString
             );
-            $options = '';
-            foreach ($assertionOptions as $optionKey => $optionValue) {
-                $options .= "'{$optionKey}' => '{$optionValue}',";
+            foreach ($generatorConfig['entity']['validator'] as $assertion => $assertionOptions) {
+                $asString = str_replace(
+                    '{{ assertion }}',
+                    $assertion,
+                    $asString
+                );
+                $options = '';
+                foreach ($assertionOptions as $optionKey => $optionValue) {
+                    $options .= "'{$optionKey}' => '{$optionValue}',";
+                }
+                if (!empty($options)) {
+                    $options = rtrim($options, ',');
+                    $options = "[{$options}]";
+                }
+                $asString = str_replace(
+                    '{{ assertionOptions }}',
+                    $options,
+                    $asString
+                );
             }
-            if (!empty($options)) {
-                $options = rtrim($options, ',');
-                $options = "[{$options}]";
-            }
-            $asString = str_replace(
-                '{{ assertionOptions }}',
-                $options,
-                $asString
-            );
+            return Template::create($asString);
         }
 
-        return Template::create($asString);
+        return Template::create('');
     }
 }
