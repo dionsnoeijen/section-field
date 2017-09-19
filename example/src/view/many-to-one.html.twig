@@ -10,7 +10,129 @@
     <div class="row">
         <div class="col-md-12">
             <h2>Many to one</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <p>This is a setup for a basic Many to one field. For the example I have a "Many" side. And a "One" side. Both sides are modeled as a section that contains some basic fields.</p>
 
+            <h4>The fields are configured as follows:</h4>
+            <h5>The title field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Titel
+    - en_EN: Title
+  label:
+    - nl_NL: Titel
+    - en_EN: Title
+  handle: title
+  type: TextInput
+  form:
+    all:
+      trim: true
+    update:
+      disabled: true
+  generator:
+    entity:
+      validator:
+        Length:
+          min: 2
+          max: 255
+    doctrine:
+      length: 255
+            </pre>
+            <h5>The slug field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Slug
+    - en_EN: Slug
+  handle: slug
+  label:
+    - nl_NL: Onderdeel voor url segment
+    - en_EN: Composit for url segment
+  type: Slug
+  length: 255 #move to generator->doctrine config
+  typeConfig: [ title, created|DateTime|Y-m-d ] #move to generator config
+  generator:
+    entity:
+      slugFields: [ title, created|DateTime|Y-m-d ]
+    doctrine:
+      length: 255
+      unique: true
+  form:
+    default:
+      available: false
+            </pre>
+            <h5>The created field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Aangemaakt
+    - en_EN: Created
+  handle: created
+  label:
+    - nl_NL: Bericht aanmaak datum
+    - en_EN: Record creation date
+  type: DateTimeField
+  entityEvents:
+    - prePersist
+            </pre>
+            <h5>The updated field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Geupdated
+    - en_EN: Updated
+  handle: updated
+  label:
+    - nl_NL: Update datum
+    - en_EN: Date record is updated
+  type: DateTimeField
+  entityEvents:
+    - prePersist
+    - preUpdate
+            </pre>
+        </div>
+        <div class="col-md-6">
+            <p>The many side contains the manyToOne field as configured in the fields above. The section handles are mtoMany and mtoOne, this stands for: Many to One - Many and Many to One - One</p>
+            <h4>This is how the sections are configured:</h4>
+            <h5>Many side</h5>
+            <pre>
+section:
+  name: Many to One - Many
+  handle: mtoMany
+  fields:
+    - title
+    - slug
+    - manyToOne
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~
+            </pre>
+            <h5>One side</h5>
+            <pre>
+section:
+  name: Many to One - One
+  handle: mtoOne
+  fields:
+    - title
+    - slug
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~
+            </pre>
         </div>
     </div>
 {% endblock %}
