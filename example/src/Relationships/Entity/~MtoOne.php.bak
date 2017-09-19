@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class MtoMany
+class MtoOne
 {
     /** @var \DateTime */
     protected $created;
@@ -20,17 +20,18 @@ class MtoMany
     /** @var \DateTime */
     protected $updated;
 
-    /** @var MtoOne */
-    protected $mtoOne;
-
     /** @var string */
     protected $slug;
+
+    /** @var ArrayCollection */
+    protected $mtoManies;
 
     /** @var int */
     private $id;
 
     public function __construct()
     {
+        $this->mtoManies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -43,7 +44,7 @@ class MtoMany
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created): MtoMany
+    public function setCreated(\DateTime $created): MtoOne
     {
         $this->created = $created;
         return $this;
@@ -54,7 +55,7 @@ class MtoMany
         return $this->title;
     }
 
-    public function setTitle(string $title): MtoMany
+    public function setTitle(string $title): MtoOne
     {
         $this->title = $title;
         return $this;
@@ -65,26 +66,9 @@ class MtoMany
         return $this->updated;
     }
 
-    public function setUpdated(\DateTime $updated): MtoMany
+    public function setUpdated(\DateTime $updated): MtoOne
     {
         $this->updated = $updated;
-        return $this;
-    }
-
-    public function getMtoOne(): MtoOne
-    {
-        return $this->mtoOne;
-    }
-
-    public function setMtoOne(MtoOne $mtoOne): MtoMany
-    {
-        $this->mtoOne = $mtoOne;
-        return $this;
-    }
-
-    public function removeMtoOne(MtoOne $mtoOne): MtoMany
-    {
-        $this->mtoOne = null;
         return $this;
     }
 
@@ -94,6 +78,31 @@ class MtoMany
             return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->slug);
         }
         return null;
+    }
+
+    public function getMtoManies(): Collection
+    {
+        return $this->mtoManies;
+    }
+
+    public function addMtoMany(MtoMany $mtoMany): MtoOne
+    {
+        if ($this->mtoManies->contains($mtoMany)) {
+            return $this;
+        }
+        $this->mtoManies->add($mtoMany);
+        $mtoMany->setMtoOne($this);
+        return $this;
+    }
+
+    public function removeMtoMany(MtoMany $mtoMany): MtoOne
+    {
+        if (!$this->mtoManies->contains($mtoMany)) {
+            return $this;
+        }
+        $this->mtoManies->removeElement($mtoMany);
+        $mtoMany->removeMtoOne($this);
+        return $this;
     }
 
     public function getDefault(): string

@@ -8,7 +8,8 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 $config = Setup::createXMLMetadataConfiguration([
     __DIR__.'/../src/config/xml', // Library
-    __DIR__.'/src/Blog/config/xml' // Example
+    __DIR__.'/src/Blog/config/xml', // Example Blog
+    __DIR__.'/src/Relationships/config/xml' // Example relationships
 ], true);
 
 // database configuration parameters

@@ -23,6 +23,9 @@ class MtoMany
     /** @var MtoOne */
     protected $mtoOne;
 
+    /** @var string */
+    protected $slug;
+
     /** @var int */
     private $id;
 
@@ -85,6 +88,14 @@ class MtoMany
         return $this;
     }
 
+    public function getSlug(): ?Tardigrades\FieldType\Slug\ValueObject\Slug
+    {
+        if (!empty($this->slug)) {
+            return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->slug);
+        }
+        return null;
+    }
+
     public function getDefault(): string
     {
         return $this->title;
@@ -100,6 +111,7 @@ class MtoMany
     {
         $this->created = new \DateTime('now');
         $this->updated = new \DateTime('now');
+        $this->slug = Tardigrades\Helper\StringConverter::toSlug($this->getTitle() . '-' . $this->getCreated()->format('Y-m-d'));
     }
 
     public function onPreUpdate(): void
