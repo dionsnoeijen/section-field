@@ -146,6 +146,18 @@ try {
         case '/relationships/many-to-one':
             echo $templating->render('many-to-one.html.twig');
             break;
+        case '/relationships/create-many-record-mto':
+            echo $templating->render('create-many-record-mto.html.twig');
+            break;
+        case '/relationships/update-many-record-mto':
+            echo $templating->render('update-many-record-mto.html.twig');
+            break;
+        case '/relationships/create-one-record-mto':
+            echo $templating->render('create-one-record-mto.html.twig');
+            break;
+        case '/relationships/update-one-record-mto':
+            echo $templating->render('update-one-record-mto.html.twig');
+            break;
         case '/relationships/many-to-many':
             echo $templating->render('many-to-many.html.twig');
             break;

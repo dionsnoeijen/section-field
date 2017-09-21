@@ -1,0 +1,15 @@
+{% set form = sectionForm('Example.Relationships.Entity.MtoMany') %}
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-md-12">
+        {{ form_errors(form) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10">
+        {{ form_row(form.title) }}
+        type="hidden" name="form[mtoOne_id]" value="Example.Relationships.Entity.MtoOne:??"
+        {{ form_row(form.save) }}
+    </div>
+</div>
+{{ form_end(form) }}
