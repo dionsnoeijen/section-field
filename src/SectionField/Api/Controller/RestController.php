@@ -5,17 +5,17 @@ namespace Tardigrades\SectionField\Api\Controller;
 
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface as SymfonyFormInterface;
 use Tardigrades\Entity\FieldInterface;
 use Tardigrades\SectionField\Api\Serializer\FieldsExclusionStrategy;
-use Tardigrades\SectionField\SectionFieldInterface\CreateSection;
-use Tardigrades\SectionField\SectionFieldInterface\DeleteSection;
-use Tardigrades\SectionField\SectionFieldInterface\Form;
-use Tardigrades\SectionField\SectionFieldInterface\ReadSection;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\CreateSectionInterface;
+use Tardigrades\SectionField\Service\DeleteSectionInterface;
+use Tardigrades\SectionField\Form\FormInterface;
+use Tardigrades\SectionField\Service\ReadSectionInterface;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\Service\ReadOptions;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\SectionFormOptions;
@@ -29,19 +29,19 @@ use Tardigrades\SectionField\ValueObject\SectionFormOptions;
  */
 class RestController
 {
-    /** @var ReadSection */
+    /** @var ReadSectionInterface */
     private $readSection;
 
-    /** @var CreateSection */
+    /** @var CreateSectionInterface */
     private $createSection;
 
-    /** @var DeleteSection */
+    /** @var DeleteSectionInterface */
     private $deleteSection;
 
-    /** @var Form */
+    /** @var FormInterface */
     private $form;
 
-    /** @var SectionManager */
+    /** @var SectionManagerInterface */
     private $sectionManager;
 
     /** @var RequestStack */
@@ -49,19 +49,19 @@ class RestController
 
     /**
      * RestController constructor.
-     * @param CreateSection $createSection
-     * @param ReadSection $readSection
-     * @param DeleteSection $deleteSection
-     * @param Form $form
-     * @param SectionManager $sectionManager
+     * @param CreateSectionInterface $createSection
+     * @param ReadSectionInterface $readSection
+     * @param DeleteSectionInterface $deleteSection
+     * @param FormInterface $form
+     * @param SectionManagerInterface $sectionManager
      * @param RequestStack $requestStack
      */
     public function __construct(
-        CreateSection $createSection,
-        ReadSection $readSection,
-        DeleteSection $deleteSection,
-        Form $form,
-        SectionManager $sectionManager,
+        CreateSectionInterface $createSection,
+        ReadSectionInterface $readSection,
+        DeleteSectionInterface $deleteSection,
+        FormInterface $form,
+        SectionManagerInterface $sectionManager,
         RequestStack $requestStack
     ) {
         $this->readSection = $readSection;
@@ -188,6 +188,7 @@ class RestController
     public function createEntry(string $sectionHandle): JsonResponse
     {
         $response = [];
+        /** @var \Symfony\Component\Form\FormInterface $form */
         $form = $this->form->buildFormForSection(
             $sectionHandle,
             null,
@@ -321,10 +322,10 @@ class RestController
     }
 
     /**
-     * @param FormInterface $form
+     * @param SymfonyFormInterface $form
      * @return array
      */
-    private function save(FormInterface $form): array
+    private function save(SymfonyFormInterface $form): array
     {
         $response = [];
         $data = $form->getData();
@@ -344,17 +345,17 @@ class RestController
     }
 
     /**
-     * @param FormInterface $form
+     * @param SymfonyFormInterface $form
      * @return array
      */
-    private function getFormErrors(FormInterface $form): array
+    private function getFormErrors(SymfonyFormInterface $form): array
     {
         $errors = [];
         foreach ($form->getErrors(true, true) as $field=>$formError) {
             $errors[] = $formError->getMessage();
         }
 
-        /** @var FormInterface $child */
+        /** @var SymfonyFormInterface $child */
         foreach ($form as $child) {
             if (!$child->isValid()) {
                 foreach ($child->getErrors() as $error) {
