@@ -27,9 +27,9 @@ However, in some situations, you would want users to be able to create or config
 
 #### Language config
 
-  language:
-    - nl_NL
-    - en_EN
+	language:
+	  - nl_NL
+	  - en_EN
     
 location: ./language/language.yml
 
@@ -39,12 +39,12 @@ Run the create language command and point to that language.yml. That way the dat
 
 #### Application config
 
-  application:
-    name: Blog
-    handle: blog
-    languages:
-      - nl_NL
-      - en_EN
+	application:
+	  name: Blog
+	  handle: blog
+	  languages:
+	    - nl_NL
+	    - en_EN
 
 location: ./application/language.yml
 
@@ -52,18 +52,18 @@ You have to define at least one application. Every application has it's own appl
 
 #### Section config
 
-  section:
-    name: Comments
-    handle: comments
-    fields:
-      - name
-      - email
-      - comment
-      - blog
-    slug: [name]
-    required: [name, email, comment, blog]
-    default: name
-    application: [blog]
+	section:
+	  name: Comments
+	  handle: comments
+	  fields:
+	    - name
+	    - email
+	    - comment
+	    - blog
+	  slug: [name]
+	  required: [name, email, comment, blog]
+	  default: name
+	  application: [blog]
     
 A section contains fields. By this configuration things are tied together if you will. 
 
@@ -92,35 +92,35 @@ application: For what application(s) is this section available.
 #### Example field configs
 
   ###### field/title.yml
-  field:
-    name:
-     - nl_NL: Titel
-     - en_EN: Title
-    type: TextInput
-    length: 255
+	field:
+	  name:
+	   - nl_NL: Titel
+	   - en_EN: Title
+	  type: TextInput
+	  length: 255
     
 This is a simple text input field.
 
   ###### field/email.yml
-  field:
-    name:
-      - nl_NL: Email
-      - en_EN: Email
-    type: TextInput
-    length: 255
-    validate: email
+	field:
+	  name:
+	    - nl_NL: Email
+	    - en_EN: Email
+	  type: TextInput
+	  length: 255
+	  validate: email
   
 Another one, but with a validation specified.
   
   ###### field/blog.yml
-  field:
-    name:
-      - nl_NL: Blog
-      - en_EN: Blog
-    type: Relationship
-    variant: hidden
-    kind: many-to-one
-    to: blog
+	field:
+	  name:
+	    - nl_NL: Blog
+	    - en_EN: Blog
+	  type: Relationship
+	  variant: hidden
+	  kind: many-to-one
+	  to: blog
 
 A more complicated field like a relationship requires a bit more explanation.
 
@@ -181,3 +181,5 @@ variant: There are many way's one might associate relationships. In this case th
 `bin/console sf:delete-section (follow dialog)`
 
 `bin/console sf:list-section`
+
+`bin/console sf:generate-section`
