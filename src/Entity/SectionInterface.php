@@ -22,6 +22,7 @@ interface SectionInterface
     public function setHandle(string $handle): SectionInterface;
     public function addField(FieldInterface $field): SectionInterface;
     public function removeField(FieldInterface $field): SectionInterface;
+    public function removeFields(): SectionInterface;
     public function getFields(): Collection;
     public function addApplication(ApplicationInterface $application): SectionInterface;
     public function removeApplication(ApplicationInterface $application): SectionInterface;

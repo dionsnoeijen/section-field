@@ -112,6 +112,13 @@ class Section implements SectionInterface, SectionEntityInterface
         return $this;
     }
 
+    public function removeFields(): SectionInterface
+    {
+        $this->fields->clear();
+
+        return $this;
+    }
+
     public function getFields(): Collection
     {
         return $this->fields;
