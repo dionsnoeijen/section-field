@@ -179,7 +179,6 @@ class DoctrineSectionManager implements SectionManagerInterface
 
         $section->setVersion(1 + $section->getVersion()->toInt()); // 3
 
-        // Clear fields
         $section->removeFields(); // 4
 
         $fields = $this->fieldManager->readByHandles($sectionConfig->getFields()); // 5
