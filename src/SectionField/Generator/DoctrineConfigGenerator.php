@@ -142,10 +142,12 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
             $asString
         );
 
+        $tableVersion = $this->section->getVersion()->toInt() > 1 ?
+            ('_' . $this->section->getVersion()->toInt()) : '';
+
         $asString = str_replace(
             '{{ handle }}',
-            (string) $this->sectionConfig->getHandle() . '_' .
-            (string) $this->section->getVersion(),
+            (string) $this->sectionConfig->getHandle() . $tableVersion,
             $asString
         );
 
