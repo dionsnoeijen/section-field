@@ -39,7 +39,7 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
                     __DIR__ . '/../GeneratorTemplate/doctrine.onetomany.xml.php', [
                         'toPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']) . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
-                        'fromHandle' => $fieldConfig['field']['handle'] . $fromVersion,
+                        'fromHandle' => $fieldConfig['field']['handle'], // Don't version this one, it's mapped to the entity method.
                         'fromPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']) . $fromVersion,
                         'toHandle' => $fieldConfig['field']['to'] . $toVersion
                     ]

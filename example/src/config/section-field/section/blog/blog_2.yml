@@ -1,0 +1,21 @@
+section:
+  name: Blog
+  handle: blog
+  fields:
+    - title
+    - subTitle
+    - description
+    - body
+    - blogSlug
+    - authorBlog
+    - created
+    - updated
+  slug: blogSlug #assign the field that will function as slug
+  default: title
+  namespace: Example\Blog
+  generator:
+    entity:
+      title:
+        NotBlank: ~
+      body:
+        NotBlank: ~

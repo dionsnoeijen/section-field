@@ -1,0 +1,9 @@
+field:
+  name:
+    - nl_NL: Omschrijving
+    - en_EN: Description
+  handle: description
+  label:
+    - nl_NL: Omschrijving tekst
+    - en_EN: Description
+  type: RichTextArea

@@ -121,9 +121,9 @@ class DoctrineSectionManager implements SectionManagerInterface
      * to make the version change complete.
      *
      * @param $sectionFromHistory
-     * @return SectionHistoryInterface
+     * @return SectionInterface
      */
-    public function restoreFromHistory(SectionInterface $sectionFromHistory): SectionHistoryInterface
+    public function restoreFromHistory(SectionInterface $sectionFromHistory): SectionInterface
     {
         /** @var SectionInterface $activeSection */
         $activeSection = $this->readByHandle($sectionFromHistory->getHandle()); // 1
@@ -144,6 +144,8 @@ class DoctrineSectionManager implements SectionManagerInterface
 
         $this->entityManager->persist($updatedActiveSection);
         $this->entityManager->flush();
+
+        return $updatedActiveSection;
     }
 
     /**
@@ -174,7 +176,6 @@ class DoctrineSectionManager implements SectionManagerInterface
     {
         /** @var SectionInterface $sectionHistory */
         $sectionHistory = $this->copySectionDataToSectionHistoryEntity($section); // 1
-
         $this->sectionHistoryManager->create($sectionHistory); // 2
 
         $section->setVersion(1 + $section->getVersion()->toInt()); // 3

@@ -185,6 +185,8 @@ class SectionHistory implements SectionInterface, SectionHistoryInterface
     public function setVersion(int $version): SectionInterface
     {
         $this->version = $version;
+
+        return $this;
     }
 
     public function getVersion(): Version

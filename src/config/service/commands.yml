@@ -69,6 +69,12 @@ services:
     arguments:
       - '@section_field.manager.doctrine.section_manager'
 
+  section_field.restore.section.command:
+    class: Tardigrades\Command\RestoreSectionCommand
+    arguments:
+      - '@section_field.manager.doctrine.section_manager'
+      - '@section_field.manager.doctrine.section_history_manager'
+
   section_field.delete.section.command:
     class: Tardigrades\Command\DeleteSectionCommand
     arguments:

@@ -17,6 +17,11 @@
         <field name="name" type="string" />
         <field name="config" type="json_array" />
         <field name="version" type="integer" />
+        <one-to-many
+            target-entity="Tardigrades\Entity\SectionHistory"
+            field="history"
+            mapped-by="section"
+        />
         <many-to-many
             target-entity="Tardigrades\Entity\Field"
             field="fields"

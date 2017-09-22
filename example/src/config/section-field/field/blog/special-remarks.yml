@@ -1,0 +1,9 @@
+field:
+  name:
+    - nl_NL: Speciale opmerkingen
+    - en_EN: Special remarks
+  handle: specialRemarks
+  label:
+    - nl_NL: Speciale opmerkingen
+    - en_EN: Special remarks
+  type: RichTextArea

@@ -33,6 +33,9 @@ class Section implements SectionInterface, SectionEntityInterface
     /** @var ArrayCollection */
     protected $applications;
 
+    /** @var ArrayCollection */
+    protected $history;
+
     /** @var \DateTime */
     protected $created;
 
@@ -44,10 +47,12 @@ class Section implements SectionInterface, SectionEntityInterface
 
     public function __construct(
         Collection $fields = null,
-        Collection $applications = null
+        Collection $applications = null,
+        Collection $history = null
     ) {
         $this->fields = is_null($fields) ? new ArrayCollection() : $fields;
         $this->applications = is_null($applications) ? new ArrayCollection() : $applications;
+        $this->history = is_null($history) ? new ArrayCollection() : $history;
     }
 
     public function setId(int $id): SectionInterface
@@ -165,6 +170,8 @@ class Section implements SectionInterface, SectionEntityInterface
     public function setVersion(int $version): SectionInterface
     {
         $this->version = $version;
+
+        return $this;
     }
 
     public function getVersion(): Version
@@ -174,17 +181,28 @@ class Section implements SectionInterface, SectionEntityInterface
 
     public function getHistory(): Collection
     {
-        // TODO: Implement getHistory() method.
+        return $this->history;
     }
 
     public function addHistory(SectionInterface $section): SectionEntityInterface
     {
-        // TODO: Implement addHistory() method.
+        if ($this->history->contains($section)) {
+            return $this;
+        }
+        $this->history->add($section);
+        $section->setSection($this);
+
+        return $this;
     }
 
     public function removeHistory(SectionInterface $section): SectionEntityInterface
     {
-        // TODO: Implement removeHistory() method.
+        if (!$this->history->contains($section)) {
+            return $this;
+        }
+        $this->history->remove($section);
+
+        return $this;
     }
 
     public function setCreated(\DateTime $created): SectionInterface
