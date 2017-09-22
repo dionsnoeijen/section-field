@@ -26,7 +26,7 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
             /** @var SectionInterface $from */
-            $from = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['from']));
+            $from = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['handle']));
 
             /** @var SectionInterface $to */
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
