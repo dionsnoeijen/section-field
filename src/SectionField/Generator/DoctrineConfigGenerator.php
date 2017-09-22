@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\Generator;
 
 use Assert\Assertion;
-use Doctrine\Common\Util\Inflector;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\Entity\FieldInterface;
