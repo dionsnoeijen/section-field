@@ -12,7 +12,6 @@ use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
-use Tardigrades\SectionField\ValueObject\Version;
 
 class DoctrineSectionManager implements SectionManagerInterface
 {
@@ -107,14 +106,13 @@ class DoctrineSectionManager implements SectionManagerInterface
     /**
      * Restore an old version of a section by it's handle and version
      *
-     * 1. Fetch the stored section history entity.
-     * 2. Fetch the currently active section.
-     * 3. Move the currently active section to history.
-     * 4. Copy the section history data to the active section entity, including the version.
-     * 5. Clean the field associations from the updated active section.
-     * 6. Fetch the fields from the 'old' section config.
-     * 7. Assign the fields to the section.
-     * 8. Persist the active section.
+     * 1. Fetch the currently active section
+     * 2. Copy the section history data to the active section entity, including the version
+     * 3. Move the currently active section to history
+     * 4. Clean the field associations from the updated active section
+     * 5. Fetch the fields from the 'old' section config
+     * 6. Assign the fields to the section
+     * 7. Persist the active section
      *
      * This section might be generated from an updated config yml. Meaning the current config might
      * not comply with the active section configuration anymore.
@@ -122,23 +120,19 @@ class DoctrineSectionManager implements SectionManagerInterface
      * This will only update the config stored in the database. The generators will have to be called
      * to make the version change complete.
      *
-     * @param Handle $handle
-     * @param Version $version
+     * @param $sectionFromHistory
      * @return SectionHistoryInterface
      */
-    public function restoreFromHistory(Handle $handle, Version $version): SectionHistoryInterface
+    public function restoreFromHistory(SectionInterface $sectionFromHistory): SectionHistoryInterface
     {
-        /** @var SectionInterface $sectionHistory */
-        $sectionHistory = $this->sectionHistoryManager->readByHandleAndVersion($handle, $version); // 1
-
         /** @var SectionInterface $activeSection */
-        $activeSection = $this->readByHandle($handle); // 2
+        $activeSection = $this->readByHandle($sectionFromHistory->getHandle()); // 1
 
         /** @var SectionInterface $newSectionHistory */
-        $newSectionHistory = $this->copySectionDataToSectionHistoryEntity($activeSection); // 3
+        $newSectionHistory = $this->copySectionDataToSectionHistoryEntity($activeSection); // 2
         $this->sectionHistoryManager->create($newSectionHistory); // 3
 
-        $updatedActiveSection = $this->copySectionHistoryDataToSectionEntity($sectionHistory, $activeSection); // 4
+        $updatedActiveSection = $this->copySectionHistoryDataToSectionEntity($sectionFromHistory, $activeSection); // 4
 
         $updatedActiveSection->removeFields(); // 5
 
@@ -161,7 +155,7 @@ class DoctrineSectionManager implements SectionManagerInterface
      * 4. Clear the field many to many relationships
      * 5. Fetch the fields based on the config
      * 6. Add them to the Section entity
-     * 7. Set the fields with the config values.
+     * 7. Set the fields with the config values
      * 8. Set the config
      * 9. Persist the entity
      *

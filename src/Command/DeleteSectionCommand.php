@@ -6,6 +6,7 @@ namespace Tardigrades\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\Service\SectionManagerInterface;
 
 class DeleteSectionCommand extends SectionCommand
@@ -33,6 +34,7 @@ class DeleteSectionCommand extends SectionCommand
 
     private function deleteWhatRecord(InputInterface $input, OutputInterface $output): void
     {
+        /** @var SectionInterface $section */
         $section = $this->getSection($input, $output);
 
         $output->writeln('<info>Record with id #' . $section->getId() . ' will be deleted</info>');
