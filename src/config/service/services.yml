@@ -15,6 +15,12 @@ services:
     arguments:
       - '@doctrine.orm.entity_manager'
       - '@section_field.manager.doctrine.field_manager'
+      - '@section_field.manager.doctrine.section_history_manager'
+
+  section_field.manager.doctrine.section_history_manager:
+    class: Tardigrades\SectionField\Service\DoctrineSectionHistoryManager
+    arguments:
+      - '@doctrine.orm.entity_manager'
 
   section_field.manager.doctrine.field_type_manager:
     class: Tardigrades\SectionField\Service\DoctrineFieldTypeManager
