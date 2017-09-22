@@ -12,6 +12,7 @@ use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
+use Tardigrades\SectionField\ValueObject\Version;
 
 class DoctrineSectionManager implements SectionManagerInterface
 {
@@ -104,6 +105,54 @@ class DoctrineSectionManager implements SectionManagerInterface
     }
 
     /**
+     * Restore an old version of a section by it's handle and version
+     *
+     * 1. Fetch the stored section history entity.
+     * 2. Fetch the currently active section.
+     * 3. Move the currently active section to history.
+     * 4. Copy the section history data to the active section entity, including the version.
+     * 5. Clean the field associations from the updated active section.
+     * 6. Fetch the fields from the 'old' section config.
+     * 7. Assign the fields to the section.
+     * 8. Persist the active section.
+     *
+     * This section might be generated from an updated config yml. Meaning the current config might
+     * not comply with the active section configuration anymore.
+     *
+     * This will only update the config stored in the database. The generators will have to be called
+     * to make the version change complete.
+     *
+     * @param Handle $handle
+     * @param Version $version
+     * @return SectionHistoryInterface
+     */
+    public function restoreFromHistory(Handle $handle, Version $version): SectionHistoryInterface
+    {
+        /** @var SectionInterface $sectionHistory */
+        $sectionHistory = $this->sectionHistoryManager->readByHandleAndVersion($handle, $version); // 1
+
+        /** @var SectionInterface $activeSection */
+        $activeSection = $this->readByHandle($handle); // 2
+
+        /** @var SectionInterface $newSectionHistory */
+        $newSectionHistory = $this->copySectionDataToSectionHistoryEntity($activeSection); // 3
+        $this->sectionHistoryManager->create($newSectionHistory); // 3
+
+        $updatedActiveSection = $this->copySectionHistoryDataToSectionEntity($sectionHistory, $activeSection); // 4
+
+        $updatedActiveSection->removeFields(); // 5
+
+        $fields = $this->fieldManager->readByHandles($updatedActiveSection->getConfig()->getFields()); // 6
+
+        foreach ($fields as $field) {
+            $updatedActiveSection->addField($field);
+        } // 7
+
+        $this->entityManager->persist($updatedActiveSection);
+        $this->entityManager->flush();
+    }
+
+    /**
      * A section config is stored in the section history before it's updated.
      *
      * 1. Copy the data from the Section entity to the SectionHistory entity
@@ -115,6 +164,13 @@ class DoctrineSectionManager implements SectionManagerInterface
      * 7. Set the fields with the config values.
      * 8. Set the config
      * 9. Persist the entity
+     *
+     * This new section might be created from an updated config yml. It's recommended to copy the old
+     * config yml before you update it. That way the config yml's history will be in compliance with the
+     * config stored in the database.
+     *
+     * This will only update the config stored in the database. The generators will have to be called
+     * to make the version change complete.
      *
      * @param SectionConfig $sectionConfig
      * @param SectionInterface $section
@@ -146,11 +202,6 @@ class DoctrineSectionManager implements SectionManagerInterface
         $this->entityManager->flush(); // 9
 
         return $section;
-    }
-
-    public function restoreFromHistory(): SectionHistoryInterface
-    {
-
     }
 
     public function readByHandle(Handle $handle): SectionInterface
@@ -234,13 +285,28 @@ class DoctrineSectionManager implements SectionManagerInterface
 
         $sectionHistory->setVersion(($section->getVersion()->toInt()));
         $sectionHistory->setConfig($section->getConfig()->toArray());
+        $sectionHistory->setName((string) $section->getName());
         $sectionHistory->setHandle((string) $section->getHandle());
         $sectionHistory->setCreated($section->getCreated());
         $sectionHistory->setUpdated($section->getUpdated());
-        $sectionHistory->setName((string) $section->getName());
         $sectionHistory->setSection($section);
 
         return $sectionHistory;
+    }
+
+    private function copySectionHistoryDataToSectionEntity(
+        SectionInterface $sectionHistory,
+        SectionInterface $section
+    ): SectionInterface {
+
+        $section->setVersion($sectionHistory->getVersion()->toInt());
+        $section->setConfig($sectionHistory->getConfig()->toArray());
+        $section->setHandle((string) $sectionHistory->getHandle());
+        $section->setName((string) $sectionHistory->getName());
+        $section->setCreated($sectionHistory->getCreated());
+        $section->setUpdated($sectionHistory->getUpdated());
+
+        return $section;
     }
 
     private function fillOpposingRelationshipSides(array $relationships): array

@@ -15,15 +15,10 @@ class DoctrineSectionHistoryManager implements SectionHistoryManagerInterface
     /** @var EntityManagerInterface */
     private $entityManager;
 
-    /** @var DoctrineFieldManager */
-    private $fieldManager;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        FieldManagerInterface $fieldManager
+        EntityManagerInterface $entityManager
     ) {
         $this->entityManager = $entityManager;
-        $this->fieldManager = $fieldManager;
     }
 
     public function create(SectionInterface $entity): SectionInterface
