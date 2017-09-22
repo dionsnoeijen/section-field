@@ -1,14 +1,14 @@
 <?php if ($type === 'unidirectional') { ?>
-<many-to-one field="<?php echo $thatHandle; ?>" fetch="EXTRA_LAZY" target-entity="<?php echo $thatFullyQualfiedClassName; ?>">
-    <join-column name="<?php echo $thatHandle; ?>_id" referenced-column-name="id" />
+<many-to-one field="<?php echo $toHandle; ?>" fetch="EXTRA_LAZY" target-entity="<?php echo $toFullyQualfiedClassName; ?>">
+    <join-column name="<?php echo $toHandle; ?>_id" referenced-column-name="id" />
 </many-to-one>
 <?php } ?>
 
 <?php if ($type === 'bidirectional') { ?>
-<one-to-one field="<?php echo $thatHandle; ?>" fetch="EXTRA_LAZY" target-entity="<?php echo $thatFullyQualfiedClassName; ?>" mapped-by="<?php echo $thisHandle; ?>" />
+<one-to-one field="<?php echo $toHandle; ?>" fetch="EXTRA_LAZY" target-entity="<?php echo $toFullyQualfiedClassName; ?>" mapped-by="<?php echo $fromHandle; ?>" />
 </entity>
-<entity name="<?php echo $thatFullyQualfiedClassName; ?>">
-<one-to-one field="<?php echo $thisHandle; ?>" fetch="EXTRA_LAZY" target-entity="<?php echo $thisFullyQualfiedClassName; ?>" inversed-by="<?php echo $thatHandle; ?>">
-    <join-column name="<?php echo $thisHandle; ?>_id" referenced-column-name="id" />
+<entity name="<?php echo $toFullyQualfiedClassName; ?>">
+<one-to-one field="<?php echo $fromHandle; ?>" fetch="EXTRA_LAZY" target-entity="<?php echo $fromFullyQualfiedClassName; ?>" inversed-by="<?php echo $toHandle; ?>">
+    <join-column name="<?php echo $toHandle; ?>_id" referenced-column-name="id" />
 </one-to-one>
 <?php } ?>

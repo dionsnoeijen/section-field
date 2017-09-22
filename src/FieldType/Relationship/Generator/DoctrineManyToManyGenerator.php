@@ -9,7 +9,7 @@ use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\Generator\GeneratorInterface;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
@@ -32,7 +32,7 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
     {
         $fieldConfig = $field->getConfig()->toArray();
 
-        /** @var SectionManager $sectionManager */
+        /** @var SectionManagerInterface $sectionManager */
         $sectionManager = $options[0]['sectionManager'];
 
         /** @var SectionConfig $sectionConfig */
@@ -40,26 +40,30 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
-            /** @var SectionInterface $target */
-            $target = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
+            /** @var SectionInterface $from */
+            $from = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['from']));
+
+            /** @var SectionInterface $to */
+            $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.manytomany.xml.php', [
                         'type' => $fieldConfig['field']['relationship-type'],
-                        'thatPluralHandle' => Inflector::pluralize(
+                        'toPluralHandle' => Inflector::pluralize(
                             $fieldConfig['field']['to']
-                        ),
-                        'thatFullyQualifiedClassName' => $target
+                        ) . '_' . (string) $to->getVersion(),
+                        'toFullyQualifiedClassName' => $to
                             ->getConfig()
                             ->getFullyQualifiedClassName(),
-                        'thisHandle' => $fieldConfig['field']['from'],
-                        'thisPluralHandle' => Inflector::pluralize(
+                        'fromHandle' => $fieldConfig['field']['from'] . '_' . (string) $from->getVersion(),
+                        'fromPluralHandle' => Inflector::pluralize(
                             $fieldConfig['field']['from']
-                        ),
-                        'thisFullyQualifiedClassName' => $sectionConfig
+                        ) . '_' . (string) $from->getVersion(),
+                        'fromFullyQualifiedClassName' => $sectionConfig
                             ->getFullyQualifiedClassName(),
-                        'thatHandle' => $fieldConfig['field']['to']
+                        'toHandle' => $fieldConfig['field']['to'] . '_' .
+                            (string) $to->getVersion()
                     ]
                 )
             );

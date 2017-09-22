@@ -182,4 +182,4 @@ variant: There are many way's one might associate relationships. In this case th
 
 `bin/console sf:list-section`
 
-`bin/console sf:generate-section`
+`bin/console sf:generate-section (follow dialog)`

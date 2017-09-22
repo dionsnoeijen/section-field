@@ -10,6 +10,7 @@ use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\Updated;
+use Tardigrades\SectionField\ValueObject\Version;
 
 interface SectionInterface
 {
@@ -33,6 +34,6 @@ interface SectionInterface
     public function setUpdated(\DateTime $updated): SectionInterface;
     public function getUpdated(): \DateTime;
     public function getUpdatedValueObject(): Updated;
-    public function onPrePersist(): void;
-    public function onPreUpdate(): void;
+    public function setVersion(int $version): SectionInterface;
+    public function getVersion(): Version;
 }

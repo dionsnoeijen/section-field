@@ -9,7 +9,7 @@ use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\Generator\GeneratorInterface;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
@@ -32,7 +32,7 @@ class DoctrineOneToOneGenerator implements GeneratorInterface
     {
         $fieldConfig = $field->getConfig()->toArray();
 
-        /** @var SectionManager $sectionManager */
+        /** @var SectionManagerInterface $sectionManager */
         $sectionManager = $options[0]['sectionManager'];
 
         /** @var SectionConfig $sectionConfig */
@@ -40,19 +40,22 @@ class DoctrineOneToOneGenerator implements GeneratorInterface
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
-            /** @var SectionInterface $target */
-            $target = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
+            /** @var SectionInterface $from */
+            $from = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['from']));
+
+            /** @var SectionInterface $to */
+            $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.onetooone.xml.php', [
                         'type' => $fieldConfig['field']['type'],
-                        'thatPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']),
-                        'thatFullyQualifiedClassName' => $target->getConfig()->getFullyQualifiedClassName(),
-                        'thisHandle' => $fieldConfig['field']['handle'],
-                        'thisPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']),
-                        'thisFullyQualifiedClassName' => $sectionConfig->getFullyQualifiedClassName(),
-                        'thatHandle' => $fieldConfig['field']['to']
+                        'toPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']) . '_' . (string) $to->getVersion(),
+                        'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
+                        'fromHandle' => $fieldConfig['field']['handle'] . '_' . (string) $from->getVersion(),
+                        'fromPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']) . (string) $from->getVersion(),
+                        'fromFullyQualifiedClassName' => $sectionConfig->getFullyQualifiedClassName(),
+                        'toHandle' => $fieldConfig['field']['to'] . '_' . $to->getVersion()
                     ]
                 )
             );

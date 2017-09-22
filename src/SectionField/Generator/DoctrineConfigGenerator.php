@@ -25,6 +25,9 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
         'manyToMany' => []
     ];
 
+    /** @var SectionInterface */
+    private $section;
+
     /** @var SectionConfig */
     private $sectionConfig;
 
@@ -34,6 +37,7 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
         SectionInterface $section
     ): Writable {
 
+        $this->section = $section;
         $this->sectionConfig = $section->getConfig();
 
         $fields = $this->fieldManager->readByHandles($this->sectionConfig->getFields());
@@ -140,7 +144,8 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
 
         $asString = str_replace(
             '{{ handle }}',
-            (string) $this->sectionConfig->getHandle(),
+            (string) $this->sectionConfig->getHandle() . '_' .
+            (string) $this->section->getVersion(),
             $asString
         );
 

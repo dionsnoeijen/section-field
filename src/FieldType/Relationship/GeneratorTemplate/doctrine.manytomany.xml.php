@@ -1,16 +1,16 @@
 <?php if ($type === 'unidirectional') { ?>
-<many-to-many field="<?php echo $thatPluralHandle; ?>" target-entity="<?php echo $thatFullyQualifiedClassName; ?>">
-    <join-table name="<?php echo $thisPluralHandle; ?>_<?php echo $thatPluralHandle; ?>">
+<many-to-many field="<?php echo $toPluralHandle; ?>" target-entity="<?php echo $toFullyQualifiedClassName; ?>">
+    <join-table name="<?php echo $fromPluralHandle; ?>_<?php echo $toPluralHandle; ?>">
         <join-columns>
-            <join-column name="<?php echo $thisHandle; ?>_id" referenced-column-name="id" />
+            <join-column name="<?php echo $fromHandle; ?>_id" referenced-column-name="id" />
         </join-columns>
         <inverse-join-columns>
-            <join-column name="<?php echo $thatHandle; ?>_id" referenced-column-name="id" />
+            <join-column name="<?php echo $toHandle; ?>_id" referenced-column-name="id" />
         </inverse-join-columns>
     </join-table>
 </many-to-many>
 <?php } ?>
 
 <?php if ($type === 'bidirectional') { ?>
-<many-to-many field="<?php echo $thatPluralHandle; ?>" fetch="EXTRA_LAZY" mapped-by="<?php echo $thisPluralHandle; ?>" target-entity="<?php echo $thatFullyQualifiedClassName; ?>"/>
+<many-to-many field="<?php echo $toPluralHandle; ?>" mapped-by="<?php echo $fromPluralHandle; ?>" target-entity="<?php echo $toFullyQualifiedClassName; ?>"/>
 <?php } ?>

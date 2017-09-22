@@ -13,8 +13,11 @@ use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\Updated;
 use Tardigrades\SectionField\ValueObject\Version;
 
-class Section implements SectionInterface, SectionEntityInterface
+class SectionHistory implements SectionInterface, SectionHistoryInterface
 {
+    /** @var SectionInterface */
+    private $section;
+
     /** @var int */
     protected $id;
 
@@ -33,14 +36,14 @@ class Section implements SectionInterface, SectionEntityInterface
     /** @var ArrayCollection */
     protected $applications;
 
+    /** @var int */
+    protected $version;
+
     /** @var \DateTime */
     protected $created;
 
     /** @var \DateTime */
     protected $updated;
-
-    /** @var int */
-    protected $version;
 
     public function __construct(
         Collection $fields = null,
@@ -155,31 +158,6 @@ class Section implements SectionInterface, SectionEntityInterface
         return $this;
     }
 
-    public function setVersion(int $version): SectionInterface
-    {
-        $this->version = $version;
-    }
-
-    public function getVersion(): Version
-    {
-        return Version::fromInt($this->version);
-    }
-
-    public function getHistory(): Collection
-    {
-        // TODO: Implement getHistory() method.
-    }
-
-    public function addHistory(SectionInterface $section): SectionEntityInterface
-    {
-        // TODO: Implement addHistory() method.
-    }
-
-    public function removeHistory(SectionInterface $section): SectionEntityInterface
-    {
-        // TODO: Implement removeHistory() method.
-    }
-
     public function setCreated(\DateTime $created): SectionInterface
     {
         $this->created = $created;
@@ -195,6 +173,16 @@ class Section implements SectionInterface, SectionEntityInterface
     public function getCreatedValueObject(): Created
     {
         return Created::fromDateTime($this->created);
+    }
+
+    public function setVersion(int $version): SectionInterface
+    {
+        $this->version = $version;
+    }
+
+    public function getVersion(): Version
+    {
+        return Version::fromInt($this->version);
     }
 
     public function setUpdated(\DateTime $updated): SectionInterface
@@ -214,14 +202,22 @@ class Section implements SectionInterface, SectionEntityInterface
         return Updated::fromDateTime($this->updated);
     }
 
-    public function onPrePersist(): void
+    public function setSection(SectionInterface $section): SectionHistoryInterface
     {
-        $this->created = new \DateTime("now");
-        $this->updated = new \DateTime("now");
+        $this->section = $section;
+
+        return $this;
     }
 
-    public function onPreUpdate(): void
+    public function getSection(): SectionInterface
     {
-        $this->updated = new \DateTime("now");
+        return $this->section;
+    }
+
+    public function removeSection(SectionInterface $section): SectionHistoryInterface
+    {
+        $this->section = null;
+
+        return $this;
     }
 }

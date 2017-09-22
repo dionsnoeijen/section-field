@@ -8,7 +8,7 @@ use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\Generator\GeneratorInterface;
 use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
-use Tardigrades\SectionField\SectionFieldInterface\SectionManager;
+use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 
 class DoctrineManyToOneGenerator implements GeneratorInterface
@@ -19,19 +19,19 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
     {
         $fieldConfig = $field->getConfig()->toArray();
 
-        /** @var SectionManager $sectionManager */
+        /** @var SectionManagerInterface $sectionManager */
         $sectionManager = $options[0]['sectionManager'];
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
-            /** @var SectionInterface $target */
-            $target = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
+            /** @var SectionInterface $to */
+            $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.manytoone.xml.php', [
-                        'thatHandle' => $fieldConfig['field']['to'],
-                        'thatFullyQualifiedClassName' => $target->getConfig()->getFullyQualifiedClassName()
+                        'toHandle' => $fieldConfig['field']['to'] . '_' . (string) $to->getVersion(),
+                        'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName()
                     ]
                 )
             );
