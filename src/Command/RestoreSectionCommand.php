@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Tardigrades\Entity\SectionEntityInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\Service\SectionHistoryManagerInterface;
 use Tardigrades\SectionField\Service\SectionManagerInterface;
