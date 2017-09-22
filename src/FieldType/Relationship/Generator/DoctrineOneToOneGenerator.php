@@ -46,16 +46,19 @@ class DoctrineOneToOneGenerator implements GeneratorInterface
             /** @var SectionInterface $to */
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
+            $fromVersion = $from->getVersion()->toInt() > 1 ? ('_' . $from->getVersion()->toInt()) : '';
+            $toVersion = $to->getVersion()->toInt() > 1 ? ('_' . $to->getVersion()->toInt()) : '';
+
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.onetooone.xml.php', [
                         'type' => $fieldConfig['field']['type'],
-                        'toPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']) . '_' . (string) $to->getVersion(),
+                        'toPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']) . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
-                        'fromHandle' => $fieldConfig['field']['handle'] . '_' . (string) $from->getVersion(),
-                        'fromPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']) . (string) $from->getVersion(),
+                        'fromHandle' => $fieldConfig['field']['handle'] . $fromVersion,
+                        'fromPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']) . $fromVersion,
                         'fromFullyQualifiedClassName' => $sectionConfig->getFullyQualifiedClassName(),
-                        'toHandle' => $fieldConfig['field']['to'] . '_' . $to->getVersion()
+                        'toHandle' => $fieldConfig['field']['to'] . $toVersion
                     ]
                 )
             );

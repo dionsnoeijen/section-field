@@ -27,10 +27,12 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
             /** @var SectionInterface $to */
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
+            $toVersion = $to->getVersion()->toInt() > 1 ? ('_' . $to->getVersion()->toInt()) : '';
+
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.manytoone.xml.php', [
-                        'toHandle' => $fieldConfig['field']['to'] . '_' . (string) $to->getVersion(),
+                        'toHandle' => $fieldConfig['field']['to'] . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName()
                     ]
                 )

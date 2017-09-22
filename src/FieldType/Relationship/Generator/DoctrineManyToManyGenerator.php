@@ -46,24 +46,26 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
             /** @var SectionInterface $to */
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
+            $fromVersion = $from->getVersion()->toInt() > 1 ? ('_' . $from->getVersion()->toInt()) : '';
+            $toVersion = $to->getVersion()->toInt() > 1 ? ('_' . $to->getVersion()->toInt()) : '';
+
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.manytomany.xml.php', [
                         'type' => $fieldConfig['field']['relationship-type'],
                         'toPluralHandle' => Inflector::pluralize(
                             $fieldConfig['field']['to']
-                        ) . '_' . (string) $to->getVersion(),
+                        ) . $toVersion,
                         'toFullyQualifiedClassName' => $to
                             ->getConfig()
                             ->getFullyQualifiedClassName(),
-                        'fromHandle' => $fieldConfig['field']['from'] . '_' . (string) $from->getVersion(),
+                        'fromHandle' => $fieldConfig['field']['from'] . $fromVersion,
                         'fromPluralHandle' => Inflector::pluralize(
                             $fieldConfig['field']['from']
-                        ) . '_' . (string) $from->getVersion(),
+                        ) . $fromVersion,
                         'fromFullyQualifiedClassName' => $sectionConfig
                             ->getFullyQualifiedClassName(),
-                        'toHandle' => $fieldConfig['field']['to'] . '_' .
-                            (string) $to->getVersion()
+                        'toHandle' => $fieldConfig['field']['to'] . $toVersion
                     ]
                 )
             );

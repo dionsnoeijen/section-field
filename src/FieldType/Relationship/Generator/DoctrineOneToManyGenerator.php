@@ -31,14 +31,17 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
             /** @var SectionInterface $to */
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
+            $fromVersion = $from->getVersion()->toInt() > 1 ? ('_' . $from->getVersion()->toInt()) : '';
+            $toVersion = $to->getVersion()->toInt() > 1 ? ('_' . $to->getVersion()->toInt()) : '';
+
             return Template::create(
                 TemplateLoader::load(
                     __DIR__ . '/../GeneratorTemplate/doctrine.onetomany.xml.php', [
-                        'toPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']) . '_' . (string) $to->getVersion(),
+                        'toPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']) . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
-                        'fromHandle' => $fieldConfig['field']['handle'] . '_' . (string) $from->getVersion(),
-                        'fromPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']) . '_' . (string) $from->getVersion(),
-                        'toHandle' => $fieldConfig['field']['to'] . '_' . (string) $to->getVersion()
+                        'fromHandle' => $fieldConfig['field']['handle'] . $fromVersion,
+                        'fromPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']) . $fromVersion,
+                        'toHandle' => $fieldConfig['field']['to'] . $toVersion
                     ]
                 )
             );
