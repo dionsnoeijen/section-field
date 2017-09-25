@@ -98,7 +98,7 @@ class DoctrineSectionManager implements SectionManagerInterface
     public function createByConfig(SectionConfig $sectionConfig): SectionInterface
     {
         $section = new SectionEntity();
-        $section->setVersion(0);
+        $section->setVersion(1);
         $this->updateByConfig($sectionConfig, $section);
 
         return $section;

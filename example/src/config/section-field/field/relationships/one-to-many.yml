@@ -1,0 +1,12 @@
+field:
+  name:
+    - nl_NL: One to many
+    - en_EN: One to many
+  handle: oneToMany
+  label:
+    - nl_NL: Relatie one to many
+    - en_EN: Relationship one to many
+  type: Relationship
+  variant: select
+  kind: one-to-many
+  to: otmMany

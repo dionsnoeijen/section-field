@@ -39,8 +39,13 @@ class Relationship extends FieldType
                 );
                 break;
             case self::ONE_TO_MANY:
-                echo 'one to many';
-                exit;
+                $this->addOneToManyToForm(
+                    $formBuilder,
+                    $readSection,
+                    $sectionManager,
+                    $sectionEntity,
+                    $section
+                );
                 break;
             case self::MANY_TO_ONE:
                 $this->addManyToOneToForm(
@@ -100,6 +105,21 @@ class Relationship extends FieldType
                 'mapped' => false
             ]
         );
+
+        return $formBuilder;
+    }
+
+    private function addOneToManyToForm(
+        FormBuilderInterface $formBuilder,
+        ReadSectionInterface $readSection,
+        SectionManagerInterface $sectionManager,
+        $sectionEntity,
+        SectionInterface $section
+    ): FormBuilderInterface {
+
+        $fieldConfig = $this->getConfig()->toArray();
+
+        
 
         return $formBuilder;
     }

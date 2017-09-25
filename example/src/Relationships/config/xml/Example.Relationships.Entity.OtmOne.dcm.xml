@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+  <entity name="Example\Relationships\Entity\OtmOne" table="otmOne">
+    <lifecycle-callbacks>
+      <lifecycle-callback type="prePersist" method="onPrePersist"/>
+      <lifecycle-callback type="preUpdate" method="onPreUpdate"/>
+    </lifecycle-callbacks>
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="created" nullable="true" type="datetime"/>
+    <field name="title" nullable="true" type="string"/>
+    <field name="updated" nullable="true" type="datetime"/>
+    <field name="slug" type="string" unique="true"/>
+    <one-to-many field="otmManies" target-entity="Example\Relationships\Entity\OtmMany" mapped-by="otmOne"/>
+  </entity>
+</doctrine-mapping>

@@ -1,6 +1,6 @@
 section:
   name: One to Many - Many
-  handle: otmOne
+  handle: otmMany
   fields:
     - title
     - slug

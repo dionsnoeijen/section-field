@@ -173,6 +173,22 @@ try {
                 'slug' => $slug
             ]);
             break;
+        case '/relationships/create-one-record-otm':
+            echo $templating->render('create-one-record-otm.html.twig');
+            break;
+        case '/relationships/update-one-record-otm':
+            echo $templating->render('update-one-record-otm.html.twig', [
+                'slug' => $slug
+            ]);
+            break;
+        case '/relationships/create-many-record-otm':
+            echo $templating->render('create-many-record-otm.html.twig');
+            break;
+        case '/relationships/update-many-record-otm':
+            echo $templating->render('update-many-record-otm.html.twig', [
+                'slug' => $slug
+            ]);
+            break;
         case '/relationships/many-to-many':
             echo $templating->render('many-to-many.html.twig');
             break;

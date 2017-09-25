@@ -4,6 +4,7 @@ section:
   fields:
     - title
     - slug
+    - oneToMany
     - updated
     - created
   default: title

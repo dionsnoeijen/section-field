@@ -27,11 +27,12 @@ class EntityPrePersistGenerator implements GeneratorInterface
             $field->getConfig()->getPropertyName(),
             $asString
         );
+
         $asString = str_replace(
             '{{ assignment }}',
             self::makeSlugAssignment(
                 SlugValueObject::create(
-                    $field->getConfig()->getTypeConfig()
+                    $field->getConfig()->getGeneratorConfig()->toArray()['entity']['slugFields']
                 )
             ),
             $asString

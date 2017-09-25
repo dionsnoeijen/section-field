@@ -11,6 +11,7 @@ use Tardigrades\FieldType\ValueObject\Template;
 use Tardigrades\SectionField\Generator\Loader\TemplateLoader;
 use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
+use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class DoctrineOneToManyGenerator implements GeneratorInterface
 {
@@ -20,18 +21,15 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
     {
         $fieldConfig = $field->getConfig()->toArray();
 
-        print_r($fieldConfig);
-
         /** @var SectionManagerInterface $sectionManager */
         $sectionManager = $options[0]['sectionManager'];
 
+        /** @var SectionConfig $sectionConfig */
+        $sectionConfig = $options[0]['sectionConfig'];
+
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
-            $handle = Handle::fromString($fieldConfig['field']['handle']);
-            /** @var SectionInterface $from */
-            if (!empty($fieldConfig['field']['from'])) {
-                $handle = Handle::fromString($fieldConfig['field']['from']);
-            }
+            $handle = $sectionConfig->getHandle();
             $from = $sectionManager->readByHandle($handle);
 
             /** @var SectionInterface $to */

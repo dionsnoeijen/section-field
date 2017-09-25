@@ -2,6 +2,11 @@
 
 {% block content %}
 
-    {% include 'form-one-mto.html.twig' %}
+    {% include 'form-one-mto.html.twig' with {
+            form: sectionForm('Example.Relationships.Entity.MtoOne', {
+                redirect: '/relationships/many-to-one'
+            })
+        }
+    %}
 
 {% endblock %}
