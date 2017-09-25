@@ -12,6 +12,7 @@ use Tardigrades\SectionField\ValueObject\Name;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\Updated;
 use Tardigrades\SectionField\ValueObject\Version;
+use Tardigrades\SectionField\ValueObject\Versioned;
 
 class SectionHistory implements SectionInterface, SectionHistoryInterface
 {
@@ -44,6 +45,9 @@ class SectionHistory implements SectionInterface, SectionHistoryInterface
 
     /** @var \DateTime */
     protected $updated;
+
+    /** @var \DateTime */
+    protected $versioned;
 
     public function __construct(
         Collection $fields = null,
@@ -209,6 +213,18 @@ class SectionHistory implements SectionInterface, SectionHistoryInterface
     public function getUpdatedValueObject(): Updated
     {
         return Updated::fromDateTime($this->updated);
+    }
+
+    public function getVersioned(): Versioned
+    {
+        return Versioned::fromDateTime($this->versioned);
+    }
+
+    public function setVersioned(\DateTime $versioned): SectionHistoryInterface
+    {
+        $this->versioned = $versioned;
+
+        return $this;
     }
 
     public function setSection(SectionInterface $section): SectionHistoryInterface

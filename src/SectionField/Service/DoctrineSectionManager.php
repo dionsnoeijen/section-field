@@ -130,6 +130,7 @@ class DoctrineSectionManager implements SectionManagerInterface
 
         /** @var SectionInterface $newSectionHistory */
         $newSectionHistory = $this->copySectionDataToSectionHistoryEntity($activeSection); // 2
+        $newSectionHistory->setVersioned(new \DateTime()); // 3
         $this->sectionHistoryManager->create($newSectionHistory); // 3
 
         $updatedActiveSection = $this->copySectionHistoryDataToSectionEntity($sectionFromHistory, $activeSection); // 4
@@ -176,6 +177,7 @@ class DoctrineSectionManager implements SectionManagerInterface
     {
         /** @var SectionInterface $sectionHistory */
         $sectionHistory = $this->copySectionDataToSectionHistoryEntity($section); // 1
+        $sectionHistory->setVersioned(new \DateTime()); // 2
         $this->sectionHistoryManager->create($sectionHistory); // 2
 
         $section->setVersion(1 + $section->getVersion()->toInt()); // 3

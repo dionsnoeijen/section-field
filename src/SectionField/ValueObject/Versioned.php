@@ -3,24 +3,24 @@ declare (strict_types=1);
 
 namespace Tardigrades\SectionField\ValueObject;
 
-final class Created
+final class Versioned
 {
     /** @var \DateTime */
-    private $created;
+    private $versioned;
 
     private function __construct(\DateTime $created)
     {
-        $this->created = $created;
+        $this->versioned = $created;
     }
 
     public function __toString(): string
     {
-        return $this->created->format(\DateTime::ATOM);
+        return $this->versioned->format(\DateTime::ATOM);
     }
 
     public function getDateTime(): \DateTime
     {
-        return $this->created;
+        return $this->versioned;
     }
 
     public static function fromDateTime(\DateTime $created): self

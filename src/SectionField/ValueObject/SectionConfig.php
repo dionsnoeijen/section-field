@@ -4,13 +4,12 @@ declare (strict_types=1);
 namespace Tardigrades\SectionField\ValueObject;
 
 use Assert\Assertion;
+use Assert\InvalidArgumentException;
 use Tardigrades\Helper\ArrayConverter;
 
 final class SectionConfig
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $sectionConfig;
 
     private function __construct(array $sectionConfig)
@@ -59,11 +58,38 @@ final class SectionConfig
 
     public function getSlugField(): SlugField
     {
-        Assertion::keyExists($this->sectionConfig['section'], 'slug', 'Slug is not defined');
-        Assertion::notEmpty($this->sectionConfig['section']['slug'], 'The slug field must have a value');
-        Assertion::string($this->sectionConfig['section']['slug'], 'The slug field must be a string');
+        try {
+            Assertion::keyExists($this->sectionConfig['section'], 'slug', 'Slug is not defined');
+            Assertion::notEmpty($this->sectionConfig['section']['slug'], 'The slug field must have a value');
+            Assertion::string($this->sectionConfig['section']['slug'], 'The slug field must be a string');
+            return SlugField::fromString($this->sectionConfig['section']['slug']);
+        } catch (InvalidArgumentException $exception) {
+            return SlugField::fromString('slug');
+        }
+    }
 
-        return SlugField::fromString($this->sectionConfig['section']['slug']);
+    public function getCreatedField(): CreatedField
+    {
+        try {
+            Assertion::keyExists($this->sectionConfig['section'], 'created', 'Created is not defined');
+            Assertion::notEmpty($this->sectionConfig['section']['created'], 'The created field must have a value');
+            Assertion::string($this->sectionConfig['section']['created'], 'The created field must be a string');
+            return CreatedField::fromString($this->sectionConfig['section']['created']);
+        } catch (InvalidArgumentException $exception) {
+            return CreatedField::fromString('created');
+        }
+    }
+
+    public function getUpdatedField(): UpdatedField
+    {
+        try {
+            Assertion::keyExists($this->sectionConfig['section'], 'updated', 'Updated is not defined');
+            Assertion::notEmpty($this->sectionConfig['section']['created'], 'The updated field must have a value');
+            Assertion::string($this->sectionConfig['section']['created'], 'The updated field must be a string');
+            return UpdatedField::fromString($this->sectionConfig['section']['updated']);
+        } catch (InvalidArgumentException $exception) {
+            return UpdatedField::fromString('updated');
+        }
     }
 
     public function getGeneratorConfig(): GeneratorConfig
