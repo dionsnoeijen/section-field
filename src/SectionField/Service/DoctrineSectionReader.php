@@ -8,6 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Tardigrades\FieldType\Slug\ValueObject\Slug;
 use Tardigrades\SectionField\ValueObject\After;
 use Tardigrades\SectionField\ValueObject\Before;
+use Tardigrades\SectionField\ValueObject\CreatedField;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\Limit;
@@ -43,9 +44,20 @@ class DoctrineSectionReader implements ReadSectionInterface
         );
         $this->addLimitToQuery($readOptions->getLimit());
         $this->addOffsetToQuery($readOptions->getOffset());
-        $this->addOrderByToQuery($readOptions->getOrderBy(), $readOptions->getSection()[0]);
-        $this->addBeforeToQuery($readOptions->getBefore(), $readOptions->getSection()[0]);
-        $this->addAfterToQuery($readOptions->getAfter(), $readOptions->getSection()[0]);
+        $this->addOrderByToQuery(
+            $readOptions->getOrderBy(),
+            $readOptions->getSection()[0]
+        );
+        $this->addBeforeToQuery(
+            $sectionConfig->getCreatedField(),
+            $readOptions->getBefore(),
+            $readOptions->getSection()[0]
+        );
+        $this->addAfterToQuery(
+            $sectionConfig->getCreatedField(),
+            $readOptions->getAfter(),
+            $readOptions->getSection()[0]
+        );
 
         $query = $this->queryBuilder->getQuery();
         $results = $query->getResult();
@@ -106,24 +118,24 @@ class DoctrineSectionReader implements ReadSectionInterface
         }
     }
 
-    /**
-     * @todo: Created has the same problem as the slug field. Implement similar solution.
-     *
-     * @param Before $before
-     * @param FullyQualifiedClassName $section
-     */
-    private function addBeforeToQuery(Before $before = null, FullyQualifiedClassName $section = null): void
-    {
+    private function addBeforeToQuery(
+        CreatedField $createdField,
+        Before $before = null,
+        FullyQualifiedClassName $section = null
+    ): void {
         if ($before instanceof Before && $section instanceof FullyQualifiedClassName) {
-            $this->queryBuilder->where($section->getClassName() . '.created < :before');
+            $this->queryBuilder->where($section->getClassName() . '.' . (string) $createdField . ' < :before');
             $this->queryBuilder->setParameter('before', (string) $before);
         }
     }
 
-    private function addAfterToQuery(After $after = null, FullyQualifiedClassName $section = null): void
-    {
+    private function addAfterToQuery(
+        CreatedField $createdField,
+        After $after = null,
+        FullyQualifiedClassName $section = null
+    ): void {
         if ($after instanceof After && $section instanceof FullyQualifiedClassName) {
-            $this->queryBuilder->where($section->getClassName() . '.created > :after');
+            $this->queryBuilder->where($section->getClassName() . '.' . (string) $createdField . ' > :after');
             $this->queryBuilder->setParameter('after', (string) $after);
         }
     }

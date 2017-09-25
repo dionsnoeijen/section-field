@@ -9,7 +9,9 @@ section:
     - authorBlog
     - created
     - updated
-  slug: blogSlug #assign the field that will function as slug
+  slug: blogSlug # assign the field that will function as slug
+  created: created # assign the field that will function as created date
+  updated: updated # assign the field that will function as updated date
   default: title
   namespace: Example\Blog
   generator:
