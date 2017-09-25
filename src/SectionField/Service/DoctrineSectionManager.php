@@ -12,6 +12,7 @@ use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\Id;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
+use Tardigrades\SectionField\ValueObject\Version;
 
 class DoctrineSectionManager implements SectionManagerInterface
 {
@@ -131,6 +132,8 @@ class DoctrineSectionManager implements SectionManagerInterface
         /** @var SectionInterface $newSectionHistory */
         $newSectionHistory = $this->copySectionDataToSectionHistoryEntity($activeSection); // 2
         $newSectionHistory->setVersioned(new \DateTime()); // 3
+        $version = $this->getHighestVersion($newSectionHistory->getHandle());
+        $newSectionHistory->setVersion(1 + $version->toInt());
         $this->sectionHistoryManager->create($newSectionHistory); // 3
 
         $updatedActiveSection = $this->copySectionHistoryDataToSectionEntity($sectionFromHistory, $activeSection); // 4
@@ -180,7 +183,9 @@ class DoctrineSectionManager implements SectionManagerInterface
         $sectionHistory->setVersioned(new \DateTime()); // 2
         $this->sectionHistoryManager->create($sectionHistory); // 2
 
-        $section->setVersion(1 + $section->getVersion()->toInt()); // 3
+        $version = $this->getHighestVersion($section->getHandle());
+
+        $section->setVersion(1 + $version->toInt()); // 3
 
         $section->removeFields(); // 4
 
@@ -198,6 +203,21 @@ class DoctrineSectionManager implements SectionManagerInterface
         $this->entityManager->flush(); // 9
 
         return $section;
+    }
+
+    public function getHighestVersion(Handle $handle): Version
+    {
+        $version = Version::fromInt(1);
+        $handle = (string) $handle;
+        $query = $this->entityManager->createQuery(
+            "SELECT MAX(section.version) FROM Tardigrades\Entity\SectionHistory section WHERE section.handle = '{$handle}'"
+        );
+        $results = $query->getResult();
+        if (empty($results)) {
+            return $version;
+        }
+
+        return Version::fromInt((int) $results[0][1]);
     }
 
     public function readByHandle(Handle $handle): SectionInterface

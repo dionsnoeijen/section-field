@@ -10,7 +10,6 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Tardigrades\Entity\SectionEntityInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\Service\SectionNotFoundException;
@@ -57,7 +56,7 @@ abstract class SectionCommand extends Command
         $table->render();
     }
 
-    protected function getSection(InputInterface $input, OutputInterface $output): SectionEntityInterface
+    protected function getSection(InputInterface $input, OutputInterface $output): SectionInterface
     {
         $question = new Question('<question>Choose record.</question> (#id): ');
 
