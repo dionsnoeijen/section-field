@@ -138,24 +138,34 @@ section:
     <hr />
     <div class="row">
         <div class="col-md-6">
-            <h4>Many</h4>
+            <h4>Many - Has relationship to one</h4>
+            <p>This relationship is defined in the section config with a field.</p>
+            <hr />
             <ul>
-                <li>title</li>
-                <li>title</li>
-                <li>title</li>
-                <li>title</li>
-                <li>title</li>
+                {% for entry in section('mtoMany').limit(10).fetch() %}
+                    <li>{{ entry.default }}
+                        <ul>
+                            <li>{{ entry.mtoOne.default }}</li>
+                        </ul>
+                    </li>
+                {% endfor %}
             </ul>
             <a class="btn btn-default" href="/relationships/create-many-record-mto">Create</a>
         </div>
         <div class="col-md-6">
-            <h4>One</h4>
+            <h4>One - Has relationship to many</h4>
+            <p>This relationship is automatically added, because the opposing side has the relationship. This is only for reading the data, if you wan't the opposing side represented in the form, you will have to add a field to the "MtoOne" config because SexyField doesn't want to guess your field preferences.</p>
+            <hr />
             <ul>
-                <li>title</li>
-                <li>title</li>
-                <li>title</li>
-                <li>title</li>
-                <li>title</li>
+            {% for entry in section('mtoOne').limit(10).fetch() %}
+                <li>{{ entry.default }}
+                    <ul>
+                        {% for many in entry.mtoManies %}
+                            <li>{{ many.default }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
             </ul>
             <a class="btn btn-default" href="/relationships/create-one-record-mto">Create</a>
         </div>

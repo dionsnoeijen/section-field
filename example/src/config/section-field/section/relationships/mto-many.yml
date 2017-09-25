@@ -8,6 +8,9 @@ section:
     - updated
     - created
   default: title
+  created: created
+  updated: updated
+  slug: slug
   namespace: Example\Relationships
   generator:
     entity:

@@ -122,6 +122,7 @@ class Form implements SectionFormInterface
             $fieldTypeFullyQualifiedClassName = (string) $field
                 ->getFieldType()
                 ->getFullyQualifiedClassName();
+
             /** @var FieldTypeInterface $fieldType */
             $fieldType = new $fieldTypeFullyQualifiedClassName;
             $fieldType->setConfig($field->getConfig());

@@ -20,13 +20,19 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
     {
         $fieldConfig = $field->getConfig()->toArray();
 
+        print_r($fieldConfig);
+
         /** @var SectionManagerInterface $sectionManager */
         $sectionManager = $options[0]['sectionManager'];
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
+            $handle = Handle::fromString($fieldConfig['field']['handle']);
             /** @var SectionInterface $from */
-            $from = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['handle']));
+            if (!empty($fieldConfig['field']['from'])) {
+                $handle = Handle::fromString($fieldConfig['field']['from']);
+            }
+            $from = $sectionManager->readByHandle($handle);
 
             /** @var SectionInterface $to */
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
@@ -39,8 +45,8 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
                     __DIR__ . '/../GeneratorTemplate/doctrine.onetomany.xml.php', [
                         'toPluralHandle' => Inflector::pluralize($fieldConfig['field']['to']) . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
-                        'fromHandle' => $fieldConfig['field']['handle'], // Don't version this one, it's mapped to the entity method.
-                        'fromPluralHandle' => Inflector::pluralize($fieldConfig['field']['handle']) . $fromVersion,
+                        'fromHandle' => (string) $handle, // Don't version this one, it's mapped to the entity method.
+                        'fromPluralHandle' => Inflector::pluralize((string) $handle) . $fromVersion,
                         'toHandle' => $fieldConfig['field']['to'] . $toVersion
                     ]
                 )

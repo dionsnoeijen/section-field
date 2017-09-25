@@ -6,6 +6,7 @@ namespace Tardigrades\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Yaml\Yaml;
 use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
@@ -46,7 +47,10 @@ class UpdateSectionCommand extends SectionCommand
                     file_get_contents($config)
                 )
             );
-            $this->sectionManager->updateByConfig($sectionConfig, $section);
+
+            $inHistory = $this->getHelper('question')->ask($input, $output, new ConfirmationQuestion('<comment>Do you want to store the current version in history?</comment> (y/n) ', false));
+
+            $this->sectionManager->updateByConfig($sectionConfig, $section, $inHistory);
         } catch (\Exception $exception) {
             $output->writeln("<error>Invalid configuration file.  {$exception->getMessage()}</error>");
             return;

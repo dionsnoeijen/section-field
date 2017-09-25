@@ -71,9 +71,14 @@ class MtoMany
         return $this;
     }
 
-    public function getMtoOne(): MtoOne
+    public function getMtoOne(): ?MtoOne
     {
         return $this->mtoOne;
+    }
+
+    public function hasMtoOne(): bool
+    {
+        return !empty($this->mtoOne);
     }
 
     public function setMtoOne(MtoOne $mtoOne): MtoMany
@@ -82,7 +87,7 @@ class MtoMany
         return $this;
     }
 
-    public function removeMtoOne(MtoOne $mtoOne): MtoMany
+    public function removeMtoOne(): MtoMany
     {
         $this->mtoOne = null;
         return $this;

@@ -41,7 +41,8 @@ $container
         ],
         Setup::createXMLMetadataConfiguration([
             __DIR__.'/../src/config/xml',
-            __DIR__.'/src/Blog/config/xml'
+            __DIR__.'/src/Blog/config/xml',
+            __DIR__.'/src/Relationships/config/xml'
         ], true)
     ]);
 $container->set('request_stack', $requestStack);

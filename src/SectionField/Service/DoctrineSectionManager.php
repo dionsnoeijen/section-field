@@ -174,18 +174,24 @@ class DoctrineSectionManager implements SectionManagerInterface
      *
      * @param SectionConfig $sectionConfig
      * @param SectionInterface $section
+     * @param bool $history
+     *
      * @return SectionInterface
      */
-    public function updateByConfig(SectionConfig $sectionConfig, SectionInterface $section): SectionInterface
-    {
-        /** @var SectionInterface $sectionHistory */
-        $sectionHistory = $this->copySectionDataToSectionHistoryEntity($section); // 1
-        $sectionHistory->setVersioned(new \DateTime()); // 2
-        $this->sectionHistoryManager->create($sectionHistory); // 2
+    public function updateByConfig(
+        SectionConfig $sectionConfig,
+        SectionInterface $section,
+        bool $history = false
+    ): SectionInterface {
 
-        $version = $this->getHighestVersion($section->getHandle());
-
-        $section->setVersion(1 + $version->toInt()); // 3
+        if ($history) {
+            /** @var SectionInterface $sectionHistory */
+            $sectionHistory = $this->copySectionDataToSectionHistoryEntity($section); // 1
+            $sectionHistory->setVersioned(new \DateTime()); // 2
+            $this->sectionHistoryManager->create($sectionHistory); // 2
+            $version = $this->getHighestVersion($section->getHandle());
+            $section->setVersion(1 + $version->toInt()); // 3
+        }
 
         $section->removeFields(); // 4
 
@@ -272,6 +278,7 @@ class DoctrineSectionManager implements SectionManagerInterface
                     $relationships[$sectionHandle][$fieldHandle] = [
                         'kind' => $field->getConfig()->getRelationshipKind(),
                         'to' => $field->getConfig()->getRelationshipTo(),
+                        'from' => $sectionHandle,
                         'fullyQualifiedClassName' => $field->getFieldType()->getFullyQualifiedClassName()
                     ];
 

@@ -59,8 +59,10 @@ abstract class Generator implements GeneratorInterface
                         'label' => ['en_EN' => $fieldHandle],
                         'kind' => $relationship['kind'],
                         'to' => $relationship['to'],
+                        'from' => $relationship['from']
                     ]
                 ];
+
                 if (!empty($relationship['from'])) {
                     $config['field']['from'] = $relationship['from'];
                 }

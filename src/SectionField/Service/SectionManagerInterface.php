@@ -16,7 +16,11 @@ interface SectionManagerInterface
     public function update(SectionInterface $entity): void;
     public function delete(SectionInterface $entity): void;
     public function createByConfig(SectionConfig $sectionConfig): SectionInterface;
-    public function updateByConfig(SectionConfig $sectionConfig, SectionInterface $section): SectionInterface;
+    public function updateByConfig(
+        SectionConfig $sectionConfig,
+        SectionInterface $section,
+        bool $history = true
+    ): SectionInterface;
     public function restoreFromHistory(SectionInterface $sectionFromHistory): SectionInterface;
     public function getRelationshipsOfAll(): array;
     public function readByHandle(Handle $handle): SectionInterface;

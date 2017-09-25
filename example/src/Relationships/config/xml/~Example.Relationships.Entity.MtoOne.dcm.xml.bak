@@ -12,6 +12,5 @@
     <field name="title" nullable="true" type="string"/>
     <field name="updated" nullable="true" type="datetime"/>
     <field name="slug" type="string" unique="true"/>
-    <one-to-many field="mtoManies" fetch="EXTRA_LAZY" target-entity="Example\Relationships\Entity\MtoMany" mapped-by="manyToOne"/>
   </entity>
 </doctrine-mapping>

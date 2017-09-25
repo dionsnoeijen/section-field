@@ -35,9 +35,14 @@ public function remove<?php echo $methodName; ?>(<?php echo $entity; ?> $<?php e
 <?php } ?>
 
 <?php if ($kind === 'many-to-one') { ?>
-public function get<?php echo $methodName; ?>(): <?php echo $entity . PHP_EOL; ?>
+public function get<?php echo $methodName; ?>(): ?<?php echo $entity . PHP_EOL; ?>
 {
     return $this-><?php echo $propertyName; ?>;
+}
+
+public function has<?php echo $methodName; ?>(): bool
+{
+    return !empty($this-><?php echo $propertyName; ?>);
 }
 
 public function set<?php echo $methodName; ?>(<?php echo $entity; ?> $<?php echo $propertyName; ?>): {{ section }}
@@ -47,7 +52,7 @@ public function set<?php echo $methodName; ?>(<?php echo $entity; ?> $<?php echo
     return $this;
 }
 
-public function remove<?php echo $methodName; ?>(<?php echo $entity; ?> $<?php echo $propertyName; ?>): {{ section }}
+public function remove<?php echo $methodName; ?>(): {{ section }}
 {
     $this-><?php echo $propertyName; ?> = null;
 

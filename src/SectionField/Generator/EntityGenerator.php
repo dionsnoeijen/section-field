@@ -40,6 +40,7 @@ class EntityGenerator extends Generator implements GeneratorInterface
 
         $fields = $this->fieldManager->readByHandles($this->sectionConfig->getFields());
         $fields = $this->addOpposingRelationships($section, $fields);
+
         $this->generateElements($fields);
 
         return Writable::create(
@@ -121,12 +122,16 @@ class EntityGenerator extends Generator implements GeneratorInterface
 
     protected function generateSlugFieldGetMethod(SlugField $slugField): string
     {
-        return <<<EOT
+        if ((string) $slugField !== 'slug') {
+            return <<<EOT
 public function getSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
 {
     return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString(\$this->{$slugField});
 }
 EOT;
+        }
+
+        return '';
     }
 
     protected function generateDefaultFieldGetMethod(string $defaultField): string
