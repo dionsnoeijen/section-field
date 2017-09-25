@@ -48,18 +48,12 @@ abstract class Generator implements GeneratorInterface
                 $fieldHandle = str_replace('-opposite', '', $fieldHandle);
 
                 $oppositeRelationshipField = new FieldEntity();
-                // @todo: I sense the field labels are going to be a problem.
-                // I propbably need a config value for the default language and use it here
-                // Also, the relationship opposite side might require more configuration
-                // make that available in the field config and use it here
                 $config = [
                     'field' => [
                         'name' => $fieldHandle,
                         'handle' => $fieldHandle,
-                        'label' => ['en_EN' => $fieldHandle],
                         'kind' => $relationship['kind'],
-                        'to' => $relationship['to'],
-                        'from' => $relationship['from']
+                        'to' => $relationship['to']
                     ]
                 ];
 
