@@ -121,6 +121,9 @@ class Relationship extends FieldType
             ->getConfig()
             ->getFullyQualifiedClassName();
 
+        $toHandle = $fieldConfig['field']['to'];
+        $selectedEntity = $sectionEntity->{'get' . ucfirst($fieldConfig['field']['to'])}();
+
         try {
             $entries = $readSection->read(ReadOptions::fromArray([
                 'section' => $fullyQualifiedClassName
@@ -129,12 +132,7 @@ class Relationship extends FieldType
             $entries = [];
         }
 
-        $toHandle = $fieldConfig['field']['to'];
-        $selectedEntity = $sectionEntity->{'get' . ucfirst($fieldConfig['field']['to'])}();
-
-        $choices = [
-            '' => '...'
-        ];
+        $choices = [ '' => '...' ];
         foreach ($entries as $entry) {
             $choices[$entry->getDefault()] = $entry;
         }

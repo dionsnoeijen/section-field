@@ -14,6 +14,43 @@
     </div>
     <div class="row">
         <div class="col-md-6">
+            <h4>Many - Has relationship to one</h4>
+            <p>This relationship is defined in the section config with a field. ("manyToOne")</p>
+            <hr />
+            <ul>
+                {% for entry in section('mtoMany').limit(10).fetch() %}
+                    <li>{{ entry.default }} <a href="/relationships/update-many-record-mto/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a>
+                        <ul>
+                            <li>{{ entry.mtoOne.default }}</li>
+                        </ul>
+                        <hr />
+                    </li>
+                {% endfor %}
+            </ul>
+            <a class="btn btn-default" href="/relationships/create-many-record-mto">Create "Many" entry</a>
+        </div>
+        <div class="col-md-6">
+            <h4>One - Has relationship to many</h4>
+            <p>This relationship is automatically added, because the opposing side has the relationship. This is only for reading the data, if you wan't the opposing side represented in the form, you will have to add a field to the "MtoOne" config because SexyField doesn't want to guess your field preferences.</p>
+            <hr />
+            <ul>
+                {% for entry in section('mtoOne').limit(10).fetch() %}
+                    <li>{{ entry.default }} <a href="/relationships/update-one-record-mto/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a>
+                        <ul>
+                            {% for many in entry.mtoManies %}
+                                <li>{{ many.default }}</li>
+                            {% endfor %}
+                        </ul>
+                        <hr />
+                    </li>
+                {% endfor %}
+            </ul>
+            <a class="btn btn-default" href="/relationships/create-one-record-mto">Create "One" entry</a>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
             <p>This is a setup for a basic Many to one field. For the example I have a "Many" side. And a "One" side. Both sides are modeled as a section that contains some basic fields.</p>
 
             <h4>The fields are configured as follows:</h4>
@@ -53,8 +90,6 @@ field:
     - nl_NL: Onderdeel voor url segment
     - en_EN: Composit for url segment
   type: Slug
-  length: 255 #move to generator->doctrine config
-  typeConfig: [ title, created|DateTime|Y-m-d ] #move to generator config
   generator:
     entity:
       slugFields: [ title, created|DateTime|Y-m-d ]
@@ -93,6 +128,21 @@ field:
   entityEvents:
     - prePersist
     - preUpdate
+            </pre>
+            <h5>The manyToOne field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Many to One
+    - en_EN: Many to One
+  handle: manyToOne
+  label:
+    - nl_NL: Relatie many to one
+    - en_EN: Relationship many to one
+  type: Relationship
+  variant: select
+  kind: many-to-one
+  to: mtoOne
             </pre>
         </div>
         <div class="col-md-6">
@@ -138,43 +188,12 @@ section:
     entity:
       title:
         NotBlank: ~
-
             </pre>
         </div>
     </div>
-    <hr />
     <div class="row">
-        <div class="col-md-6">
-            <h4>Many - Has relationship to one</h4>
-            <p>This relationship is defined in the section config with a field.</p>
+        <div class="col-md-12">
             <hr />
-            <ul>
-                {% for entry in section('mtoMany').limit(10).fetch() %}
-                    <li>{{ entry.default }}
-                        <ul>
-                            <li>{{ entry.mtoOne.default }}</li>
-                        </ul>
-                    </li>
-                {% endfor %}
-            </ul>
-            <a class="btn btn-default" href="/relationships/create-many-record-mto">Create</a>
-        </div>
-        <div class="col-md-6">
-            <h4>One - Has relationship to many</h4>
-            <p>This relationship is automatically added, because the opposing side has the relationship. This is only for reading the data, if you wan't the opposing side represented in the form, you will have to add a field to the "MtoOne" config because SexyField doesn't want to guess your field preferences.</p>
-            <hr />
-            <ul>
-            {% for entry in section('mtoOne').limit(10).fetch() %}
-                <li>{{ entry.default }}
-                    <ul>
-                        {% for many in entry.mtoManies %}
-                            <li>{{ many.default }}</li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-            </ul>
-            <a class="btn btn-default" href="/relationships/create-one-record-mto">Create</a>
         </div>
     </div>
 {% endblock %}

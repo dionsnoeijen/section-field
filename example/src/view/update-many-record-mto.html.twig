@@ -1,0 +1,12 @@
+{% extends "master.html.twig" %}
+
+{% block content %}
+
+    {% include 'form-many-mto.html.twig' with {
+        form: sectionForm('Example.Relationships.Entity.MtoMany', {
+            slug: slug,
+            redirect: '/relationships/many-to-one'
+        })
+    } %}
+
+{% endblock %}

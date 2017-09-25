@@ -132,6 +132,16 @@ if (strpos($requestUri, '/blog/edit-author') !== false) {
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
+if (strpos($requestUri, '/relationships/update-many-record-mto') !== false) {
+    $requestUri = '/relationships/update-many-record-mto';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
+if (strpos($requestUri, '/relationships/update-one-record-mto') !== false) {
+    $requestUri = '/relationships/update-one-record-mto';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
 
 try {
     switch ($requestUri) {
@@ -151,13 +161,17 @@ try {
             echo $templating->render('create-many-record-mto.html.twig');
             break;
         case '/relationships/update-many-record-mto':
-            echo $templating->render('update-many-record-mto.html.twig');
+            echo $templating->render('update-many-record-mto.html.twig', [
+                'slug' => $slug
+            ]);
             break;
         case '/relationships/create-one-record-mto':
             echo $templating->render('create-one-record-mto.html.twig');
             break;
         case '/relationships/update-one-record-mto':
-            echo $templating->render('update-one-record-mto.html.twig');
+            echo $templating->render('update-one-record-mto.html.twig', [
+                'slug' => $slug
+            ]);
             break;
         case '/relationships/many-to-many':
             echo $templating->render('many-to-many.html.twig');

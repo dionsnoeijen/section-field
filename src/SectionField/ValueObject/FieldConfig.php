@@ -64,15 +64,6 @@ final class FieldConfig
         return $this->fieldConfig['field']['to'];
     }
 
-    public function getTypeConfig(): array
-    {
-        Assertion::keyIsset($this->fieldConfig['field'], 'typeConfig', 'No typeConfig defined');
-        Assertion::notEmpty($this->fieldConfig['field']['typeConfig'], 'Type config is empty');
-        Assertion::isArray($this->fieldConfig['field']['typeConfig'], 'Type config is not an array');
-
-        return $this->fieldConfig['field']['typeConfig'];
-    }
-
     public function getPropertyName(): PropertyName
     {
         return PropertyName::fromString($this->fieldConfig['field']['handle']);

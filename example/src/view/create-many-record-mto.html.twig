@@ -2,6 +2,8 @@
 
 {% block content %}
 
-    {% include 'form-many-mto.html.twig' %}
+    {% include 'form-many-mto.html.twig' with {
+        form: sectionForm('Example.Relationships.Entity.MtoMany')
+    }  %}
 
 {% endblock %}
