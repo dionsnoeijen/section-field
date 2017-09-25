@@ -3,6 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\Twig;
 
+use Tardigrades\SectionField\Service\EntryNotFoundException;
 use Tardigrades\SectionField\Service\ReadOptions;
 use Tardigrades\SectionField\Service\ReadSectionInterface;
 use Twig_Extension;
@@ -15,6 +16,9 @@ class SectionTwigExtension extends Twig_Extension
 
     /** @var array */
     private $options;
+
+    /** @var bool */
+    private $throwNotFound = false;
 
     public function __construct(ReadSectionInterface $readSection)
     {
@@ -160,6 +164,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function id(int $id): SectionTwigExtension
     {
+        $this->throwNotFound = true;
         $this->options[ReadOptions::ID] = $id;
 
         return $this;
@@ -173,6 +178,7 @@ class SectionTwigExtension extends Twig_Extension
      */
     public function slug(string $slug): SectionTwigExtension
     {
+        $this->throwNotFound = true;
         $this->options[ReadOptions::SLUG] = $slug;
 
         return $this;
@@ -217,6 +223,16 @@ class SectionTwigExtension extends Twig_Extension
     {
         $options = array_merge($this->options, $options);
 
-        return $this->readSection->read(ReadOptions::fromArray($options));
+        if (!$this->throwNotFound) {
+            try {
+                $entries = $this->readSection->read(ReadOptions::fromArray($options));
+            } catch (EntryNotFoundException $exception) {
+                $entries = new \ArrayIterator();
+            }
+        } else {
+            $entries = $this->readSection->read(ReadOptions::fromArray($options));
+        }
+
+        return $entries;
     }
 }
