@@ -81,6 +81,7 @@ YML;
             ->andReturn($this->givenAnArrayOfSections()[0]);
 
         $commandTester->setInputs([1]);
+        $commandTester->setInputs([1, 'y']);
         $commandTester->execute(
             [
                 'command' => $command->getName(),
