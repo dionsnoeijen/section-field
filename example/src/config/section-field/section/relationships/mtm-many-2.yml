@@ -3,6 +3,7 @@ section:
   handle: mtm2
   fields:
     - title
+    - toOne
     - slug
     - updated
     - created

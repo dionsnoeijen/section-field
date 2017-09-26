@@ -1,0 +1,13 @@
+field:
+  name:
+    - nl_NL: Many to Many
+    - en_EN: Many to Many
+  handle: toTwo
+  label:
+    - nl_NL: Relatie naar MTM2
+    - en_EN: Relationship to MTM2
+  type: Relationship
+  variant: select
+  kind: many-to-many
+  relationship-type: unidirectional
+  to: mtm2
