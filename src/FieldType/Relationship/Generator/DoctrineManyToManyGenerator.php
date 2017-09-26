@@ -40,8 +40,9 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
 
+            $handle = $sectionConfig->getHandle();
             /** @var SectionInterface $from */
-            $from = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['from']));
+            $from = $sectionManager->readByHandle($handle);
 
             /** @var SectionInterface $to */
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
@@ -59,9 +60,9 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
                         'toFullyQualifiedClassName' => $to
                             ->getConfig()
                             ->getFullyQualifiedClassName(),
-                        'fromHandle' => $fieldConfig['field']['from'] . $fromVersion,
+                        'fromHandle' => (string) $handle . $fromVersion,
                         'fromPluralHandle' => Inflector::pluralize(
-                            $fieldConfig['field']['from']
+                            (string) $handle
                         ) . $fromVersion,
                         'fromFullyQualifiedClassName' => $sectionConfig
                             ->getFullyQualifiedClassName(),
