@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Tardigrades\FieldType\Relationship;
 
 use Doctrine\Common\Util\Inflector;
-use Mockery\Exception;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tardigrades\Entity\SectionInterface;
@@ -43,8 +42,7 @@ class Relationship extends FieldType
                     $formBuilder,
                     $readSection,
                     $sectionManager,
-                    $sectionEntity,
-                    $section
+                    $sectionEntity
                 );
                 break;
             case self::MANY_TO_ONE:
@@ -52,8 +50,7 @@ class Relationship extends FieldType
                     $formBuilder,
                     $readSection,
                     $sectionManager,
-                    $sectionEntity,
-                    $section
+                    $sectionEntity
                 );
                 break;
         }
@@ -113,13 +110,43 @@ class Relationship extends FieldType
         FormBuilderInterface $formBuilder,
         ReadSectionInterface $readSection,
         SectionManagerInterface $sectionManager,
-        $sectionEntity,
-        SectionInterface $section
+        $sectionEntity
     ): FormBuilderInterface {
 
         $fieldConfig = $this->getConfig()->toArray();
 
-        
+        $sectionTo = $sectionManager
+            ->readByHandle(Handle::fromString($fieldConfig['field']['to']));
+
+        $fullyQualifiedClassName = $sectionTo
+            ->getConfig()
+            ->getFullyQualifiedClassName();
+
+        $toHandle = Inflector::pluralize($fieldConfig['field']['to']);
+
+        $sectionEntities = $sectionEntity->{'get' . ucfirst($toHandle)}();
+
+        try {
+            $entries = $readSection->read(ReadOptions::fromArray([
+                'section' => $fullyQualifiedClassName
+            ]));
+        } catch (\Exception $exception) {
+            $entries = [];
+        }
+
+        $choices = [];
+        foreach ($entries as $entry) {
+            $choices[$entry->getDefault()] = $entry;
+        }
+
+        $formBuilder->add(
+            $toHandle,
+            ChoiceType::class, [
+                'choices' => $choices,
+                'data' => $sectionEntities->toArray(),
+                'multiple' => true
+            ]
+        );
 
         return $formBuilder;
     }
@@ -128,8 +155,7 @@ class Relationship extends FieldType
         FormBuilderInterface $formBuilder,
         ReadSectionInterface $readSection,
         SectionManagerInterface $sectionManager,
-        $sectionEntity,
-        SectionInterface $section
+        $sectionEntity
     ): FormBuilderInterface {
 
         $fieldConfig = $this->getConfig()->toArray();
@@ -142,13 +168,13 @@ class Relationship extends FieldType
             ->getFullyQualifiedClassName();
 
         $toHandle = $fieldConfig['field']['to'];
-        $selectedEntity = $sectionEntity->{'get' . ucfirst($fieldConfig['field']['to'])}();
+        $selectedEntity = $sectionEntity->{'get' . ucfirst($toHandle)}();
 
         try {
             $entries = $readSection->read(ReadOptions::fromArray([
                 'section' => $fullyQualifiedClassName
             ]));
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $entries = [];
         }
 

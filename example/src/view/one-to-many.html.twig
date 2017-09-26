@@ -19,7 +19,13 @@
             <hr />
             <ul>
                 {% for entry in section('otmOne').limit(10).fetch() %}
-                    <li>{{ entry.default }}</li>
+                    <li>{{ entry.default }} <a href="/relationships/update-one-record-otm/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a></li>
+                    <ul>
+                        {% for many in entry.otmManies %}
+                            <li>{{ many.default }}</li>
+                        {% endfor %}
+                    </ul>
+                    <hr />
                 {% endfor %}
             </ul>
             <a class="btn btn-default" href="/relationships/create-one-record-otm">Create "One" entry</a>
@@ -30,7 +36,13 @@
             <hr />
             <ul>
                 {% for entry in section('otmMany').limit(10).fetch() %}
-                    <li>{{ entry.default }}</li>
+                    <li>{{ entry.default }} <a href="/relationships/update-many-record-otm/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a></li>
+                    {% if entry.otmOne is not empty %}
+                    <ul>
+                        <li>{{ entry.otmOne.default }}</li>
+                    </ul>
+                    {% endif %}
+                    <hr />
                 {% endfor %}
             </ul>
             <a class="btn btn-default" href="/relationships/create-many-record-otm">Create "Many" entry</a>

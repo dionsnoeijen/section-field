@@ -1,0 +1,12 @@
+{% extends "master.html.twig" %}
+
+{% block content %}
+
+    {% include 'form-one-otm.html.twig' with {
+        form: sectionForm('Example.Relationships.Entity.OtmOne', {
+            slug: slug,
+            redirect: '/relationships/one-to-many'
+        })
+    } %}
+
+{% endblock %}

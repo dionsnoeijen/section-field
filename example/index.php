@@ -142,6 +142,16 @@ if (strpos($requestUri, '/relationships/update-one-record-mto') !== false) {
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
+if (strpos($requestUri, '/relationships/update-one-record-otm') !== false) {
+    $requestUri = '/relationships/update-one-record-otm';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
+if (strpos($requestUri, '/relationships/update-many-record-otm') !== false) {
+    $requestUri = '/relationships/update-many-record-otm';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
 
 try {
     switch ($requestUri) {
