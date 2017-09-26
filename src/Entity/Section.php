@@ -119,6 +119,10 @@ class Section implements SectionInterface, SectionEntityInterface
 
     public function removeFields(): SectionInterface
     {
+        /** @var FieldInterface $field */
+        foreach ($this->fields as $field) {
+            $field->removeSection($this);
+        }
         $this->fields->clear();
 
         return $this;

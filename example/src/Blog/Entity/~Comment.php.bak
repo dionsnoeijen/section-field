@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Example\Blog\Entity;
 
 use Tardigrades;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -28,14 +30,19 @@ class Comment
     {
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getBlog(): Blog
+    public function getBlog(): ?Blog
     {
         return $this->blog;
+    }
+
+    public function hasBlog(): bool
+    {
+        return !empty($this->blog);
     }
 
     public function setBlog(Blog $blog): Comment
@@ -44,7 +51,7 @@ class Comment
         return $this;
     }
 
-    public function removeBlog(Blog $blog): Comment
+    public function removeBlog(): Comment
     {
         $this->blog = null;
         return $this;
@@ -86,6 +93,12 @@ class Comment
     public function getDefault(): string
     {
         return $this->name;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('comment', new Assert\NotBlank());
     }
 
     public function onPrePersist(): void

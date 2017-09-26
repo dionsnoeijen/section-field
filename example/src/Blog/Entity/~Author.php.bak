@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Example\Blog\Entity;
 
 use Tardigrades;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class Author
 {
@@ -24,18 +24,14 @@ class Author
     /** @var string */
     protected $authorSlug;
 
-    /** @var ArrayCollection */
-    protected $blogs;
-
     /** @var int */
     private $id;
 
     public function __construct()
     {
-        $this->blogs = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -92,30 +88,6 @@ class Author
         return null;
     }
 
-    public function getBlogs(): Collection
-    {
-        return $this->blogs;
-    }
-
-    public function addBlog(Blog $blog): Author
-    {
-        if ($this->blogs->contains($blog)) {
-            return $this;
-        }
-        $this->blogs->add($blog);
-        $blog->addAuthor($this);
-        return $this;
-    }
-
-    public function removeBlog(Blog $blog): Author
-    {
-        if (!$this->blogs->contains($blog)) {
-            return $this;
-        }
-        $this->blogs->removeElement($blog);
-        return $this;
-    }
-
     public function getSlug(): Tardigrades\FieldType\Slug\ValueObject\Slug
     {
         return Tardigrades\FieldType\Slug\ValueObject\Slug::fromString($this->authorSlug);
@@ -124,6 +96,11 @@ class Author
     public function getDefault(): string
     {
         return $this->name;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank());
     }
 
     public function onPrePersist(): void

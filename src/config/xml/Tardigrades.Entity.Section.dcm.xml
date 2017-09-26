@@ -26,7 +26,11 @@
             target-entity="Tardigrades\Entity\Field"
             field="fields"
             mapped-by="sections"
-        />
+        >
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </many-to-many>
         <many-to-many
             target-entity="Tardigrades\Entity\Application"
             field="applications"

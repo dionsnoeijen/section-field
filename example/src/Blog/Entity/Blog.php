@@ -157,7 +157,7 @@ class Blog
             return $this;
         }
         $this->comments->removeElement($comment);
-        $comment->removeBlog($this);
+        $comment->removeBlog();
         return $this;
     }
 

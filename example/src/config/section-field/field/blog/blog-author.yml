@@ -2,12 +2,12 @@ field:
   name:
     - nl_NL: Auteur
     - en_EN: Author
-  handle: authorBlog
+  handle: blogAuthor
   label:
     - nl_NL: Auteur van blog
     - en_EN: Author that wrote blog
   type: Relationship
   variant: select
   kind: many-to-many
-  relationship-type: unidirectional
-  to: author
+  relationship-type: bidirectional
+  to: blog

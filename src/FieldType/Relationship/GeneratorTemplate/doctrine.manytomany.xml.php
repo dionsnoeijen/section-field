@@ -1,5 +1,8 @@
 <?php if ($type === 'unidirectional') { ?>
 <many-to-many field="<?php echo $toPluralHandle; ?>" target-entity="<?php echo $toFullyQualifiedClassName; ?>">
+    <cascade>
+        <cascade-all/>
+    </cascade>
     <join-table name="<?php echo $fromPluralHandle; ?>_<?php echo $toPluralHandle; ?>">
         <join-columns>
             <join-column name="<?php echo $fromHandle; ?>_id" referenced-column-name="id" />

@@ -32,6 +32,9 @@
             </cascade>
         </one-to-many>
         <many-to-many field="sections" target-entity="Tardigrades\Entity\Section">
+            <cascade>
+                <cascade-all />
+            </cascade>
             <join-table name="section_field">
                 <join-columns>
                     <join-column

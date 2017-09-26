@@ -34,13 +34,15 @@ abstract class SectionCommand extends Command
         $table = new Table($output);
 
         $rows = [];
+        /** @var SectionInterface $section */
         foreach ($sections as $section) {
             $rows[] = [
                 $section->getId(),
                 $section->getName(),
                 $section->getHandle(),
                 (string) $section->getConfig(),
-                $section->getUpdated()->format('D-m-y')
+                $section->getUpdated()->format('D-m-y'),
+                $section->getVersion()
             ];
         }
 
@@ -50,7 +52,7 @@ abstract class SectionCommand extends Command
         ];
 
         $table
-            ->setHeaders(['#id', 'name', 'handle', 'config', 'updated'])
+            ->setHeaders(['#id', 'name', 'handle', 'config', 'updated', 'version'])
             ->setRows($rows)
         ;
         $table->render();

@@ -82,6 +82,7 @@ class Form implements SectionFormInterface
             }
         }
 
+
         // If we hava an id, it means we are updating something.
         // Prep so we can get the correct $sectionEntity
         $id = null;
@@ -99,6 +100,7 @@ class Form implements SectionFormInterface
             $slug,
             $id
         );
+
         $factory = $this->getFormFactory();
 
         $form = $factory
@@ -119,6 +121,10 @@ class Form implements SectionFormInterface
 
         /** @var FieldInterface $field */
         foreach ($section->getFields() as $field) {
+
+            $handle = $field->getHandle();
+            echo (string) $handle;
+
             $fieldTypeFullyQualifiedClassName = (string) $field
                 ->getFieldType()
                 ->getFullyQualifiedClassName();

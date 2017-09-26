@@ -14,8 +14,11 @@
     <field name="title" nullable="true" type="string"/>
     <field name="updated" nullable="true" type="datetime"/>
     <field name="blogSlug" type="string" unique="true"/>
-    <one-to-many field="comments" fetch="EXTRA_LAZY" target-entity="Example\Blog\Entity\Comment" mapped-by="blog"/>
+    <one-to-many field="comments" target-entity="Example\Blog\Entity\Comment" mapped-by="blog"/>
     <many-to-many field="authors" target-entity="Example\Blog\Entity\Author">
+      <cascade>
+        <cascade-all/>
+      </cascade>
       <join-table name="blogs_authors">
         <join-columns>
           <join-column name="blog_id" referenced-column-name="id"/>

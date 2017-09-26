@@ -1,4 +1,6 @@
-{% set form = sectionForm('Example.Blog.Entity.Comment') %}
+{% set form = sectionForm('Example.Blog.Entity.Comment', {
+    redirect: redirect
+}) %}
 {{ form_start(form) }}
 <input type="hidden" name="form[blog_id]" value="Example.Blog.Entity.Blog:{{ blogId }}" />
 <div class="row">
@@ -14,7 +16,6 @@
         {{ form_row(form.save) }}
     </div>
     <div class="col-md-2">
-        {#{{ form_row(form.blogSlug) }}#}
     </div>
 </div>
 {{ form_end(form) }}

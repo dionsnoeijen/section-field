@@ -263,7 +263,8 @@ try {
     header("HTTP/1.0 404 Not Found");
     echo $templating->render('404.html.twig', [
         'slug' => $slug,
-        'message' => $exception->getMessage()
+        'message' => $exception->getMessage(),
+        'stack' => $exception->getTraceAsString()
     ]);
 }
 
