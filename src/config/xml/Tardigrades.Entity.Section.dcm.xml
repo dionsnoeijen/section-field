@@ -23,18 +23,32 @@
             mapped-by="section"
         />
         <many-to-many
-            target-entity="Tardigrades\Entity\Field"
-            field="fields"
-            mapped-by="sections"
-        >
-            <cascade>
-                <cascade-all />
-            </cascade>
-        </many-to-many>
-        <many-to-many
             target-entity="Tardigrades\Entity\Application"
             field="applications"
             mapped-by="sections"
         />
+        <many-to-many field="fields" target-entity="Tardigrades\Entity\Field">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-table name="section_field">
+                <join-columns>
+                    <join-column
+                        name="section_id"
+                        referenced-column-name="id"
+                        unique="false"
+                        on-delete="CASCADE"
+                    />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column
+                        name="field_id"
+                        referenced-column-name="id"
+                        on-delete="CASCADE"
+                    />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
     </entity>
 </doctrine-mapping>

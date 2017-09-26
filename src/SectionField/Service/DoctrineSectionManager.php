@@ -139,6 +139,8 @@ class DoctrineSectionManager implements SectionManagerInterface
         $updatedActiveSection = $this->copySectionHistoryDataToSectionEntity($sectionFromHistory, $activeSection); // 4
 
         $updatedActiveSection->removeFields(); // 5
+        $this->entityManager->persist($updatedActiveSection);
+        $this->entityManager->flush();
 
         $fields = $this->fieldManager->readByHandles($updatedActiveSection->getConfig()->getFields()); // 6
 

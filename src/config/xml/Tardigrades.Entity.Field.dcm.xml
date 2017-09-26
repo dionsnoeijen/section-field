@@ -40,6 +40,7 @@
                     <join-column
                         name="field_id"
                         referenced-column-name="id"
+                        on-delete="CASCADE"
                     />
                 </join-columns>
                 <inverse-join-columns>
@@ -47,6 +48,7 @@
                         name="section_id"
                         referenced-column-name="id"
                         unique="false"
+                        on-delete="CASCADE"
                     />
                 </inverse-join-columns>
             </join-table>
