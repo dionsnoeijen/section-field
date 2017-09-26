@@ -3,7 +3,7 @@ declare (strict_types=1);
 
 namespace Tardigrades\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Tardigrades\SectionField\ValueObject\Created;
 use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\Id;
@@ -20,7 +20,8 @@ interface FieldTypeInterface
     public function setType(string $type): FieldTypeInterface;
     public function addField(FieldInterface $field): FieldTypeInterface;
     public function removeField(FieldInterface $field): FieldTypeInterface;
-    public function getFields(): ArrayCollection;
+    public function getFields(): Collection;
+    public function hasFields(): bool;
     public function setFullyQualifiedClassName(string $fullyQualifiedClassName): FieldTypeInterface;
     public function getFullyQualifiedClassName(): FullyQualifiedClassName;
     public function setCreated(\DateTime $created): FieldTypeInterface;

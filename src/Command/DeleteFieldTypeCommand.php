@@ -61,6 +61,17 @@ class DeleteFieldTypeCommand extends FieldTypeCommand
     {
         $fieldType = $this->getFieldType($input, $output);
 
+        if ($fieldType->hasFields()) {
+
+            $fields = PHP_EOL;
+            foreach ($fieldType->getFields() as $field) {
+                $fields .= ' - ' . $field->getHandle() . ':' . PHP_EOL;
+            }
+
+            $output->writeln('<info>This FieldType has fields that use this type, delete them first. ' . $fields . '</info>');
+            return;
+        }
+
         $output->writeln('<info>Record with id #' . $fieldType->getId() . ' will be deleted</info>');
 
         $sure = new ConfirmationQuestion('<comment>Are you sure?</comment> (y/n) ', false);

@@ -89,9 +89,14 @@ class FieldType implements FieldTypeInterface
         return $this;
     }
 
-    public function getFields(): ArrayCollection
+    public function getFields(): Collection
     {
         return $this->fields;
+    }
+
+    public function hasFields(): bool
+    {
+        return !$this->fields->isEmpty();
     }
 
     public function setFullyQualifiedClassName(string $fullyQualifiedClassName): FieldTypeInterface
