@@ -48,4 +48,147 @@
             <a class="btn btn-default" href="/relationships/create-many-record-otm">Create "Many" entry</a>
         </div>
     </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <h4></h4>
+            <p>This is a setup for a basic one to many field. For the example I have a "Many" side. And a "One" side. Both sides are modeled as a section that contains some basic fields.</p>
+
+            <h4>The fields are configured as follows:</h4>
+            <h5>The title field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Titel
+    - en_EN: Title
+  label:
+    - nl_NL: Titel
+    - en_EN: Title
+  handle: title
+  type: TextInput
+  form:
+    all:
+      trim: true
+    update:
+      disabled: true
+  generator:
+    entity:
+      validator:
+        Length:
+          min: 2
+          max: 255
+    doctrine:
+      length: 255
+            </pre>
+            <h5>The slug field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Slug
+    - en_EN: Slug
+  handle: slug
+  label:
+    - nl_NL: Onderdeel voor url segment
+    - en_EN: Composit for url segment
+  type: Slug
+  generator:
+    entity:
+      slugFields: [ title, created|DateTime|Y-m-d ]
+    doctrine:
+      length: 255
+      unique: true
+  form:
+    default:
+      available: false
+            </pre>
+            <h5>The created field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Aangemaakt
+    - en_EN: Created
+  handle: created
+  label:
+    - nl_NL: Bericht aanmaak datum
+    - en_EN: Record creation date
+  type: DateTimeField
+  entityEvents:
+    - prePersist
+            </pre>
+            <h5>The updated field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Geupdated
+    - en_EN: Updated
+  handle: updated
+  label:
+    - nl_NL: Update datum
+    - en_EN: Date record is updated
+  type: DateTimeField
+  entityEvents:
+    - prePersist
+    - preUpdate
+            </pre>
+            <h5>The oneToMany field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: One to many
+    - en_EN: One to many
+  handle: oneToMany
+  label:
+    - nl_NL: Relatie one to many
+    - en_EN: Relationship one to many
+  type: Relationship
+  variant: select
+  kind: one-to-many
+  to: otmMany
+            </pre>
+        </div>
+        <div class="col-md-6">
+            <p>The many side contains the manyToOne field as configured in the fields above. The section handles are mtoMany and mtoOne, this stands for: Many to One - Many and Many to One - One</p>
+            <h4>This is how the sections are configured:</h4>
+            <h5>Many side</h5>
+            <pre>
+section:
+  name: One to Many - Many
+  handle: otmMany
+  fields:
+    - title
+    - slug
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~
+            </pre>
+            <h5>One side</h5>
+            <pre>
+section:
+  name: One to Many - One
+  handle: otmOne
+  fields:
+    - title
+    - slug
+    - oneToMany
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~
+            </pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <hr />
+        </div>
+    </div>
 {% endblock %}
