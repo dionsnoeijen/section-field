@@ -121,10 +121,6 @@ class Form implements SectionFormInterface
 
         /** @var FieldInterface $field */
         foreach ($section->getFields() as $field) {
-
-            $handle = $field->getHandle();
-            echo (string) $handle;
-
             $fieldTypeFullyQualifiedClassName = (string) $field
                 ->getFieldType()
                 ->getFullyQualifiedClassName();
