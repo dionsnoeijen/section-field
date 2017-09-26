@@ -48,4 +48,165 @@
             <a class="btn btn-default" href="/relationships/create-many2-record-mtm">Create "Many2" entry</a>
         </div>
     </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <p>This is a many to many configuration.</p>
+
+            <h4>The fields are configured as follows</h4>
+            <h5>The title field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Titel
+    - en_EN: Title
+  label:
+    - nl_NL: Titel
+    - en_EN: Title
+  handle: title
+  type: TextInput
+  form:
+    all:
+      trim: true
+    update:
+      disabled: true
+  generator:
+    entity:
+      validator:
+        Length:
+          min: 2
+          max: 255
+    doctrine:
+      length: 255
+            </pre>
+            <h5>The slug field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Slug
+    - en_EN: Slug
+  handle: slug
+  label:
+    - nl_NL: Onderdeel voor url segment
+    - en_EN: Composit for url segment
+  type: Slug
+  generator:
+    entity:
+      slugFields: [ title, created|DateTime|Y-m-d ]
+    doctrine:
+      length: 255
+      unique: true
+  form:
+    default:
+      available: false
+            </pre>
+            <h5>The created field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Aangemaakt
+    - en_EN: Created
+  handle: created
+  label:
+    - nl_NL: Bericht aanmaak datum
+    - en_EN: Record creation date
+  type: DateTimeField
+  entityEvents:
+    - prePersist
+            </pre>
+            <h5>The updated field</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Geupdated
+    - en_EN: Updated
+  handle: updated
+  label:
+    - nl_NL: Update datum
+    - en_EN: Date record is updated
+  type: DateTimeField
+  entityEvents:
+    - prePersist
+    - preUpdate
+            </pre>
+            <h5>The many to many field (this one is from one to two)</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Many to Many
+    - en_EN: Many to Many
+  handle: toTwo
+  label:
+    - nl_NL: Relatie naar MTM2
+    - en_EN: Relationship to MTM2
+  type: Relationship
+  variant: select
+  kind: many-to-many
+  relationship-type: bidirectional
+  to: mtm2
+            </pre>
+            <h5>The many to many field (this one is from two to one)</h5>
+            <pre>
+field:
+  name:
+    - nl_NL: Many to Many
+    - en_EN: Many to Many
+  handle: toOne
+  label:
+    - nl_NL: Relatie naar MTM1
+    - en_EN: Relationship to MTM1
+  type: Relationship
+  variant: select
+  kind: many-to-many
+  relationship-type: unidirectional
+  to: mtm1
+
+            </pre>
+        </div>
+        <div class="col-md-6">
+            <p>These are the sections, both with a relationship field configured.</p>
+            <h5>Many 1</h5>
+            <pre>
+section:
+  name: Many to Many - 1
+  handle: mtm1
+  fields:
+    - title
+    - toTwo
+    - slug
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~
+            </pre>
+            <h5>Many 2</h5>
+            <pre>
+section:
+  name: Many to Many - 2
+  handle: mtm2
+  fields:
+    - title
+    - toOne
+    - slug
+    - updated
+    - created
+  default: title
+  namespace: Example\Relationships
+  generator:
+    entity:
+      title:
+        NotBlank: ~
+
+            </pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <hr />
+        </div>
+    </div>
 {% endblock %}

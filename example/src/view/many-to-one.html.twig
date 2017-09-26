@@ -19,12 +19,12 @@
             <hr />
             <ul>
                 {% for entry in section('mtoMany').limit(10).fetch() %}
-                    <li>{{ entry.default }} <a href="/relationships/update-many-record-mto/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a>
-                        <ul>
-                            <li>{{ entry.mtoOne.default }}</li>
-                        </ul>
-                        <hr />
-                    </li>
+                <li>{{ entry.default }} <a href="/relationships/update-many-record-mto/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a>
+                    <ul>
+                        <li>{{ entry.mtoOne.default }}</li>
+                    </ul>
+                    <hr />
+                </li>
                 {% endfor %}
             </ul>
             <a class="btn btn-default" href="/relationships/create-many-record-mto">Create "Many" entry</a>
@@ -35,14 +35,14 @@
             <hr />
             <ul>
                 {% for entry in section('mtoOne').limit(10).fetch() %}
-                    <li>{{ entry.default }} <a href="/relationships/update-one-record-mto/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a>
-                        <ul>
-                            {% for many in entry.mtoManies %}
-                                <li>{{ many.default }}</li>
-                            {% endfor %}
-                        </ul>
-                        <hr />
-                    </li>
+                <li>{{ entry.default }} <a href="/relationships/update-one-record-mto/{{ entry.slug }}" class="btn btn-default pull-right">Edit</a>
+                    <ul>
+                        {% for many in entry.mtoManies %}
+                            <li>{{ many.default }}</li>
+                        {% endfor %}
+                    </ul>
+                    <hr />
+                </li>
                 {% endfor %}
             </ul>
             <a class="btn btn-default" href="/relationships/create-one-record-mto">Create "One" entry</a>
