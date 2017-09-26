@@ -337,18 +337,18 @@ class DoctrineSectionManager implements SectionManagerInterface
         foreach ($relationships as $sectionHandle=>$relationshipFields) {
             if (count($relationshipFields)) {
                 foreach ($relationshipFields as $fieldHandle => $kindToFieldType) {
-                    $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite'] = [
-                        'kind' => $this->opposingRelationships[$kindToFieldType['kind']],
-                        'to' => $sectionHandle,
-                        'fullyQualifiedClassName' => $kindToFieldType['fullyQualifiedClassName']
-                    ];
-                    if (!empty($kindToFieldType['from'])) {
-                        $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite']['from'] =
-                            $kindToFieldType['to'];
-                    }
-                    if (!empty($kindToFieldType['relationship-type'])) {
-                        $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite']['relationship-type'] =
-                            $this->opposingRealtionshipTypes[$kindToFieldType['relationship-type']];
+                    // At this point, use two fields for the many to many relationship, one on each side.
+                    // So ignore it here.
+                    if ($kindToFieldType['kind'] !== 'many-to-many') {
+                        $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite'] = [
+                            'kind' => $this->opposingRelationships[$kindToFieldType['kind']],
+                            'to' => $sectionHandle,
+                            'fullyQualifiedClassName' => $kindToFieldType['fullyQualifiedClassName']
+                        ];
+                        if (!empty($kindToFieldType['relationship-type'])) {
+                            $relationships[$kindToFieldType['to']][$fieldHandle . '-opposite']['relationship-type'] =
+                                $this->opposingRealtionshipTypes[$kindToFieldType['relationship-type']];
+                        }
                     }
                 }
             }

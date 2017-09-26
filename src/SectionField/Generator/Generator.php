@@ -57,9 +57,6 @@ abstract class Generator implements GeneratorInterface
                     ]
                 ];
 
-                if (!empty($relationship['from'])) {
-                    $config['field']['from'] = $relationship['from'];
-                }
                 if (!empty($relationship['relationship-type'])) {
                     $config['field']['relationship-type'] = $relationship['relationship-type'];
                 }

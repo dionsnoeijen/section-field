@@ -9,5 +9,5 @@ field:
   type: Relationship
   variant: select
   kind: many-to-many
-  relationship-type: unidirectional
+  relationship-type: bidirectional
   to: mtm2

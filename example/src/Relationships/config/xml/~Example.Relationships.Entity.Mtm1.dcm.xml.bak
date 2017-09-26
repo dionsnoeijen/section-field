@@ -12,6 +12,15 @@
     <field name="title" nullable="true" type="string"/>
     <field name="updated" nullable="true" type="datetime"/>
     <field name="slug" type="string" unique="true"/>
-    <many-to-many field="mtm2s" mapped-by="mtm1s" target-entity="Example\Relationships\Entity\Mtm2"/>
+    <many-to-many field="mtm2s" target-entity="Example\Relationships\Entity\Mtm2">
+      <join-table name="mtm1s_mtm2s">
+        <join-columns>
+          <join-column name="mtm1_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="mtm2_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

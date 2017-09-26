@@ -22,6 +22,5 @@
         </inverse-join-columns>
       </join-table>
     </many-to-many>
-    <many-to-many field="mtm1s" mapped-by="mtm2s" target-entity="Example\Relationships\Entity\Mtm1"/>
   </entity>
 </doctrine-mapping>

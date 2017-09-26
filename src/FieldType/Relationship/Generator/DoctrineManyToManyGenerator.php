@@ -13,17 +13,6 @@ use Tardigrades\SectionField\Service\SectionManagerInterface;
 use Tardigrades\SectionField\ValueObject\Handle;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
-/**
- * Class DoctrineManyToManyGenerator
- *
- * @todo: We have an automatic inverse relationship detector in
- * the generators. What we have to take care of is that the opposing
- * relationship for a many to many field in case of a unidirectional
- * opposing side get's the correct opposing field added. With type
- * bidirectional.
- *
- * @package Tardigrades\FieldTypeInterface\Relationship\Generator
- */
 class DoctrineManyToManyGenerator implements GeneratorInterface
 {
     const KIND = 'many-to-many';
