@@ -30,13 +30,19 @@ final class SectionManagerTest extends TestCase
     /** @var DoctrineFieldManager */
     private $fieldManager;
 
+    /** @var SectionHistoryManagerInterface */
+    private $sectionHistoryManager;
+
     public function setUp()
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
         $this->fieldManager = Mockery::mock(FieldManagerInterface::class);
+        $this->sectionHistoryManager = Mockery::mock(SectionHistoryManagerInterface::class);
+
         $this->sectionManager = new DoctrineSectionManager(
             $this->entityManager,
-            $this->fieldManager
+            $this->fieldManager,
+            $this->sectionHistoryManager
         );
     }
 
