@@ -16,14 +16,10 @@ use Tardigrades\SectionField\ValueObject\Id;
 
 class UpdateFieldTypeCommand extends FieldTypeCommand
 {
-    /**
-     * @var QuestionHelper
-     */
+    /** @var QuestionHelper */
     private $questionHelper;
 
-    /**
-     * @var FieldTypeManagerInterface
-     */
+    /** @var FieldTypeManagerInterface */
     private $fieldTypeManager;
 
     public function __construct(

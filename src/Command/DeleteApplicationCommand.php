@@ -15,14 +15,10 @@ use Tardigrades\SectionField\ValueObject\Id;
 
 class DeleteApplicationCommand extends ApplicationCommand
 {
-    /**
-     * @var ApplicationManagerInterface
-     */
+    /** @var ApplicationManagerInterface */
     private $applicationManager;
 
-    /**
-     * @var QuestionHelper
-     */
+    /** @var QuestionHelper */
     private $questionHelper;
 
     public function __construct(

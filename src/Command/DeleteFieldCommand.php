@@ -16,14 +16,10 @@ use Tardigrades\SectionField\ValueObject\Id;
 
 class DeleteFieldCommand extends FieldCommand
 {
-    /**
-     * @var QuestionHelper
-     */
+    /** @var QuestionHelper */
     private $questionHelper;
 
-    /**
-     * @var FieldManagerInterface
-     */
+    /** @var FieldManagerInterface */
     private $fieldManager;
 
     public function __construct(

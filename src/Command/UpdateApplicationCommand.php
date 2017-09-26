@@ -17,14 +17,10 @@ use Tardigrades\SectionField\ValueObject\Id;
 
 class UpdateApplicationCommand extends ApplicationCommand
 {
-    /**
-     * @var QuestionHelper
-     */
+    /** @var QuestionHelper */
     private $questionHelper;
 
-    /**
-     * @var ApplicationManagerInterface
-     */
+    /** @var ApplicationManagerInterface */
     private $applicationManager;
 
     public function __construct(

@@ -10,9 +10,7 @@ use Tardigrades\SectionField\Service\FieldTypeNotFoundException;
 
 class ListFieldTypeCommand extends FieldTypeCommand
 {
-    /**
-     * @var FieldTypeManagerInterface
-     */
+    /** @var FieldTypeManagerInterface */
     private $fieldTypeManager;
 
     public function __construct(
