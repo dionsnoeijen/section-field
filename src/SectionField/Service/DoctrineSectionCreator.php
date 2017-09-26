@@ -42,6 +42,7 @@ class DoctrineSectionCreator implements CreateSectionInterface
             $handle = FullyQualifiedClassNameConverter::toHandle(
                 $jitRelationship->getFullyQualifiedClassName()
             );
+            $methodPartHandle = ucfirst((string) $handle);
             if (!isset($handles[(string) $handle])) {
                 $handles[(string) $handle] = false;
             }
@@ -50,8 +51,8 @@ class DoctrineSectionCreator implements CreateSectionInterface
                 $jitRelationship->getId()->toInt()
             );
             if (!$handles[(string) $handle]) {
-                $removeMethod = 'remove' . ucfirst($handle);
-                $pluralGetMethod = 'get' . ucfirst(Inflector::pluralize($handle));
+                $removeMethod = 'remove' . $methodPartHandle;
+                $pluralGetMethod = 'get' . ucfirst(Inflector::pluralize((string) $handle));
                 if (method_exists($data, $removeMethod) &&
                     method_exists($data, $pluralGetMethod)) {
                     $existingRelationships = $data->{$pluralGetMethod}();
@@ -61,11 +62,11 @@ class DoctrineSectionCreator implements CreateSectionInterface
                 }
                 $handles[(string) $handle] = true;
             }
-            $setMethod = 'set' . ucfirst($handle);
+            $setMethod = 'set' . $methodPartHandle;
             if (method_exists($data, $setMethod)) {
                 $data->{$setMethod}($reference);
             }
-            $addMethod = 'add' . ucfirst($handle);
+            $addMethod = 'add' . $methodPartHandle;
             if (method_exists($data, $addMethod)) {
                 $data->{$addMethod}($reference);
             }

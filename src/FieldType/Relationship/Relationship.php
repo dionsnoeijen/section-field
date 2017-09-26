@@ -19,6 +19,8 @@ class Relationship extends FieldType
     const ONE_TO_MANY = 'one-to-many';
     const MANY_TO_ONE = 'many-to-one';
 
+    const JIT_VARIANT = 'jit';
+
     public function addToForm(
         FormBuilderInterface $formBuilder,
         SectionInterface $section,
@@ -156,6 +158,9 @@ class Relationship extends FieldType
     ): FormBuilderInterface {
 
         $fieldConfig = $this->getConfig()->toArray();
+        if ($fieldConfig['field']['variant'] === self::JIT_VARIANT) {
+            return $formBuilder;
+        }
 
         $sectionTo = $sectionManager
             ->readByHandle(Handle::fromString($fieldConfig['field']['to']));

@@ -1,31 +1,18 @@
 <?xml version="1.0"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping                     http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-
-    <entity name="Example\Blog\Entity\Comment" table="comment">
-        <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="onPrePersist"/>
-            <lifecycle-callback type="preUpdate" method="onPreUpdate"/>
-        </lifecycle-callbacks>
-
-        <id name="id" type="integer">
-            <generator strategy="AUTO"/>
-        </id>
-
-        <field name="comment" type="text"/>
-<field name="email" type="string"/>
-<field name="name" type="string"/>
-
-
-        <many-to-one field="blog" target-entity="Example\Blog\Entity\Blog">
-    <join-column name="blog_id" referenced-column-name="id"/>
-</many-to-one>
-
-
-        
-
-        
-
-        
-
-    </entity>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+  <entity name="Example\Blog\Entity\Comment" table="comment">
+    <lifecycle-callbacks>
+      <lifecycle-callback type="prePersist" method="onPrePersist"/>
+      <lifecycle-callback type="preUpdate" method="onPreUpdate"/>
+    </lifecycle-callbacks>
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="comment" nullable="true" type="text"/>
+    <field name="email" nullable="true" type="string"/>
+    <field name="name" nullable="true" type="string"/>
+    <many-to-one field="blog" target-entity="Example\Blog\Entity\Blog">
+      <join-column name="blog_id" referenced-column-name="id"/>
+    </many-to-one>
+  </entity>
 </doctrine-mapping>

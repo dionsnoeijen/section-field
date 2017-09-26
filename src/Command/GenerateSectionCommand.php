@@ -46,8 +46,6 @@ class GenerateSectionCommand extends SectionCommand
 
         $writables = $this->entityGenerator->generateBySection($section);
 
-        $counter = 0;
-
         /** @var Writable $writable */
         foreach ($writables as $writable) {
             $output->writeln(

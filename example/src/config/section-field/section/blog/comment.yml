@@ -14,3 +14,9 @@ section:
       - email
       - comment
       - blog
+  generator:
+    entity:
+      name:
+        NotBlank: ~
+      comment:
+        NotBlank: ~

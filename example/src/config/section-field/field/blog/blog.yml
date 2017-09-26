@@ -7,6 +7,6 @@ field:
     - nl_NL: Relatie tot blog
     - en_EN: Relationship to blog
   type: Relationship
-  variant: hidden
+  variant: jit
   kind: many-to-one
   to: blog
