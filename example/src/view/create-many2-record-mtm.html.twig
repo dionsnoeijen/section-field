@@ -1,0 +1,9 @@
+{% extends "master.html.twig" %}
+
+{% block content %}
+
+    {% include 'form-many2-mtm.html.twig' with {
+        form: sectionForm('Example.Relationships.Entity.Mtm2')
+    }  %}
+
+{% endblock %}

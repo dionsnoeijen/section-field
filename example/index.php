@@ -152,6 +152,16 @@ if (strpos($requestUri, '/relationships/update-many-record-otm') !== false) {
     $slug = explode('/', $request->getRequestUri());
     $slug = $slug[count($slug) -1];
 }
+if (strpos($requestUri, '/relationships/update-many1-record-mtm') !== false) {
+    $requestUri = '/relationships/update-many1-record-mtm';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
+if (strpos($requestUri, '/relationships/update-many2-record-mtm') !== false) {
+    $requestUri = '/relationships/update-many2-record-mtm';
+    $slug = explode('/', $request->getRequestUri());
+    $slug = $slug[count($slug) -1];
+}
 
 try {
     switch ($requestUri) {
@@ -196,6 +206,22 @@ try {
             break;
         case '/relationships/update-many-record-otm':
             echo $templating->render('update-many-record-otm.html.twig', [
+                'slug' => $slug
+            ]);
+            break;
+        case '/relationships/create-many1-record-mtm':
+            echo $templating->render('create-many1-record-mtm.html.twig');
+            break;
+        case '/relationships/update-many1-record-mtm':
+            echo $templating->render('update-many1-record-mtm.html.twig', [
+                'slug' => $slug
+            ]);
+            break;
+        case '/relationships/create-many2-record-mtm':
+            echo $templating->render('create-many2-record-mtm.html.twig');
+            break;
+        case '/relationships/update-many2-record-mtm':
+            echo $templating->render('update-many2-record-mtm.html.twig', [
                 'slug' => $slug
             ]);
             break;

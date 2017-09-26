@@ -75,31 +75,28 @@ class Relationship extends FieldType
             ->getConfig()
             ->getFullyQualifiedClassName();
 
-        $entries = $readSection->read(ReadOptions::fromArray([
-            'section' => $fullyQualifiedClassName
-        ]));
+        try {
+            $entries = $readSection->read(ReadOptions::fromArray([
+                'section' => $fullyQualifiedClassName
+            ]));
+        } catch (\Exception $exception) {
+            $entries = [];
+        }
 
         $choices = [];
         foreach ($entries as $entry) {
-            $choices[$entry->getDefault()] =
-                $fullyQualifiedClassName . ':' . $entry->getId();
+            $choices[$entry->getDefault()] = $entry;
         }
 
         $toHandle = Inflector::pluralize($fieldConfig['field']['to']);
         $selectedEntities = $sectionEntity->{'get' . ucfirst($toHandle)}();
 
-        $selected = [];
-        foreach ($selectedEntities as $selectedEntity) {
-            $selected[] = get_class($selectedEntity) . ':' . $selectedEntity->getId();
-        }
-
         $formBuilder->add(
-            $toHandle . '_id',
+            $toHandle,
             ChoiceType::class, [
                 'choices' => $choices,
-                'data' => $selected,
-                'multiple' => true,
-                'mapped' => false
+                'data' => $selectedEntities->toArray(),
+                'multiple' => true
             ]
         );
 
